@@ -81,7 +81,7 @@
 
         // --- CONSTANTES ---
         const SHEET_ID = "1eoZCQG7FZyGYCIJBzXMKIm2ioFUZHh-3PPaJ16dtQPU";
-        const CACHE_KEY = 'sst_dao_data_v4'; // Actualizado v4 para refrescar caché con nueva columna
+        const CACHE_KEY = 'sst_dao_data_v5'; // Versión 5 para actualizar niveles
         const CACHE_DURATION = 3600000; 
 
         // --- ICONOS SVG ---
@@ -101,7 +101,8 @@
             Filter: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>,
             UserPlus: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>,
             Bell: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>,
-            XCircle: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            XCircle: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>,
+            Info: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         };
 
         const App = () => {
@@ -132,7 +133,6 @@
                     for (let pattern of patterns) {
                         const match = url.match(pattern);
                         if (match && match[1]) {
-                            // SOLUCIÓN ROBUSTA: Usar lh3.googleusercontent.com para miniaturas fiables
                             return `https://lh3.googleusercontent.com/d/${match[1]}`;
                         }
                     }
@@ -157,6 +157,7 @@
                 return () => window.removeEventListener('scroll', controlNavbar);
             }, [lastScrollY]);
 
+            // --- LÓGICA DE NIVELES ACTUALIZADA ---
             const getLevelProgress = (points) => {
                 const p = Number(points) || 0;
                 if (p < 500) return (p / 500) * 100; 
@@ -167,18 +168,28 @@
 
             const getNextLevelName = (points) => {
                 const p = Number(points) || 0;
-                if (p < 500) return "Aprendiz";
-                if (p < 1000) return "Experto";
-                if (p < 2000) return "Maestro";
-                return "Leyenda";
+                if (p < 500) return "Activo"; // Próximo
+                if (p < 1000) return "Proactivo"; // Próximo
+                if (p < 2000) return "Referente"; // Próximo
+                return "Leyenda";                
             };
 
+            // NUEVOS NOMBRES DE NIVEL
             const getCurrentLevelName = (points) => {
                 const p = Number(points) || 0;
-                if (p < 500) return "Novato";
-                if (p < 1000) return "Aprendiz";
-                if (p < 2000) return "Experto";
-                return "Maestro";
+                if (p < 500) return "Participante";
+                if (p < 1000) return "Activo";
+                if (p < 2000) return "Proactivo";
+                return "Referente";
+            };
+
+            // NUEVOS EMOJIS DE NIVEL
+            const getLevelEmoji = (points) => {
+                const p = Number(points) || 0;
+                if (p < 500) return "🥉"; 
+                if (p < 1000) return "🥈"; 
+                if (p < 2000) return "🥇"; 
+                return "🏆";              
             };
 
             const formatDate = (raw) => {
@@ -227,15 +238,15 @@
                                     progresoAuto: v(11), debateHoyAuto: v(12), diaActual: v(13),
                                     fotoMod1: v(14), 
                                     fotoMod2: v(15),
-                                    resumenLink: v(16) // Columna Q: Enlace del Resumen
+                                    resumenLink: v(16)
                                 };
                             } else {
                                 return {
                                     idSesion: v(0) ? String(v(0)) : "global", 
                                     nombre: v(1), 
                                     puntos: v(2),
-                                    foto: v(3), // Columna D: Foto
-                                    rol: v(4),  // Columna E: Rol
+                                    foto: v(3), // Columna D
+                                    rol: v(4),  // Columna E
                                 };
                             }
                         });
@@ -440,7 +451,6 @@
                                 </a>
                             )}
 
-                            {/* BOTÓN PDF (MODIFICADO) */}
                             <a href={session.driveLink} target="_blank" className="flex-1 bg-white hover:bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wide py-3 rounded-lg flex items-center justify-center gap-2 transition-colors border border-slate-200 hover:border-brand-200 shadow-sm shrink-0 min-w-[80px]" title="Descargar Documento Oficial">
                                 <Icons.Download className="w-4 h-4" /> PDF
                             </a>
@@ -456,6 +466,7 @@
                 const progress = getLevelProgress(points);
                 const nextLevel = getNextLevelName(points);
                 const currentLevel = getCurrentLevelName(points); 
+                const levelEmoji = getLevelEmoji(points);
                 
                 let rankBadgeClass = 'bg-transparent text-slate-400 font-normal';
                 let avatarRingClass = 'border-2 border-white'; 
@@ -505,8 +516,8 @@
                         <div className="ml-4 flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1 flex-wrap">
                                 <h4 className="text-slate-800 font-bold text-sm truncate">{user.nombre}</h4>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-brand-600 border border-brand-100 font-bold uppercase tracking-wide shrink-0">
-                                    {currentLevel}
+                                <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 border border-slate-200 font-bold uppercase tracking-wide shrink-0 flex items-center gap-1">
+                                    <span className="text-base leading-none">{levelEmoji}</span> {currentLevel}
                                 </span>
                             </div>
                             
@@ -577,22 +588,45 @@
                         return (
                             <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
                                 <div className="text-center py-8">
-                                    <div className="inline-block p-4 rounded-full bg-brand-50 mb-4 animate-float border border-brand-100">
-                                        <Icons.Trophy className="w-8 h-8 text-brand-500" />
-                                    </div>
+                                    <div className="inline-block p-4 rounded-full bg-brand-50 mb-4 animate-float border border-brand-100"><Icons.Trophy className="w-8 h-8 text-brand-500" /></div>
                                     <h2 className="text-2xl font-bold text-slate-800 mb-3">Reconocimiento a la Colaboración</h2>
                                     
-                                    {/* EXPLICACIÓN DEL SISTEMA DE PUNTOS ACTUALIZADA */}
                                     <div className="bg-brand-50/50 border border-brand-100 rounded-xl p-4 max-w-lg mx-auto">
-                                        <p className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                                        <p className="text-slate-600 text-xs md:text-sm leading-relaxed mb-4">
                                             Este es un espacio de <span className="font-bold text-brand-600">reconocimiento</span> a los aportes colaborativos. Los puntos (XP) reflejan la <span className="font-bold text-slate-700">frecuencia</span> y la <span className="font-bold text-slate-700">calidad</span> de tus intervenciones para el crecimiento de todos.
                                         </p>
-                                    </div>
-                                </div>
-
-                                <div className="bg-white p-2 rounded-xl border border-slate-200 flex items-center gap-2 mb-4 shadow-sm">
-                                    <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
-                                        <Icons.Filter className="w-4 h-4" />
+                                        
+                                        {/* LEYENDA DE NIVELES */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-4 border-t border-brand-100">
+                                            <div className="flex items-start gap-2">
+                                                <span className="text-lg">🥉</span>
+                                                <div>
+                                                    <p className="text-xs font-bold text-slate-700">Participante (0 - 499 XP)</p>
+                                                    <p className="text-[10px] text-slate-500">Estás presente, eres parte del grupo.</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-start gap-2">
+                                                <span className="text-lg">🥈</span>
+                                                <div>
+                                                    <p className="text-xs font-bold text-slate-700">Activo (500 - 999 XP)</p>
+                                                    <p className="text-[10px] text-slate-500">Tu presencia es notoria y frecuente.</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-start gap-2">
+                                                <span className="text-lg">🥇</span>
+                                                <div>
+                                                    <p className="text-xs font-bold text-slate-700">Proactivo (1,000 - 1,999 XP)</p>
+                                                    <p className="text-[10px] text-slate-500">No solo participas, generas valor e iniciativa.</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-start gap-2">
+                                                <span className="text-lg">🏆</span>
+                                                <div>
+                                                    <p className="text-xs font-bold text-slate-700">Referente (2,000+ XP)</p>
+                                                    <p className="text-[10px] text-slate-500">Tu constancia te hace un líder natural en el debate.</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
