@@ -225,7 +225,7 @@
                 if (p < 3000) return "Mentor";    
                 if (p < 4000) return "Embajador"; 
                 if (p < 5000) return "Leyenda";   
-                return "Nivel Máximo";                
+                return "Nivel Máximo";                 
             };
 
             const getCurrentLevelName = (points) => {
@@ -378,7 +378,8 @@
                 <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm">
                     <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
                         <div className="flex items-center gap-4">
-                            <img src="https://assets.poap.xyz/d7eaa336-f8ff-4913-87ef-07ad4d8cb754.jpeg" alt="Logo" className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shadow-md border-2 border-brand-100"/>
+                            {/* Logo duplicado de tamaño: de w-10/12 a w-20/24 */}
+                            <img src="https://assets.poap.xyz/d7eaa336-f8ff-4913-87ef-07ad4d8cb754.jpeg" alt="Logo" className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover shadow-md border-2 border-brand-100"/>
                             <div>
                                 <h1 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight leading-none">
                                     La Movida <span className="text-brand-500">SST</span>
@@ -565,7 +566,7 @@
                             ) : session.estadoAuto === 'Finalizada' ? (
                                 <a href={session.driveLink} target="_blank" className="flex-1 bg-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wide py-3 rounded-lg flex items-center justify-center gap-2 border border-slate-200 cursor-default shrink-0 min-w-[100px]"><Icons.ShieldCheck className="w-4 h-4" /> Finalizado</a>
                             ) : (
-                                 <a href={session.driveLink} target="_blank" className="flex-1 bg-white hover:bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wide py-3 rounded-lg flex items-center justify-center gap-2 transition-colors border border-slate-200 hover:border-brand-200 shadow-sm shrink-0 min-w-[100px]"><Icons.Calendar className="w-4 h-4 text-slate-400" /> Próximamente</a>
+                                     <a href={session.driveLink} target="_blank" className="flex-1 bg-white hover:bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wide py-3 rounded-lg flex items-center justify-center gap-2 transition-colors border border-slate-200 hover:border-brand-200 shadow-sm shrink-0 min-w-[100px]"><Icons.Calendar className="w-4 h-4 text-slate-400" /> Próximamente</a>
                             )}
                             {session.resumenLink && <a href={session.resumenLink} target="_blank" className="flex-1 bg-white hover:bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wide py-3 rounded-lg flex items-center justify-center gap-2 transition-colors border border-slate-200 hover:border-brand-200 shadow-sm shrink-0 min-w-[100px]" title="Ver Resumen"><Icons.FileText className="w-4 h-4 text-brand-500" /> Resumen</a>}
                             <a href={session.driveLink} target="_blank" className="flex-1 bg-white hover:bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wide py-3 rounded-lg flex items-center justify-center gap-2 transition-colors border border-slate-200 hover:border-brand-200 shadow-sm shrink-0 min-w-[80px]" title="Descargar Documento Oficial"><Icons.Download className="w-4 h-4" /> PDF</a>
@@ -708,6 +709,17 @@
                                             </optgroup>
                                         </select>
                                     </div>
+                                    
+                                    {/* Botón Ver tus Insignias agregado */}
+                                    <a 
+                                        href="https://insignias.movidasst.com/" 
+                                        target="_blank" 
+                                        className="bg-brand-500 hover:bg-brand-600 text-white border border-transparent px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide shadow-glow hover:shadow-lg flex items-center gap-2 transition-all w-full sm:w-auto justify-center"
+                                    >
+                                        <Icons.Crown className="w-4 h-4" />
+                                        Ver tus insignias
+                                    </a>
+
                                     <button 
                                         onClick={downloadRankingAsImage} 
                                         disabled={generatingImage}
