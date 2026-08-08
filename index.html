@@ -1,891 +1,971 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Comunidad de Estudio y Actualización Profesional" />
-    <meta property="og:description" content="¡Estudia con La Movida de SST!" />
-    <meta property="og:image" content="https://assets.poap.xyz/cec12a20-fefb-4199-9cc0-b1ece87fe44d.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://estudia.movidasst.com" />
-    
-    <title>La Movida de SST</title>
-    <meta name="description" content="Plataforma de estudio automatizada La Movida SST.">
-    
-    <!-- DEPENDENCIAS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#00205b">
+  <meta name="description" content="Estudios, ranking y progreso profesional de La Movida SST Plus. Consulta estudios activos, histórico, ranking público y tus puntos con tus credenciales.">
+  <meta property="og:title" content="Estudia con La Movida SST Plus">
+  <meta property="og:description" content="Estudios, actualización profesional, ranking y progreso en Seguridad y Salud en el Trabajo.">
+  <meta property="og:image" content="https://assets.poap.xyz/cec12a20-fefb-4199-9cc0-b1ece87fe44d.png">
+  <meta property="og:url" content="https://estudia.movidasst.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Estudia | La Movida SST Plus</title>
 
-    <!-- GOOGLE FONTS: OUTFIT -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --navy:#00205b;
+      --navy-2:#071b40;
+      --teal:#007b85;
+      --teal-2:#00a6a6;
+      --green:#70ad47;
+      --yellow:#ffb600;
+      --red:#d83b3b;
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe4ee;
+      --bg:#f5f8fb;
+      --card:#ffffff;
+      --shadow:0 16px 42px rgba(0,32,91,.10);
+      --shadow-sm:0 8px 24px rgba(15,23,42,.07);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Outfit',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 8% -10%, rgba(0,123,133,.12), transparent 31%),
+        radial-gradient(circle at 95% 0%, rgba(255,182,0,.10), transparent 23%),
+        var(--bg);
+      min-height:100vh;
+      padding-bottom:82px;
+    }
+    button,input,select{font:inherit}
+    button,a{touch-action:manipulation}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%}
+    .container{width:min(1180px,calc(100% - 28px));margin:0 auto}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .hidden{display:none!important}
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            teal: '#007b85',
-                            navy: '#00205b',
-                            green: '#70ad47',
-                            yellow: '#ffb600'
-                        },
-                        slate: { 
-                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 500: '#64748b', 600: '#475569', 800: '#1e293b', 900: '#0f172a' 
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'glass': '0 4px 20px -2px rgba(0, 0, 0, 0.03)',
-                        'glass-hover': '0 8px 24px -4px rgba(0, 123, 133, 0.12)',
-                        'glow-teal': '0 0 15px rgba(0, 123, 133, 0.3)',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-8px)' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: '0.05' },
-                            '50%': { opacity: '0.1' },
-                        }
-                    },
-                    borderRadius: {
-                        '3xl': '1.5rem',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body { 
-            background-color: #f8fafc; 
-            color: #475569;
-            min-height: 100vh; 
-            font-family: 'Outfit', sans-serif;
-            overflow-x: hidden;
-        }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #007b85; }
-        
-        .bg-tech-grid {
-            background-image: 
-                linear-gradient(to right, rgba(0, 32, 91, 0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 32, 91, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -2;
-            pointer-events: none;
-        }
+    .topbar{
+      position:sticky;top:0;z-index:70;
+      background:rgba(255,255,255,.90);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(219,228,238,.9);
+    }
+    .topbar-inner{min-height:76px;display:flex;align-items:center;gap:14px}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0;margin-right:auto}
+    .brand-logo{width:54px;height:54px;object-fit:contain;flex:0 0 auto}
+    .brand-title{font-size:1.02rem;font-weight:900;color:var(--navy);line-height:1.05;white-space:nowrap}
+    .brand-sub{font-size:.70rem;color:var(--teal);font-weight:800;margin-top:5px;letter-spacing:.02em}
+    .desktop-nav{display:none;gap:4px;align-items:center}
+    .nav-btn{
+      border:0;background:transparent;color:#64748b;padding:10px 12px;border-radius:12px;
+      font-size:.88rem;font-weight:800;cursor:pointer;transition:.2s;
+    }
+    .nav-btn:hover{background:#edf7f7;color:var(--teal)}
+    .nav-btn.active{background:#e7f7f7;color:var(--teal);box-shadow:inset 0 0 0 1px rgba(0,123,133,.12)}
+    .header-actions{display:flex;gap:7px;align-items:center}
+    .icon-link{
+      width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+      border:1px solid var(--line);background:white;color:var(--navy);box-shadow:0 4px 14px rgba(15,23,42,.05);
+    }
+    .icon-link:hover{color:var(--teal);border-color:rgba(0,123,133,.35)}
 
-        .ambient-glow {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: -1;
-            pointer-events: none;
-        }
-        .glow-teal { background-color: #007b85; width: 40vw; height: 40vw; top: -10%; right: -10%; }
-        .glow-yellow { background-color: #ffb600; width: 30vw; height: 30vw; bottom: 10%; left: -5%; }
+    .hero{padding:34px 0 16px}
+    .hero-shell{
+      position:relative;overflow:hidden;border-radius:30px;padding:28px 22px;
+      background:linear-gradient(135deg,var(--navy-2),var(--navy) 50%,#006e7d);
+      color:white;box-shadow:0 20px 50px rgba(0,32,91,.20);
+    }
+    .hero-shell:before,.hero-shell:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+    .hero-shell:before{width:230px;height:230px;background:rgba(255,182,0,.13);right:-75px;top:-115px}
+    .hero-shell:after{width:190px;height:190px;background:rgba(0,207,192,.14);left:-90px;bottom:-120px}
+    .hero-grid{position:relative;z-index:1;display:grid;gap:20px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);padding:7px 11px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .hero h1{font-size:clamp(2rem,8vw,3.8rem);line-height:.98;margin:15px 0 12px;font-weight:900;letter-spacing:-.035em}
+    .hero h1 span{color:#82f0e7}
+    .hero p{margin:0;color:#d8e6f5;line-height:1.6;max-width:720px;font-size:.98rem}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 15px;border-radius:14px;font-weight:900;font-size:.88rem;border:1px solid rgba(255,255,255,.16)}
+    .hero-btn.primary{background:white;color:var(--navy)}
+    .hero-btn.secondary{background:rgba(255,255,255,.09);color:white}
+    .hero-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-self:end}
+    .hero-kpi{padding:14px 8px;text-align:center;border-radius:17px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13)}
+    .hero-kpi strong{display:block;font-size:1.35rem;font-weight:900;color:white}
+    .hero-kpi span{display:block;font-size:.66rem;color:#c9d9eb;font-weight:700;margin-top:3px}
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            border-radius: 24px;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .glass-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 24px -4px rgba(0, 123, 133, 0.12);
-        }
-        
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #00205b, #007b85, #70ad47);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
-        .glass-card:hover::before { opacity: 1; }
+    .section{padding:20px 0 10px}
+    .view{display:none;animation:fade .25s ease}
+    .view.active{display:block}
+    @keyframes fade{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px}
+    .section-title{margin:0;color:var(--navy);font-size:1.55rem;font-weight:900;letter-spacing:-.02em}
+    .section-desc{margin:6px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
+    .badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;font-size:.7rem;font-weight:900;white-space:nowrap}
+    .badge.live{color:#087b55;background:#eafaf3;border:1px solid #c6eedf}
+    .badge.done{color:#536275;background:#eff3f7;border:1px solid #dbe4ee}
+    .badge.soon{color:#8c6100;background:#fff7d8;border:1px solid #f6df82}
+    .badge.pause{color:#9a4b11;background:#fff0e5;border:1px solid #f6c7a3}
 
-        .mobile-nav {
-            transition: transform 0.3s ease-in-out;
-            backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.95);
-        }
-        .mobile-nav-hidden { transform: translateY(100%); }
-        h1, h2, h3, h4, h5, h6 { color: #00205b; }
-        
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-    </style>
+    .toolbar{display:grid;gap:10px;margin-bottom:16px}
+    .searchbox{position:relative}
+    .searchbox i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
+    .searchbox input,.select{
+      width:100%;height:48px;border:1px solid var(--line);border-radius:15px;background:white;color:var(--ink);outline:none;padding:0 14px;
+      box-shadow:0 4px 18px rgba(15,23,42,.035);font-weight:600;
+    }
+    .searchbox input{padding-left:41px}
+    .searchbox input:focus,.select:focus,.credential-input:focus{border-color:rgba(0,123,133,.6);box-shadow:0 0 0 4px rgba(0,123,133,.09)}
+
+    .studies-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .study-card{background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;position:relative}
+    .study-accent{height:5px;background:linear-gradient(90deg,var(--teal),var(--navy),var(--yellow))}
+    .study-body{padding:18px}
+    .study-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .study-code{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:.72rem;font-weight:900;letter-spacing:.06em}
+    .study-title{margin:7px 0 8px;color:var(--navy);font-size:1.16rem;line-height:1.25;font-weight:900}
+    .study-meta{display:flex;gap:7px;flex-wrap:wrap;color:#64748b;font-size:.76rem;font-weight:700}
+    .meta-chip{display:inline-flex;align-items:center;gap:6px;background:#f5f8fb;border:1px solid #e6edf4;border-radius:999px;padding:6px 8px}
+    .progress-wrap{margin:16px 0 11px}
+    .progress-label{display:flex;justify-content:space-between;color:#64748b;font-size:.72rem;font-weight:800;margin-bottom:6px}
+    .progress{height:8px;background:#eaf0f5;border-radius:999px;overflow:hidden}
+    .progress > span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),#02b2b0)}
+    .debate{margin:12px 0 0;padding:11px 12px;border-radius:14px;background:#f0fbfb;border:1px solid #cfecec;color:#36586a;font-size:.81rem;line-height:1.45}
+    .moderators{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .mod-label{font-size:.68rem;color:#94a3b8;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+    .moderator{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #e4ebf2;border-radius:999px;padding:5px 9px 5px 5px;color:#40536b;font-size:.74rem;font-weight:800}
+    .moderator img,.avatar{object-fit:cover;background:#eef3f7}
+    .moderator img{width:26px;height:26px;border-radius:50%}
+    .study-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
+    .action-btn{min-height:42px;border-radius:12px;border:1px solid var(--line);background:white;color:#40536b;display:flex;align-items:center;justify-content:center;gap:7px;font-size:.76rem;font-weight:900;padding:8px;cursor:pointer}
+    .action-btn:hover{border-color:rgba(0,123,133,.35);color:var(--teal);background:#f5fdfd}
+    .action-btn.primary{background:var(--navy);border-color:var(--navy);color:white}
+    .action-btn.whatsapp{background:#effcf4;border-color:#c8efd7;color:#128c7e}
+    .empty{padding:40px 18px;text-align:center;background:white;border:1px dashed #cbd7e3;border-radius:22px;color:#64748b}
+    .empty i{font-size:2rem;color:#b6c3d1;margin-bottom:12px}
+
+    .ranking-shell{display:grid;gap:14px}
+    .ranking-controls{display:grid;gap:10px;background:white;padding:14px;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+    .ranking-capture{background:linear-gradient(180deg,#fff,#f9fbfd);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow)}
+    .ranking-brand{text-align:center;margin-bottom:16px}
+    .ranking-brand small{color:var(--teal);font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+    .ranking-brand h3{margin:5px 0 0;color:var(--navy);font-size:1.5rem;font-weight:900}
+    .podium{display:grid;grid-template-columns:1fr 1.12fr 1fr;gap:7px;align-items:end;margin:18px 0 22px}
+    .podium-item{text-align:center;min-width:0}
+    .podium-avatar-wrap{position:relative;width:64px;height:64px;margin:0 auto 8px}
+    .podium-item.first .podium-avatar-wrap{width:78px;height:78px}
+    .podium-avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;border:4px solid white;box-shadow:0 8px 24px rgba(15,23,42,.15);background:#e7edf3}
+    .medal{position:absolute;right:-4px;bottom:-3px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:white;box-shadow:0 4px 12px rgba(15,23,42,.16);font-size:.9rem}
+    .podium-name{font-weight:900;color:var(--navy);font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .podium-xp{color:var(--teal);font-weight:900;font-size:.78rem;margin-top:3px}
+    .podium-base{margin-top:8px;border-radius:12px 12px 5px 5px;background:linear-gradient(180deg,#f0f5f9,#e3eaf1);padding:10px 4px;font-size:1.15rem;font-weight:900;color:var(--navy)}
+    .podium-item.first .podium-base{padding:17px 4px;background:linear-gradient(180deg,#fff7d7,#f6de84)}
+    .ranking-list{display:grid;gap:7px}
+    .rank-row{display:grid;grid-template-columns:38px 42px minmax(0,1fr) auto;gap:9px;align-items:center;border:1px solid #e5ecf3;background:white;border-radius:14px;padding:8px 10px}
+    .rank-pos{font-family:'JetBrains Mono',monospace;font-weight:900;color:#7a8a9c;text-align:center;font-size:.8rem}
+    .rank-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#edf2f6}
+    .rank-name{font-weight:900;color:var(--navy);font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .rank-state{font-size:.68rem;color:#94a3b8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .rank-score{text-align:right}
+    .rank-score strong{display:block;color:var(--teal);font-size:.9rem}
+    .rank-score span{display:block;color:#8291a2;font-size:.65rem;font-weight:800;margin-top:2px}
+    .level-legend{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:16px}
+    .level-card{padding:10px;border-radius:13px;background:#f5f8fb;border:1px solid #e7edf3;font-size:.72rem}
+    .level-card strong{display:block;color:var(--navy);font-size:.76rem}
+    .level-card span{color:#8291a2}
+
+    .mine-grid{display:grid;gap:14px}
+    .credential-card,.panel{background:white;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow-sm)}
+    .credential-card{overflow:hidden;position:relative}
+    .credential-card:before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-60px;top:-70px;background:rgba(0,123,133,.08)}
+    .credential-title{position:relative;margin:0;color:var(--navy);font-size:1.25rem;font-weight:900}
+    .credential-copy{position:relative;color:#64748b;font-size:.84rem;line-height:1.55;margin:6px 0 16px}
+    .field{margin-top:11px}
+    .field label{display:block;color:#526277;font-size:.73rem;font-weight:900;margin:0 0 6px 2px}
+    .input-wrap{position:relative}
+    .credential-input{width:100%;height:49px;border:1px solid var(--line);border-radius:14px;padding:0 43px 0 13px;background:#fbfdff;outline:none;font-weight:800;color:var(--navy)}
+    .input-eye{position:absolute;right:5px;top:5px;width:39px;height:39px;border:0;background:transparent;border-radius:10px;color:#7c8b9d;cursor:pointer}
+    .submit-btn{width:100%;min-height:49px;margin-top:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--teal));color:white;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(0,80,110,.18)}
+    .submit-btn:disabled{opacity:.58;cursor:not-allowed}
+    .privacy-note{display:flex;gap:8px;margin-top:11px;color:#7b8b9e;font-size:.68rem;line-height:1.45}
+    .form-error{margin-top:10px;padding:10px 11px;border-radius:12px;background:#fff0f0;border:1px solid #f4caca;color:#9b2e2e;font-size:.78rem;font-weight:700}
+
+    .profile-head{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;align-items:center}
+    .profile-head .avatar{width:62px;height:62px;border-radius:18px;border:2px solid #e5edf4}
+    .profile-name{font-size:1.1rem;font-weight:900;color:var(--navy);line-height:1.15}
+    .profile-state{font-size:.74rem;color:#8291a2;margin-top:4px}
+    .level-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:#edfafa;color:var(--teal);font-size:.7rem;font-weight:900;margin-top:7px}
+    .profile-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}
+    .profile-kpi{padding:14px 10px;border-radius:16px;background:#f6f9fc;border:1px solid #e7edf3;text-align:center}
+    .profile-kpi strong{display:block;font-size:1.25rem;color:var(--navy);font-weight:900}
+    .profile-kpi span{display:block;color:#8392a4;font-size:.66rem;font-weight:800;margin-top:3px}
+    .next-level{margin-top:14px;padding:13px;border-radius:15px;background:#fbfaf2;border:1px solid #efe3a6}
+    .next-top{display:flex;justify-content:space-between;gap:10px;font-size:.73rem;font-weight:900;color:#705d13}
+    .mini-progress{height:8px;background:#eee6c4;border-radius:999px;margin-top:8px;overflow:hidden}
+    .mini-progress span{height:100%;display:block;background:linear-gradient(90deg,#ffb600,#e89c00);border-radius:999px}
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+    .stat{padding:11px 7px;background:#f8fafc;border-radius:14px;text-align:center;border:1px solid #e9eef3}
+    .stat strong{display:block;color:var(--teal);font-size:1rem;font-weight:900}
+    .stat span{font-size:.62rem;color:#8392a4;font-weight:800}
+    .subhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+    .subhead h3{margin:0;color:var(--navy);font-size:1rem;font-weight:900}
+    .breakdown{display:grid;gap:7px}
+    .break-row,.history-row,.session-points-row{display:flex;justify-content:space-between;gap:10px;padding:10px 11px;border:1px solid #e8eef4;border-radius:13px;background:#fbfdff}
+    .break-row strong,.history-row strong,.session-points-row strong{color:var(--navy);font-size:.79rem}
+    .break-row span,.history-row span,.session-points-row span{color:var(--teal);font-size:.76rem;font-weight:900;white-space:nowrap}
+    .history-row{align-items:flex-start}
+    .history-main{min-width:0}
+    .history-main strong{display:block}
+    .history-main small{display:block;color:#8291a2;font-size:.66rem;margin-top:3px;line-height:1.35}
+    .points-positive{color:#087b55!important}.points-negative{color:#b33b3b!important}
+    .clear-btn{border:1px solid #dbe4ee;background:white;color:#64748b;border-radius:11px;padding:7px 9px;font-size:.7rem;font-weight:900;cursor:pointer}
+
+    .info-grid{display:grid;gap:14px}
+    .info-card{background:white;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow-sm)}
+    .info-card h3{color:var(--navy);margin:0 0 8px;font-size:1.05rem;font-weight:900}
+    .info-card p,.info-card li{color:#5f7187;font-size:.83rem;line-height:1.58}
+    .info-card ul{margin:8px 0 0;padding-left:18px}
+    .rule-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+    .rule{padding:11px;border-radius:14px;background:#f5f9fb;border:1px solid #e5edf3;text-align:center}
+    .rule strong{display:block;color:var(--teal);font-size:1rem}
+    .rule span{font-size:.66rem;color:#718298;font-weight:800}
+    .footer{padding:28px 0 18px;text-align:center;color:#7f8da0;font-size:.73rem;line-height:1.6}
+    .footer strong{color:var(--navy)}
+
+    .mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-top:1px solid #dce5ed;padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;box-shadow:0 -8px 28px rgba(15,23,42,.08)}
+    .mobile-btn{border:0;background:transparent;color:#91a0b1;border-radius:12px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.59rem;font-weight:900;cursor:pointer}
+    .mobile-btn i{font-size:1.1rem}
+    .mobile-btn.active{background:#eaf8f8;color:var(--teal)}
+
+    .loader-overlay{position:fixed;inset:0;z-index:110;background:rgba(245,248,251,.94);display:flex;align-items:center;justify-content:center;padding:20px;transition:.25s}
+    .loader-card{text-align:center;color:var(--navy)}
+    .spinner{width:46px;height:46px;border-radius:50%;border:4px solid #dbe7ee;border-top-color:var(--teal);animation:spin .8s linear infinite;margin:0 auto 12px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;left:50%;bottom:92px;z-index:120;transform:translate(-50%,20px);opacity:0;pointer-events:none;max-width:min(440px,calc(100% - 28px));background:#152137;color:white;padding:11px 14px;border-radius:13px;font-size:.78rem;font-weight:700;box-shadow:0 12px 34px rgba(15,23,42,.25);transition:.25s}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    @media(min-width:720px){
+      body{padding-bottom:0}.desktop-nav{display:flex}.mobile-nav{display:none}
+      .hero{padding-top:40px}.hero-shell{padding:38px 40px}.hero-grid{grid-template-columns:minmax(0,1.65fr) minmax(270px,.65fr);align-items:center}
+      .hero-kpis{gap:10px}.hero-kpi{padding:18px 10px}.hero-kpi strong{font-size:1.65rem}
+      .toolbar{grid-template-columns:minmax(0,1fr) 220px}
+      .studies-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+      .study-body{padding:21px}.study-actions{grid-template-columns:repeat(4,1fr)}
+      .ranking-controls{grid-template-columns:minmax(0,1fr) 220px 180px;align-items:center}
+      .ranking-capture{padding:28px}.podium-avatar-wrap{width:78px;height:78px}.podium-item.first .podium-avatar-wrap{width:92px;height:92px}
+      .level-legend{grid-template-columns:repeat(4,1fr)}
+      .mine-grid{grid-template-columns:minmax(290px,.62fr) minmax(0,1.38fr);align-items:start}
+      .profile-kpis{grid-template-columns:repeat(4,1fr)}
+      .info-grid{grid-template-columns:repeat(2,1fr)}
+      .toast{bottom:24px}
+    }
+    @media(min-width:1040px){
+      .studies-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .info-grid{grid-template-columns:repeat(3,1fr)}
+    }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
+  <div id="loader" class="loader-overlay" aria-live="polite">
+    <div class="loader-card">
+      <div class="spinner"></div>
+      <strong>Cargando La Movida SST Plus</strong>
+      <div style="color:#718198;font-size:.78rem;margin-top:5px">Estudios, ranking y progreso profesional</div>
+    </div>
+  </div>
 
-    <div class="bg-tech-grid"></div>
-    <div class="ambient-glow glow-teal animate-pulse-glow"></div>
-    <div class="ambient-glow glow-yellow animate-pulse-glow" style="animation-delay: 3s;"></div>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="https://www.movidasst.com/" aria-label="Ir al inicio de La Movida SST">
+        <img class="brand-logo" src="https://assets.poap.xyz/cec12a20-fefb-4199-9cc0-b1ece87fe44d.png" alt="La Movida SST Plus">
+        <div>
+          <div class="brand-title">La Movida SST Plus</div>
+          <div class="brand-sub">De la Reacción a la Prevención</div>
+        </div>
+      </a>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo, useCallback } = React;
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <button class="nav-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i> Estudios</button>
+        <button class="nav-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i> Histórico</button>
+        <button class="nav-btn" data-nav="ranking"><i class="fa-solid fa-trophy"></i> Ranking</button>
+        <button class="nav-btn" data-nav="mine"><i class="fa-solid fa-chart-line"></i> Mis puntos</button>
+        <button class="nav-btn" data-nav="info"><i class="fa-regular fa-circle-question"></i> Info</button>
+      </nav>
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyb05qrIOt4QSpzN9nw5p1cWlwDh6gdR5IAAJmrPHes5ArP9a5DUk_dInJWXgLVP-P7Pw/exec"; 
-        
-        // Claves de Caché
-        const CACHE_KEY = 'sst_data_v12_api_segura'; 
-        const CACHE_TIME_KEY = 'sst_data_v12_time';
-        const CACHE_DURATION = 30 * 60 * 1000; // 30 Minutos
+      <div class="header-actions">
+        <a class="icon-link" href="https://calificaciones.movidasst.com/" title="Calificaciones" aria-label="Calificaciones"><i class="fa-solid fa-graduation-cap"></i></a>
+        <a class="icon-link" href="https://whatsapp.com/channel/0029Va0mlH5Jf05mrcCz8r3e" target="_blank" rel="noopener noreferrer" title="Canal de WhatsApp" aria-label="Canal de WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </header>
 
-        const Icons = {
-            Archive: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="5" x="2" y="4" rx="2"/><path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></svg>,
-            ShieldCheck: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>,
-            Calendar: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
-            Trophy: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>,
-            Search: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
-            BookOpen: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
-            FileText: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>,
-            Target: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
-            Zap: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-            Download: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>,
-            User: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-            Filter: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>,
-            UserPlus: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>,
-            Bell: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>,
-            XCircle: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>,
-            Info: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>,
-            Camera: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>,
-            Home: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
-            GraduationCap: ({className}) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21.42 10.922a2 2 0 0 1-.019 3.837l-8.5 4.304a2 2 0 0 1-1.802 0l-8.5-4.304a2 2 0 0 1-.019-3.837l8.5-4.25a2 2 0 0 1 1.84 0l8.5 4.25ZM14 14.5v3.425a2 2 0 0 1-1.106 1.79l-1 .5a2 2 0 0 1-1.788 0l-1-.5A2 2 0 0 1 8 17.925V14.5"/><path d="M4 11v6"/></svg>
-        };
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-shell">
+          <div class="hero-grid">
+            <div>
+              <div class="eyebrow"><i class="fa-solid fa-users-viewfinder"></i> Profesionales protagonistas</div>
+              <h1>¡Estudia con <span>La Movida</span>!</h1>
+              <p>Actualización profesional continua en SST mediante aprendizaje móvil, participación técnica y construcción colectiva de conocimiento. Consulta los estudios, el ranking público y tu progreso personal.</p>
+              <div class="hero-actions">
+                <button class="hero-btn primary" data-nav="mine"><i class="fa-solid fa-key"></i> Ver mis puntos</button>
+                <button class="hero-btn secondary" data-nav="ranking"><i class="fa-solid fa-ranking-star"></i> Ver ranking</button>
+              </div>
+            </div>
+            <div class="hero-kpis" aria-label="Resumen de la plataforma">
+              <div class="hero-kpi"><strong id="kpiStudies">—</strong><span>Estudios visibles</span></div>
+              <div class="hero-kpi"><strong id="kpiActive">—</strong><span>En curso / próximos</span></div>
+              <div class="hero-kpi"><strong id="kpiRanked">—</strong><span>Con XP</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        const App = () => {
-            const initialTab = typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('vista') || 'agenda') : 'agenda';
-            
-            const [activeTab, setActiveTab] = useState(initialTab); 
-            const [searchTerm, setSearchTerm] = useState('');
-            const [activeTag, setActiveTag] = useState('');
-            const [data, setData] = useState({ sesiones: [], ranking: [] });
-            const [loading, setLoading] = useState(true);
-            const [error, setError] = useState(null);
-            const [generatingImage, setGeneratingImage] = useState(false);
-            const [selectedRankingId, setSelectedRankingId] = useState('global');
-            const [selectedModerator, setSelectedModerator] = useState(null);
-            const [showMobileNav, setShowMobileNav] = useState(true);
-            const [lastScrollY, setLastScrollY] = useState(0);
+    <section class="section">
+      <div class="container">
+        <div id="view-agenda" class="view active">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Estudios y agenda</h2>
+              <p class="section-desc">Sesiones activas, próximas y recursos de estudio disponibles.</p>
+            </div>
+            <span class="badge live"><i class="fa-solid fa-signal"></i> Actualización continua</span>
+          </div>
+          <div class="toolbar">
+            <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="agendaSearch" type="search" placeholder="Buscar por tema, tipo o código…" autocomplete="off"></div>
+            <select id="agendaStatus" class="select" aria-label="Filtrar estudios">
+              <option value="all">Todos los activos</option>
+              <option value="En Curso">En curso</option>
+              <option value="Programada">Programados</option>
+              <option value="Pausada">Pausados</option>
+            </select>
+          </div>
+          <div id="agendaGrid" class="studies-grid"></div>
+        </div>
 
-            useEffect(() => {
-                if (typeof window !== 'undefined') {
-                    try {
-                        const url = new URL(window.location);
-                        if (url.protocol.startsWith('http')) {
-                            url.searchParams.set('vista', activeTab);
-                            window.history.pushState({}, '', url);
-                        }
-                    } catch (e) {
-                        console.warn("Modificación de URL deshabilitada en entorno de previsualización segura.");
-                    }
-                }
-            }, [activeTab]);
+        <div id="view-history" class="view">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Histórico de estudios</h2>
+              <p class="section-desc">Consulta los estudios finalizados y sus recursos disponibles.</p>
+            </div>
+            <span class="badge done"><i class="fa-solid fa-box-archive"></i> Archivo técnico</span>
+          </div>
+          <div class="toolbar">
+            <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="historySearch" type="search" placeholder="Buscar en el histórico…" autocomplete="off"></div>
+            <select id="historyType" class="select" aria-label="Filtrar histórico por tipo"><option value="all">Todos los tipos</option></select>
+          </div>
+          <div id="historyGrid" class="studies-grid"></div>
+        </div>
 
-            const fetchSheetData = async () => {
-                try {
-                    let isCacheValid = false;
-                    try {
-                        const cachedData = localStorage.getItem(CACHE_KEY);
-                        const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-                        const now = new Date().getTime();
+        <div id="view-ranking" class="view">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Ranking público</h2>
+              <p class="section-desc">Reconocimiento a la participación y al aporte técnico en la comunidad de estudio.</p>
+            </div>
+            <span class="badge soon"><i class="fa-solid fa-star"></i> XP profesional</span>
+          </div>
 
-                        if (cachedData && cachedTime && (now - Number(cachedTime) < CACHE_DURATION)) {
-                            setData(JSON.parse(cachedData));
-                            setLoading(false);
-                            isCacheValid = true;
-                        }
-                    } catch (e) { console.warn("Cache no disponible", e); }
+          <div class="ranking-shell">
+            <div class="ranking-controls">
+              <select id="rankingScope" class="select" aria-label="Seleccionar ranking"><option value="global">Ranking global</option></select>
+              <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="rankingSearch" type="search" placeholder="Buscar profesional…" autocomplete="off"></div>
+              <button id="downloadRanking" class="action-btn primary" type="button"><i class="fa-solid fa-download"></i> Descargar imagen</button>
+            </div>
 
-                    const response = await fetch(SCRIPT_URL);
-                    if (!response.ok) throw new Error("Error en la conexión a la API");
-                    const jsonData = await response.json();
-                    if (jsonData.error) throw new Error(jsonData.error);
-                    
-                    setData(jsonData);
-                    
-                    try {
-                        localStorage.setItem(CACHE_KEY, JSON.stringify(jsonData));
-                        localStorage.setItem(CACHE_TIME_KEY, new Date().getTime().toString());
-                    } catch (e) { console.warn("No se pudo guardar en cache", e); }
-                    
-                    if (!isCacheValid) setLoading(false);
-                } catch (err) {
-                    console.error("Error conectando al backend:", err);
-                    if (!data.sesiones || data.sesiones.length === 0) {
-                        setError("Error de conexión con la base de datos.");
-                        setLoading(false);
-                    }
-                }
-            };
+            <div id="rankingCapture" class="ranking-capture">
+              <div class="ranking-brand">
+                <small>La Movida SST Plus</small>
+                <h3 id="rankingTitle">Ranking global</h3>
+              </div>
+              <div id="podium" class="podium"></div>
+              <div id="rankingList" class="ranking-list"></div>
+              <div id="rankingEmpty" class="empty hidden"><i class="fa-solid fa-trophy"></i><div>Aún no hay puntos para mostrar en este ranking.</div></div>
+              <div id="levelsLegend" class="level-legend"></div>
+            </div>
+          </div>
+        </div>
 
-            useEffect(() => { fetchSheetData(); }, []);
+        <div id="view-mine" class="view">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Mis puntos</h2>
+              <p class="section-desc">Consulta de forma privada tu XP, posición, nivel e historial usando tus credenciales de La Movida.</p>
+            </div>
+            <span class="badge live"><i class="fa-solid fa-shield-halved"></i> Consulta privada</span>
+          </div>
 
-            useEffect(() => {
-                const controlNavbar = () => {
-                    if (typeof window !== 'undefined') {
-                        if (window.scrollY > lastScrollY && window.scrollY > 100) setShowMobileNav(false);
-                        else setShowMobileNav(true);
-                        setLastScrollY(window.scrollY);
-                    }
-                };
-                window.addEventListener('scroll', controlNavbar);
-                return () => window.removeEventListener('scroll', controlNavbar);
-            }, [lastScrollY]);
+          <div class="mine-grid">
+            <form id="credentialsForm" class="credential-card" autocomplete="off">
+              <h3 class="credential-title">Accede a tu progreso</h3>
+              <p class="credential-copy">Coloca tu número de cédula y tu código de registro. El código se valida en el servidor y no se muestra en el ranking público.</p>
 
-            const formatDisplayDate = (dateString) => {
-                if (!dateString) return "Fecha por definir";
-                try {
-                    if (dateString.includes(' de ') && !dateString.includes('GMT')) return dateString;
-                    const date = new Date(dateString);
-                    if (!isNaN(date.getTime())) {
-                        return new Intl.DateTimeFormat('es-VE', { timeZone: 'America/Caracas', day: 'numeric', month: 'long', year: 'numeric' }).format(date);
-                    }
-                } catch (e) {}
-                return dateString;
-            };
-
-            const getDriveDirectLink = (url) => {
-                if (!url) return null;
-                try {
-                    if (typeof url !== 'string') return url;
-                    if (url.includes('googleusercontent.com')) return url;
-                    const patterns = [/\/file\/d\/([a-zA-Z0-9_-]+)/, /id=([a-zA-Z0-9_-]+)/];
-                    for (let pattern of patterns) {
-                        const match = url.match(pattern);
-                        if (match && match[1]) return `https://lh3.googleusercontent.com/d/${match[1]}`;
-                    }
-                } catch (e) {}
-                return url;
-            };
-
-            const downloadRankingAsImage = async () => {
-                const element = document.getElementById('ranking-capture-area');
-                if (!element) return;
-                setGeneratingImage(true);
-                try {
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2, useCORS: true, logging: false });
-                    const link = document.createElement('a');
-                    link.download = `Ranking_LaMovidaSST_${new Date().toLocaleDateString('es-ES').replace(/\//g, '-')}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                } catch (err) {
-                    console.error("Error al generar imagen:", err);
-                } finally {
-                    setGeneratingImage(false);
-                }
-            };
-
-            const getLevelProgress = (points) => {
-                const p = Number(points) || 0;
-                if (p < 500) return (p / 500) * 100; 
-                if (p < 1000) return ((p - 500) / 500) * 100;
-                if (p < 2000) return ((p - 1000) / 1000) * 100;
-                if (p < 3000) return ((p - 2000) / 1000) * 100; 
-                if (p < 4000) return ((p - 3000) / 1000) * 100; 
-                if (p < 5000) return ((p - 4000) / 1000) * 100; 
-                return 100; 
-            };
-
-            const getNextLevelName = (points) => {
-                const p = Number(points) || 0;
-                if (p < 500) return "Activo"; 
-                if (p < 1000) return "Proactivo"; 
-                if (p < 2000) return "Referente"; 
-                if (p < 3000) return "Mentor";   
-                if (p < 4000) return "Embajador"; 
-                return "Leyenda";                 
-            };
-
-            const getPointsNeeded = (points) => {
-                const p = Number(points) || 0;
-                if (p < 500) return 500 - p;
-                if (p < 1000) return 1000 - p;
-                if (p < 2000) return 2000 - p;
-                if (p < 3000) return 3000 - p;
-                if (p < 4000) return 4000 - p;
-                if (p < 5000) return 5000 - p;
-                return 0;
-            };
-
-            const getCurrentLevelName = (points) => {
-                const p = Number(points) || 0;
-                if (p < 500) return "Participante";
-                if (p < 1000) return "Activo";
-                if (p < 2000) return "Proactivo";
-                if (p < 3000) return "Referente";
-                if (p < 4000) return "Mentor";
-                if (p < 5000) return "Embajador";
-                return "Leyenda";
-            };
-
-            const filteredSessions = useMemo(() => {
-                let sessions = data.sesiones.filter(s => s.tema && String(s.tema).toLowerCase().includes(searchTerm.toLowerCase()));
-                if (selectedModerator) {
-                    sessions = sessions.filter(s => 
-                        (s.moderador1 && String(s.moderador1).includes(selectedModerator)) || 
-                        (s.moderador2 && String(s.moderador2).includes(selectedModerator))
-                    );
-                }
-                if (activeTag) {
-                    sessions = sessions.filter(s => {
-                        const matchTema = s.tema && String(s.tema).toLowerCase().includes(activeTag.toLowerCase());
-                        const matchTipo = s.tipo && String(s.tipo).toLowerCase().includes(activeTag.toLowerCase());
-                        return matchTema || matchTipo;
-                    });
-                }
-                return sessions;
-            }, [data.sesiones, searchTerm, selectedModerator, activeTag]);
-
-            const processedRanking = useMemo(() => {
-                if (!data.ranking || !data.ranking.length) return [];
-                let sortedList = data.ranking
-                    .filter(r => String(r.idSesion) === String(selectedRankingId))
-                    .filter(r => (Number(r.puntos) || 0) > 0)
-                    .sort((a, b) => b.puntos - a.puntos);
-                for (let i = 0; i < sortedList.length; i++) sortedList[i].rank = i + 1;
-                return sortedList;
-            }, [data.ranking, selectedRankingId]);
-
-            const getTimestamp = (dateStr) => {
-                if (!dateStr) return 0;
-                const d = new Date(dateStr);
-                if (!isNaN(d.getTime())) return d.getTime();
-                const meses = { "enero":0, "febrero":1, "marzo":2, "abril":3, "mayo":4, "junio":5, "julio":6, "agosto":7, "septiembre":8, "octubre":9, "noviembre":10, "diciembre":11 };
-                const partes = String(dateStr).toLowerCase().split(' de ');
-                if (partes.length === 3) return new Date(parseInt(partes[2]), meses[partes[1].trim()], parseInt(partes[0])).getTime();
-                return 0;
-            };
-
-            const activeSessions = filteredSessions.filter(s => s.estadoAuto !== 'Finalizada' && s.estadoAuto !== 'Concluida');
-            const pastSessions = filteredSessions
-                .filter(s => s.estadoAuto === 'Finalizada' || s.estadoAuto === 'Concluida')
-                .sort((a, b) => getTimestamp(b.fechaInicio) - getTimestamp(a.fechaInicio));
-
-            const Header = () => (
-                <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.03)]">
-                    <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
-                        <div className="flex items-center gap-4">
-                            <img src="https://assets.poap.xyz/cec12a20-fefb-4199-9cc0-b1ece87fe44d.png" alt="Logo" className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover shadow-sm border border-slate-100 animate-float"/>
-                            <div>
-                                <h1 className="text-xl md:text-2xl font-extrabold text-brand-navy tracking-tight leading-none flex items-center gap-2">
-                                    La Movida <span className="text-brand-teal">SST</span>
-                                    <span className="bg-gradient-to-r from-brand-yellow to-brand-green text-white text-[10px] uppercase px-2 py-0.5 rounded-full font-bold shadow-sm tracking-wider">Plus</span>
-                                </h1>
-                                <p className="text-[10px] md:text-xs text-slate-500 font-medium tracking-wide mt-1 uppercase">De la Reacción a la Prevención</p>
-                                <p className="text-[9px] md:text-[10px] text-brand-teal font-extrabold tracking-widest mt-0.5 uppercase">¡ Estudia con La Movida de SST !</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2 md:gap-3">
-                            <nav className="hidden lg:flex items-center gap-1 bg-slate-100/50 p-1.5 rounded-2xl mr-2 border border-slate-200/50 backdrop-blur-sm">
-                                {['agenda', 'historico', 'ranking', 'info'].map((tab) => (
-                                    <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === tab ? 'bg-white text-brand-teal shadow-sm border border-slate-200' : 'text-slate-500 hover:text-brand-navy hover:bg-slate-200/50'}`}>
-                                        {tab === 'historico' ? 'Histórico' : tab === 'info' ? 'Info' : tab.charAt(0).toUpperCase() + tab.slice(1)}
-                                    </button>
-                                ))}
-                                <a href="https://calificaciones.movidasst.com/" className="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 text-slate-500 hover:text-brand-navy hover:bg-slate-200/50 flex items-center gap-1.5">
-                                    <Icons.GraduationCap className="w-4 h-4" /> Calificaciones
-                                </a>
-                            </nav>
-
-                            <a href="https://www.movidasst.com" className="bg-slate-100 hover:bg-brand-teal text-slate-600 hover:text-white p-2.5 rounded-xl border border-slate-200 transition-colors flex items-center justify-center shadow-sm shrink-0" title="Volver al inicio (Hub)">
-                                <Icons.Home className="w-5 h-5" />
-                            </a>
-
-                            <a href="https://whatsapp.com/channel/0029Va0mlH5Jf05mrcCz8r3e" target="_blank" className="bg-slate-100 hover:bg-brand-teal/10 text-slate-600 hover:text-brand-teal p-2.5 md:px-4 md:py-2.5 rounded-xl border border-slate-200 transition-colors flex items-center justify-center gap-2 shadow-sm shrink-0" title="Canal de Difusión">
-                                <Icons.Bell className="w-5 h-5" />
-                                <span className="hidden md:inline text-xs font-bold uppercase tracking-wider">Canal</span>
-                            </a>
-                        </div>
-                    </div>
-                </header>
-            );
-
-            const PodiumUser = ({ user, positionIndex }) => {
-                const avatarSrc = getDriveDirectLink(user.foto);
-                const rank = user.rank;
-                let ringColor, bgColor, badgeColor, badgeText, height, zIndex;
-
-                if (rank === 1) { ringColor = 'ring-brand-yellow/80'; bgColor = 'bg-gradient-to-b from-yellow-50 to-white border-brand-yellow'; badgeColor = 'bg-brand-yellow text-brand-navy border-yellow-300'; badgeText = "1"; } 
-                else if (rank === 2) { ringColor = 'ring-brand-teal/80'; bgColor = 'bg-gradient-to-b from-brand-teal/10 to-white border-brand-teal'; badgeColor = 'bg-brand-teal text-white border-brand-teal/50'; badgeText = "2"; } 
-                else if (rank === 3) { ringColor = 'ring-brand-green/80'; bgColor = 'bg-gradient-to-b from-green-50 to-white border-brand-green'; badgeColor = 'bg-brand-green text-white border-green-400'; badgeText = "3"; }
-
-                if (positionIndex === 0) { height = 'h-48 md:h-56'; zIndex = 'z-20'; } 
-                else if (positionIndex === 1) { height = 'h-40 md:h-44'; zIndex = 'z-10'; } 
-                else { height = 'h-36 md:h-40'; zIndex = 'z-0'; }
-
-                return (
-                    <div className={`flex flex-col items-center justify-end ${height} w-1/3 max-w-[120px] ${zIndex} transition-all hover:-translate-y-2 duration-300`}>
-                        <div className="relative mb-4 flex flex-col items-center">
-                            <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden ring-4 ${ringColor} shadow-[0_8px_20px_rgba(0,0,0,0.1)] bg-white relative z-10 p-0.5`}>
-                                <div className="w-full h-full rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center text-slate-300">
-                                    {avatarSrc ? <img src={avatarSrc} alt={user.nombre} className="w-full h-full object-cover" crossOrigin="anonymous" /> : <Icons.User className="w-8 h-8" />}
-                                </div>
-                            </div>
-                            <div className={`absolute -bottom-4 z-30 w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full font-bold text-sm md:text-base shadow-md border-2 ${badgeColor}`}>{badgeText}</div>
-                        </div>
-                        <div className={`w-full ${bgColor} rounded-t-3xl p-3 text-center border-t-[3px] shadow-sm flex flex-col justify-center h-full backdrop-blur-sm bg-opacity-90`}>
-                            <p className="font-bold text-brand-navy text-[11px] md:text-sm leading-tight text-center mb-1 line-clamp-2">{user.nombre}</p>
-                            <p className="font-mono text-brand-teal text-xs font-extrabold">{user.puntos} XP</p>
-                            <span className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 font-medium">{getCurrentLevelName(user.puntos)}</span>
-                        </div>
-                    </div>
-                );
-            };
-
-            const RankingRow = ({ user, index }) => {
-                const points = Number(user.puntos) || 0; 
-                const avatarSrc = getDriveDirectLink(user.foto);
-                let rankNumberColor = user.rank === 1 ? "text-brand-yellow" : user.rank === 2 ? "text-brand-teal" : user.rank === 3 ? "text-brand-green" : "text-slate-400";
-
-                const pointsNeeded = getPointsNeeded(points);
-                const nextLevel = getNextLevelName(points);
-
-                return (
-                    <div className="flex items-center p-4 bg-white/60 hover:bg-white/90 border-b border-slate-100 transition-all duration-300 group rounded-xl mx-2 my-1 hover:shadow-sm">
-                        <div className={`w-8 font-mono font-extrabold text-center mr-2 text-base ${rankNumberColor}`}>{user.rank}</div>
-                        <div className="relative shrink-0">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-300 overflow-hidden border border-slate-200">
-                                {avatarSrc ? <img src={avatarSrc} alt={user.nombre} className="w-full h-full object-cover" crossOrigin="anonymous" /> : <Icons.User className="w-6 h-6" />}
-                            </div>
-                        </div>
-                        <div className="ml-4 flex-1 min-w-0">
-                            <div className="flex flex-col md:flex-row md:items-center gap-1.5 mb-1">
-                                <h4 className="text-brand-navy font-bold text-sm md:text-base truncate group-hover:text-brand-teal transition-colors">{user.nombre}</h4>
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] bg-slate-100 text-slate-500 border border-slate-200 font-medium w-fit">
-                                    {getCurrentLevelName(points)}
-                                </span>
-                                {points > 1500 && <span title="Racha Constante" className="text-sm cursor-help hover:scale-125 transition-transform">🔥</span>}
-                                {points > 3000 && <span title="Experto de la Comunidad" className="text-sm cursor-help hover:scale-125 transition-transform">🧠</span>}
-                            </div>
-                            
-                            <div className="flex items-center gap-3 relative group/tooltip">
-                                <div className="w-full max-w-[120px] h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-brand-teal to-brand-green rounded-full" style={{width: `${getLevelProgress(points)}%`}}></div>
-                                </div>
-                                <span className="text-[10px] text-slate-400 hidden md:inline-flex items-center gap-1 font-medium cursor-help hover:text-brand-teal transition-colors">
-                                    Próximo: {nextLevel} <Icons.Info className="w-3 h-3" />
-                                </span>
-                                
-                                {pointsNeeded > 0 && (
-                                    <div className="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-56 bg-brand-navy text-white text-[10px] p-3 rounded-xl shadow-xl z-50 border border-brand-teal/30">
-                                        Te faltan <strong className="text-brand-yellow text-xs">{pointsNeeded} XP</strong> para ascender a <strong className="text-white text-xs">{nextLevel}</strong>.<br/>
-                                        <div className="mt-1 text-brand-teal/80">Gana puntos aportando valor y análisis técnicos en el grupo de WhatsApp.</div>
-                                        <div className="absolute -bottom-1.5 left-10 w-3 h-3 bg-brand-navy transform rotate-45 border-r border-b border-brand-teal/30"></div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="text-right shrink-0 ml-4">
-                            <div className="text-brand-navy font-mono font-extrabold text-sm md:text-base bg-slate-50 px-3 py-1 rounded-lg border border-slate-100">{user.puntos} XP</div>
-                        </div>
-                    </div>
-                );
-            };
-
-            const SessionCard = ({ session }) => {
-                const isActive = session.estadoAuto === 'En Curso';
-                
-                // RECOMENDACIÓN 6: Botón Compartir Estudio
-                const shareText = `¡Únete al análisis de ${session.tema} en La Movida SST! 🚀 https://estudia.movidasst.com`;
-                const shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-                
-                const renderHardcodedMod = (name, link) => {
-                    return (
-                        <a href={link} target="_blank" onClick={(e) => e.stopPropagation()} className="flex items-center gap-2 pr-3 pl-1 py-1 text-xs rounded-xl border shadow-sm font-medium transition-all bg-white text-slate-600 border-slate-200 hover:border-brand-teal/50 hover:text-brand-teal group/mod" title="Ver Perfil en el Directorio">
-                            <div className="w-7 h-7 rounded-lg overflow-hidden bg-slate-100 shrink-0 border border-slate-100 flex items-center justify-center group-hover/mod:bg-brand-teal/10 transition-colors">
-                                <i className="fa-solid fa-user-tie text-brand-teal"></i>
-                            </div>
-                            <span className="truncate max-w-[120px]">{name}</span>
-                        </a>
-                    );
-                };
-
-                return (
-                    <div className={`glass-card flex flex-col group ${isActive ? 'ring-2 ring-brand-teal/20' : ''}`}>
-                        <div className="p-5 md:p-6 flex-grow relative z-10">
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="flex items-center gap-2">
-                                    <span className={`px-3 py-1 text-[11px] uppercase font-bold rounded-full flex items-center gap-1.5 border shadow-sm ${isActive ? 'bg-brand-teal/10 text-brand-teal border-brand-teal/20' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
-                                        {isActive && <span className="w-2 h-2 rounded-full bg-brand-teal animate-pulse"></span>}
-                                        {session.estadoAuto}
-                                    </span>
-                                </div>
-                                
-                                <div className="flex items-center gap-2">
-                                    <span className="text-slate-500 text-[10px] font-mono bg-white px-2 py-1 rounded-md border border-slate-200 shadow-sm">{session.tipo}</span>
-                                    <a href={shareUrl} target="_blank" onClick={(e) => e.stopPropagation()} className="flex items-center justify-center w-7 h-7 rounded-full bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/20 hover:bg-[#25D366] hover:text-white transition-all shadow-sm" title="Compartir este estudio en WhatsApp">
-                                        <i className="fa-brands fa-whatsapp"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            
-                            <h3 className="text-lg md:text-xl font-bold text-brand-navy mb-3 leading-tight group-hover:text-brand-teal transition-colors duration-300">{session.tema}</h3>
-                            
-                            <div className="flex flex-wrap gap-3 mb-5 text-xs text-slate-600 font-medium">
-                                <div className="flex items-center bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm"><Icons.BookOpen className="w-4 h-4 mr-2 text-brand-teal" />{session.totalArticulos ? `${session.totalArticulos} Artículos` : 'N/A'}</div>
-                                <div className="flex items-center bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
-                                    <Icons.Calendar className="w-4 h-4 mr-2 text-slate-400" />
-                                    {formatDisplayDate(session.fechaInicio)} {session.fechaFin ? `- ${formatDisplayDate(session.fechaFin)}` : ''}
-                                </div>
-                            </div>
-                            
-                            <div className="bg-white/60 rounded-2xl p-4 border border-slate-200/60 mb-5 shadow-sm relative overflow-hidden">
-                                <div className="flex justify-between items-end mb-3 relative z-10">
-                                    <div>
-                                        <div className="text-[10px] text-brand-navy uppercase tracking-widest mb-1 flex items-center gap-1.5 font-bold"><Icons.Target className="w-3.5 h-3.5 text-brand-yellow" /> Objetivo Actual</div>
-                                        <div className="text-sm font-bold text-slate-700">{session.debateHoyAuto || "Sin datos"}</div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-[10px] text-slate-500 font-medium mb-0.5">{session.diaActual}</div>
-                                        <div className={`text-xl font-extrabold font-mono ${isActive ? 'text-brand-teal' : 'text-slate-400'}`}>{typeof session.progresoAuto === 'number' ? session.progresoAuto : 0}%</div>
-                                    </div>
-                                </div>
-                                <div className="h-2.5 w-full bg-slate-200/80 rounded-full overflow-hidden relative z-10 shadow-inner">
-                                    <div className={`h-full rounded-full transition-all duration-1000 ${isActive ? 'bg-gradient-to-r from-brand-teal to-brand-green' : 'bg-slate-400'}`} style={{width: `${typeof session.progresoAuto === 'number' ? session.progresoAuto : 0}%`}}></div>
-                                </div>
-                            </div>
-                            
-                            <div className="space-y-3">
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Panel de Moderación</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {renderHardcodedMod("David Linares Brea", "https://directorio.movidasst.com/?token=61278")}
-                                    {renderHardcodedMod("Oneiber Ybarra", "https://directorio.movidasst.com/?token=RC3Z3")}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="bg-slate-50/50 p-4 border-t border-slate-200/60 flex gap-2 md:gap-3 overflow-x-auto backdrop-blur-md">
-                            {session.estadoAuto === 'En Curso' ? (
-                                <>
-                                    <a href={session.resumenLink || '#'} target="_blank" onClick={(e) => { if(!session.resumenLink) e.preventDefault(); }} className="flex-1 bg-brand-teal hover:bg-brand-navy text-white text-xs font-bold uppercase tracking-wider py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(0,123,133,0.3)] hover:-translate-y-0.5 shrink-0 min-w-[120px]"><Icons.Camera className="w-4 h-4" /> Infografías</a>
-                                    
-                                    <a href={session.archivoLink || '#'} target="_blank" onClick={(e) => { if(!session.archivoLink) e.preventDefault(); }} className="flex-1 bg-brand-navy hover:bg-brand-teal text-white text-xs font-bold uppercase tracking-wider py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(0,32,91,0.3)] hover:-translate-y-0.5 shrink-0 min-w-[120px]" title="Descargar Archivo de WhatsApp">
-                                        <Icons.Download className="w-4 h-4 animate-bounce" /> Archivo
-                                    </a>
-                                </>
-                            ) : session.estadoAuto === 'Finalizada' || session.estadoAuto === 'Concluida' ? (
-                                <a href={session.driveLink || '#'} target="_blank" onClick={(e) => { if(!session.driveLink) e.preventDefault(); }} className="flex-1 bg-slate-200 text-slate-500 text-xs font-bold uppercase tracking-wider py-3 rounded-xl flex items-center justify-center gap-2 border border-slate-300 cursor-default shrink-0 min-w-[120px]"><Icons.ShieldCheck className="w-4 h-4" /> Concluida</a>
-                            ) : (
-                                <a href={session.driveLink || '#'} target="_blank" onClick={(e) => { if(!session.driveLink) e.preventDefault(); }} className="flex-1 bg-white hover:bg-slate-50 text-brand-navy text-xs font-bold uppercase tracking-wider py-3 rounded-xl flex items-center justify-center gap-2 transition-colors border border-slate-200 shadow-sm shrink-0 min-w-[120px]"><Icons.Calendar className="w-4 h-4 text-brand-yellow" /> Próxima</a>
-                            )}
-                            
-                            {session.estadoAuto !== 'En Curso' && session.resumenLink && (
-                                <a href={session.resumenLink} target="_blank" className="flex-1 bg-white hover:bg-brand-50 text-slate-700 text-xs font-bold uppercase tracking-wider py-3 rounded-xl flex items-center justify-center gap-2 transition-colors border border-slate-200 hover:border-brand-teal/30 shadow-sm shrink-0 min-w-[100px]" title="Ver Resumen"><Icons.FileText className="w-4 h-4 text-brand-green" /> Resumen</a>
-                            )}
-                            
-                            {session.estadoAuto !== 'En Curso' && (
-                                <a href={session.archivoLink || '#'} target="_blank" onClick={(e) => { if(!session.archivoLink) e.preventDefault(); }} className="flex-1 bg-white hover:bg-brand-navy hover:text-white text-slate-600 text-xs font-bold uppercase tracking-wider py-3 rounded-xl flex items-center justify-center gap-2 transition-colors border border-slate-200 shadow-sm shrink-0 min-w-[90px] group/pdf" title="Descargar Archivo de WhatsApp"><Icons.Download className="w-4 h-4 group-hover/pdf:animate-bounce" /> Archivo</a>
-                            )}
-                        </div>
-                    </div>
-                );
-            };
-
-            const renderContent = () => {
-                if (loading) return <div className="flex flex-col items-center justify-center py-32"><div className="relative rounded-full h-16 w-16 border-4 border-slate-200 border-t-brand-teal animate-spin shadow-lg"></div><p className="mt-6 text-sm text-brand-navy font-bold uppercase tracking-[0.2em]">Sincronizando plataforma...</p></div>;
-                if (error) return <div className="text-center py-20 glass-card mx-4"><p className="text-red-500 font-bold">{error}</p></div>;
-
-                switch (activeTab) {
-                    case 'agenda':
-                        return (
-                            <div className="space-y-8 animate-fade-in">
-                                <div className="glass-card p-5 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-brand-teal/20 relative">
-                                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-brand-teal/10 rounded-full blur-3xl z-0"></div>
-                                    <div className="flex flex-col md:flex-row items-center gap-5 relative z-10 text-center md:text-left">
-                                        <div className="bg-brand-navy/5 p-4 rounded-full border border-brand-navy/10 text-brand-teal"><Icons.UserPlus className="w-8 h-8" /></div>
-                                        <div>
-                                            <h3 className="font-extrabold text-brand-navy text-lg md:text-xl">Potencia tu perfil en Seguridad y Salud en el Trabajo</h3>
-                                            <p className="text-sm text-slate-600 mt-1 max-w-md">Regístrate en el Portal Oficial y accede a beneficios exclusivos, constancias y métricas detalladas.</p>
-                                        </div>
-                                    </div>
-                                    <a href="https://registro.movidasst.com" target="_blank" className="w-full md:w-auto bg-brand-navy hover:bg-brand-teal text-white px-8 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_15px_rgba(0,32,91,0.2)] hover:-translate-y-1 relative z-10 text-center">Registro en La Movida de SST Plus</a>
-                                </div>
-
-                                <div className="flex flex-col md:flex-row justify-between items-end gap-6 pt-2">
-                                    <div className="max-w-2xl w-full">
-                                        <div className="inline-block mb-3 animate-float">
-                                            <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-xs font-extrabold px-4 py-1.5 rounded-full flex items-center gap-2 uppercase tracking-widest shadow-sm">
-                                                <Icons.Zap className="w-3.5 h-3.5 text-brand-yellow" /> Inteligencia Colectiva
-                                            </span>
-                                        </div>
-                                        <h2 className="text-2xl md:text-3xl font-extrabold text-brand-navy tracking-tight leading-snug">
-                                            Comunidad de Estudio y <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-teal to-brand-green">Actualización Profesional</span>
-                                        </h2>
-                                        <p className="text-slate-600 text-sm md:text-base mt-2 font-medium max-w-xl">Estudio móvil a través de WhatsApp para el análisis de Leyes, Reglamentos, NT, Normas COVENIN en Venezuela y estándares internacionales.</p>
-                                        
-                                        <div className="mt-4 lg:hidden">
-                                            <button onClick={() => setActiveTab('historico')} className="w-full bg-white hover:bg-slate-50 border border-slate-200 text-brand-navy py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm font-bold text-sm transition-colors">
-                                                <Icons.Archive className="w-4 h-4 text-brand-teal" /> Ver Histórico de Estudios Concluidos
-                                            </button>
-                                        </div>
-
-                                        {selectedModerator && (
-                                            <div className="mt-3 flex items-center gap-2 bg-white/80 px-3 py-1.5 rounded-lg border border-slate-200 w-fit">
-                                                <span className="text-xs text-slate-600">Filtrando moderador: <strong className="text-brand-navy">{selectedModerator}</strong></span>
-                                                <button onClick={() => setSelectedModerator(null)} className="text-slate-400 hover:text-red-500 transition-colors"><Icons.XCircle className="w-4 h-4" /></button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-10">
-                                    {activeSessions.length > 0 ? activeSessions.map((session, idx) => <SessionCard key={idx} session={session} />) : (
-                                        <div className="col-span-1 md:col-span-full glass-card text-center py-16">
-                                            <Icons.Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                                            <p className="text-slate-500 font-medium text-lg">No hay sesiones activas para esta búsqueda.</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    case 'historico':
-                        return (
-                            <div className="space-y-8 animate-fade-in">
-                                <div className="flex flex-col md:flex-row justify-between items-end gap-6 pt-2">
-                                    <div className="max-w-2xl">
-                                        <div className="inline-block mb-3 animate-float">
-                                            <span className="bg-slate-200/50 text-slate-600 border border-slate-300 text-xs font-extrabold px-4 py-1.5 rounded-full flex items-center gap-2 uppercase tracking-widest shadow-sm">
-                                                <Icons.Archive className="w-3.5 h-3.5" /> Archivo de Estudios
-                                            </span>
-                                        </div>
-                                        <h2 className="text-2xl md:text-3xl font-extrabold text-brand-navy tracking-tight leading-snug">Estudios Concluidos</h2>
-                                        <p className="text-slate-600 text-sm md:text-base mt-2 font-medium max-w-xl">Historial completo de análisis normativos finalizados. Consulta los resúmenes, directrices y el material consolidado por la comunidad.</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-10">
-                                    {pastSessions.length > 0 ? pastSessions.map((session, idx) => <SessionCard key={idx} session={session} />) : (
-                                        <div className="col-span-1 md:col-span-full glass-card text-center py-16">
-                                            <p className="text-slate-500 font-medium text-lg">No se encontraron sesiones concluidas.</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    case 'ranking':
-                        const podiumUsers = processedRanking.slice(0, 3);
-                        const visualPodiumData = [];
-                        if(podiumUsers[1]) visualPodiumData.push({ user: podiumUsers[1], pos: 1 });
-                        if(podiumUsers[0]) visualPodiumData.push({ user: podiumUsers[0], pos: 0 });
-                        if(podiumUsers[2]) visualPodiumData.push({ user: podiumUsers[2], pos: 2 });
-                        const listUsers = processedRanking.slice(3);
-
-                        return (
-                            <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-10">
-                                <div className="text-center pt-6 pb-8">
-                                    <div className="inline-block p-4 rounded-2xl bg-white shadow-sm border border-slate-100 mb-5 animate-float relative"><Icons.Trophy className="w-10 h-10 text-brand-yellow" /></div>
-                                    <h2 className="text-3xl md:text-4xl font-extrabold text-brand-navy mb-4 tracking-tight">Reconocimiento a la Colaboración</h2>
-                                    
-                                    <div className="glass-card p-6 md:p-8 max-w-2xl mx-auto text-left">
-                                        <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6 text-center">
-                                            Valoramos cada aporte. Los puntos (XP) reflejan la <span className="font-bold text-brand-teal">frecuencia</span> y <span className="font-bold text-brand-teal">calidad</span> de tus intervenciones en la comunidad.
-                                        </p>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5 border-t border-slate-200">
-                                            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><span className="text-2xl">🥉</span><div><p className="text-xs font-bold text-brand-navy">Participante <span className="text-slate-400 font-mono">(0-499)</span></p></div></div>
-                                            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><span className="text-2xl">🥈</span><div><p className="text-xs font-bold text-brand-navy">Activo <span className="text-slate-400 font-mono">(500-999)</span></p></div></div>
-                                            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><span className="text-2xl">🥇</span><div><p className="text-xs font-bold text-brand-navy">Proactivo <span className="text-slate-400 font-mono">(1k-1.9k)</span></p></div></div>
-                                            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><span className="text-2xl">🌟</span><div><p className="text-xs font-bold text-brand-navy">Referente <span className="text-slate-400 font-mono">(2k-2.9k)</span></p></div></div>
-                                            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><span className="text-2xl">🧠</span><div><p className="text-xs font-bold text-brand-navy">Mentor <span className="text-slate-400 font-mono">(3k-3.9k)</span></p></div></div>
-                                            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"><span className="text-2xl">🚀</span><div><p className="text-xs font-bold text-brand-navy">Embajador <span className="text-slate-400 font-mono">(4k-4.9k)</span></p></div></div>
-                                            <div className="flex items-center gap-3 sm:col-span-2 bg-gradient-to-r from-brand-teal/10 to-transparent p-4 rounded-xl border border-brand-teal/20 mt-2">
-                                                <span className="text-3xl">👑</span><div><p className="text-sm font-extrabold text-brand-teal">Leyenda <span className="text-brand-navy font-mono">(5,000+ XP)</span></p></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col lg:flex-row items-center gap-4 mb-8">
-                                    <div className="bg-white/90 backdrop-blur-sm p-2 rounded-2xl border border-slate-200 flex items-center gap-3 shadow-sm flex-1 w-full">
-                                        <div className="p-2.5 bg-slate-100 rounded-xl text-slate-500"><Icons.Filter className="w-5 h-5" /></div>
-                                        <select value={selectedRankingId} onChange={(e) => setSelectedRankingId(e.target.value)} className="w-full bg-transparent text-brand-navy text-sm font-bold focus:outline-none px-2 py-2 cursor-pointer appearance-none">
-                                            <option value="global">⭐ Ranking Global (Histórico General)</option>
-                                            <optgroup label="Filtrar por Tema de Estudio">
-                                                {data.sesiones.map(s => <option key={s.id} value={s.id}>📄 {s.tema} ({s.estadoAuto})</option>)}
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                    <button onClick={downloadRankingAsImage} disabled={generatingImage} className={`w-full lg:w-auto bg-white hover:bg-slate-50 text-brand-navy border border-slate-200 px-5 py-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-2 transition-all ${generatingImage ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                                        <Icons.Camera className="w-5 h-5" /> {generatingImage ? '...' : 'Guardar'}
-                                    </button>
-                                </div>
-
-                                <div id="ranking-capture-area" className="glass-card p-6 md:p-10 !border-0 bg-white/70">
-                                    <div className="text-center mb-10 pt-2 relative z-10">
-                                        <h3 className="text-2xl font-extrabold text-brand-navy uppercase tracking-widest">🏆 Podio de Honor</h3>
-                                    </div>
-                                    {visualPodiumData.length > 0 && (
-                                        <div className="flex justify-center items-end gap-3 md:gap-8 mb-12 relative h-64 md:h-72">
-                                            {visualPodiumData.map((item, idx) => <PodiumUser key={idx} user={item.user} positionIndex={item.pos} />)}
-                                        </div>
-                                    )}
-                                    {listUsers.length > 0 && (
-                                        <div className="bg-slate-50/50 rounded-3xl overflow-hidden border border-slate-200 py-2">
-                                            <div className="max-h-[500px] overflow-y-auto pr-2">
-                                                {listUsers.map((user, idx) => <RankingRow key={idx} user={user} index={idx} />)}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    case 'info':
-                        return (
-                            <div className="space-y-8 animate-fade-in max-w-4xl mx-auto pb-10">
-                                <div className="glass-card p-6 md:p-10 border-l-4 border-brand-teal relative overflow-hidden mt-6">
-                                    <div className="absolute -right-6 -bottom-6 text-brand-navy/5 text-8xl pointer-events-none">
-                                        <i className="fa-solid fa-scale-balanced"></i>
-                                    </div>
-                                    <div className="max-w-3xl relative z-10">
-                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-brand-teal/10 text-brand-teal border border-brand-teal/20 mb-3">
-                                            <Icons.Info className="w-3.5 h-3.5" /> Información Oficial
-                                        </span>
-                                        <h3 className="text-2xl md:text-3xl font-extrabold text-brand-navy mb-4">
-                                            Comunidad de Estudio y Actualización Profesional
-                                        </h3>
-                                        <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-8">
-                                            Un proyecto innovador de <strong className="text-brand-navy font-semibold">Mobile Learning</strong> (aprendizaje móvil) a través de <strong className="text-[#25D366] font-semibold"><i className="fa-brands fa-whatsapp"></i> WhatsApp</strong>, dedicado al análisis técnico, discusión y actualización constante sobre Leyes, Reglamentos, Normas Técnicas (NT), Normas COVENIN en Venezuela y estándares internacionales de Seguridad y Salud en el Trabajo (SST).
-                                        </p>
-
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-8">
-                                            <div className="bg-white/80 p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-center">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fundación</span>
-                                                <span className="text-sm md:text-base font-extrabold text-brand-navy mt-1">
-                                                    <i className="fa-regular fa-calendar text-brand-teal mr-1.5"></i>22 Mayo, 2025
-                                                </span>
-                                            </div>
-                                            <div className="bg-white/80 p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-center">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Estudios Realizados</span>
-                                                <span className="text-xl md:text-2xl font-extrabold text-brand-teal mt-1 flex items-center gap-1.5">
-                                                    <i className="fa-solid fa-check-double text-sm"></i> {pastSessions.length}
-                                                </span>
-                                            </div>
-                                            <div className="col-span-2 md:col-span-1 bg-white/80 p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-center">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">En Progreso</span>
-                                                <span className="text-xl md:text-2xl font-extrabold text-amber-500 mt-1 flex items-center gap-1.5">
-                                                    <i className="fa-solid fa-bolt text-sm animate-pulse"></i> {activeSessions.length}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="border-t border-slate-200/60 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
-                                            <span className="font-bold text-slate-400 uppercase tracking-wider">Fundadores del Proyecto:</span>
-                                            <div className="flex flex-wrap items-center gap-2">
-                                                <a href="https://directorio.movidasst.com/?token=61278" target="_blank" className="inline-flex items-center gap-1.5 bg-brand-navy hover:bg-brand-teal text-white px-3 py-1.5 rounded-lg font-medium shadow-sm transition-colors group">
-                                                    <i className="fa-solid fa-user-tie text-brand-teal group-hover:text-white transition-colors"></i> David Linares Brea
-                                                </a>
-                                                <a href="https://directorio.movidasst.com/?token=RC3Z3" target="_blank" className="inline-flex items-center gap-1.5 bg-brand-navy hover:bg-brand-teal text-white px-3 py-1.5 rounded-lg font-medium shadow-sm transition-colors group">
-                                                    <i className="fa-solid fa-user-tie text-brand-teal group-hover:text-white transition-colors"></i> Oneiber Ybarra
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    default: return null;
-                }
-            };
-
-            return (
-                <div className="font-sans pb-28 md:pb-0 relative min-h-screen">
-                    <Header />
-                    <main className="max-w-6xl mx-auto px-4 md:px-6 py-8 relative z-10">
-                        {renderContent()}
-
-                        <footer className="mt-8 mb-6 pb-4 animate-fade-in">
-                            <div className="glass-card p-6 text-center border-t-4 border-brand-navy">
-                                <h4 className="text-brand-navy font-extrabold text-xl">La Movida SST Plus</h4>
-                                <p className="text-brand-teal text-xs font-bold uppercase tracking-widest mt-1 mb-5">De la reacción a la prevención</p>
-                                <div className="bg-slate-50/80 backdrop-blur-sm rounded-xl p-4 mb-5 border border-slate-100 text-sm text-slate-600 max-w-sm mx-auto shadow-sm">
-                                    <p className="font-medium">Elaborado por <strong className="text-brand-navy">David Linares Brea</strong></p>
-                                    <a href="mailto:info@movidasst.com" className="inline-flex items-center gap-1.5 mt-2 text-brand-teal hover:text-brand-navy hover:underline font-medium transition-colors">
-                                        <i className="fa-solid fa-envelope"></i> info@movidasst.com
-                                    </a>
-                                </div>
-                                <div className="grid grid-cols-2 gap-3 mb-5 max-w-md mx-auto">
-                                    <a href="https://whatsapp.com/channel/0029Va0mlH5Jf05mrcCz8r3e" target="_blank" className="flex flex-col items-center justify-center gap-1 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 p-3 rounded-xl active:scale-95 transition-all shadow-sm">
-                                        <i className="fa-brands fa-whatsapp text-2xl mb-1"></i>
-                                        <span className="text-[10px] font-extrabold uppercase tracking-wide">Canal WhatsApp</span>
-                                    </a>
-                                    <a href="https://t.me/canalmovidasst" target="_blank" className="flex flex-col items-center justify-center gap-1 bg-[#0088cc]/10 hover:bg-[#0088cc]/20 text-[#0088cc] border border-[#0088cc]/30 p-3 rounded-xl active:scale-95 transition-all shadow-sm">
-                                        <i className="fa-brands fa-telegram text-2xl mb-1"></i>
-                                        <span className="text-[10px] font-extrabold uppercase tracking-wide">Canal Telegram</span>
-                                    </a>
-                                </div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Conecta con nosotros</p>
-                                <div className="flex justify-center items-center gap-4">
-                                    <a href="https://wa.me/56968615650" target="_blank" aria-label="WhatsApp Contacto" className="flex items-center justify-center w-11 h-11 rounded-full bg-[#25D366] hover:bg-[#128C7E] text-white shadow-md active:scale-95 transition-colors"><i className="fa-brands fa-whatsapp text-xl"></i></a>
-                                    <a href="https://www.instagram.com/movidasst/" target="_blank" aria-label="Instagram" className="flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white shadow-md active:scale-95 hover:opacity-90 transition-opacity"><i className="fa-brands fa-instagram text-xl"></i></a>
-                                    <a href="https://www.linkedin.com/company/movidasst/" target="_blank" aria-label="LinkedIn" className="flex items-center justify-center w-11 h-11 rounded-full bg-[#0A66C2] hover:bg-[#004182] text-white shadow-md active:scale-95 transition-colors"><i className="fa-brands fa-linkedin-in text-xl"></i></a>
-                                    <a href="https://www.movidasst.com" target="_blank" aria-label="Web" className="flex items-center justify-center w-11 h-11 rounded-full bg-brand-navy hover:bg-brand-teal text-white shadow-md active:scale-95 transition-colors"><i className="fa-solid fa-globe text-xl"></i></a>
-                                </div>
-                            </div>
-                        </footer>
-                    </main>
-                    
-                    <div className={`lg:hidden fixed bottom-0 left-0 right-0 p-3 z-50 pb-safe mobile-nav ${showMobileNav ? '' : 'mobile-nav-hidden'}`}>
-                        <div className="glass-card flex justify-around p-2 mx-auto max-w-md rounded-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-slate-200 gap-1">
-                            <button onClick={() => setActiveTab('agenda')} className={`p-2 rounded-xl flex flex-col items-center gap-1.5 flex-1 min-w-0 transition-all duration-300 ${activeTab === 'agenda' ? 'text-brand-teal bg-brand-teal/10 shadow-sm' : 'text-slate-400 hover:text-brand-navy'}`}>
-                                <Icons.Calendar className="w-5 h-5" />
-                                <span className="text-[9px] font-bold tracking-widest truncate w-full text-center">Agenda</span>
-                            </button>
-                            
-                            <a href="https://calificaciones.movidasst.com/" className="p-2 rounded-xl flex flex-col items-center gap-1.5 flex-1 min-w-0 transition-all duration-300 text-slate-400 hover:text-brand-navy">
-                                <Icons.GraduationCap className="w-5 h-5" />
-                                <span className="text-[9px] font-bold tracking-widest truncate w-full text-center">Calificaciones</span>
-                            </a>
-
-                            <button onClick={() => setActiveTab('ranking')} className={`p-2 rounded-xl flex flex-col items-center gap-1.5 flex-1 min-w-0 transition-all duration-300 ${activeTab === 'ranking' ? 'text-brand-teal bg-brand-teal/10 shadow-sm' : 'text-slate-400 hover:text-brand-navy'}`}>
-                                <Icons.Trophy className="w-5 h-5" />
-                                <span className="text-[9px] font-bold tracking-widest truncate w-full text-center">Ranking</span>
-                            </button>
-                            
-                            <button onClick={() => setActiveTab('info')} className={`p-2 rounded-xl flex flex-col items-center gap-1.5 flex-1 min-w-0 transition-all duration-300 ${activeTab === 'info' ? 'text-brand-teal bg-brand-teal/10 shadow-sm' : 'text-slate-400 hover:text-brand-navy'}`}>
-                                <Icons.Info className="w-5 h-5" />
-                                <span className="text-[9px] font-bold tracking-widest truncate w-full text-center">Info</span>
-                            </button>
-                        </div>
-                    </div>
+              <div class="field">
+                <label for="cedulaInput">Número de cédula</label>
+                <input id="cedulaInput" class="credential-input" inputmode="numeric" pattern="[0-9]{5,12}" maxlength="12" placeholder="Ej. 12345678" required autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="codigoInput">Código de registro</label>
+                <div class="input-wrap">
+                  <input id="codigoInput" class="credential-input" type="password" maxlength="5" placeholder="•••••" required autocomplete="new-password" autocapitalize="characters">
+                  <button id="toggleCode" class="input-eye" type="button" aria-label="Mostrar u ocultar código"><i class="fa-regular fa-eye"></i></button>
                 </div>
-            );
-        };
+              </div>
+              <button id="progressSubmit" class="submit-btn" type="submit"><i class="fa-solid fa-chart-line"></i> Ver mis puntos</button>
+              <div class="privacy-note"><i class="fa-solid fa-lock"></i><span>No guardamos tu cédula ni tu código en este navegador. Evita compartir tu código con otras personas.</span></div>
+              <div id="progressError" class="form-error hidden" role="alert"></div>
+            </form>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+            <div id="progressWelcome" class="panel">
+              <div class="empty" style="border:0;background:#f8fbfd">
+                <i class="fa-solid fa-chart-simple"></i>
+                <div style="font-weight:900;color:var(--navy);margin-bottom:5px">Tu progreso profesional, en un solo lugar</div>
+                <div>Al validar tus credenciales verás tus puntos acumulados, nivel, posición, participación por estudio y movimientos de XP.</div>
+              </div>
+            </div>
+
+            <div id="progressResult" class="hidden" style="display:grid;gap:14px">
+              <div class="panel">
+                <div class="subhead"><h3>Mi progreso</h3><button id="clearProgress" class="clear-btn" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar</button></div>
+                <div class="profile-head">
+                  <img id="myAvatar" class="avatar" alt="Foto de perfil">
+                  <div>
+                    <div id="myName" class="profile-name"></div>
+                    <div id="myState" class="profile-state"></div>
+                    <div id="myLevel" class="level-pill"></div>
+                  </div>
+                </div>
+                <div class="profile-kpis">
+                  <div class="profile-kpi"><strong id="myXp">0</strong><span>XP acumulado</span></div>
+                  <div class="profile-kpi"><strong id="myPosition">—</strong><span>Posición global</span></div>
+                  <div class="profile-kpi"><strong id="myDays">0</strong><span>Días activo</span></div>
+                  <div class="profile-kpi"><strong id="myStudies">0</strong><span>Estudios con XP</span></div>
+                </div>
+                <div id="nextLevelBox" class="next-level"></div>
+                <div class="stats-grid">
+                  <div class="stat"><strong id="myMessages">0</strong><span>Mensajes registrados</span></div>
+                  <div class="stat"><strong id="myEvents">0</strong><span>Eventos de puntos</span></div>
+                  <div class="stat"><strong id="myLevelShort">—</strong><span>Nivel actual</span></div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="subhead"><h3>¿De dónde vienen mis puntos?</h3></div>
+                <div id="breakdownList" class="breakdown"></div>
+              </div>
+
+              <div class="panel">
+                <div class="subhead"><h3>Puntos por estudio</h3></div>
+                <div id="sessionPointsList" class="breakdown"></div>
+              </div>
+
+              <div class="panel">
+                <div class="subhead"><h3>Historial reciente</h3><span style="font-size:.68rem;color:#94a3b8;font-weight:800">Últimos movimientos</span></div>
+                <div id="historyPointsList" class="breakdown"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-info" class="view">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Cómo funciona</h2>
+              <p class="section-desc">Aprendizaje móvil, participación técnica y reconocimiento transparente.</p>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <article class="info-card">
+              <h3><i class="fa-brands fa-whatsapp" style="color:#25D366"></i> XP por participación</h3>
+              <p>La participación válida en los estudios de WhatsApp genera XP diario, evitando premiar cantidad de mensajes sin límite.</p>
+              <div class="rule-grid">
+                <div class="rule"><strong>10 XP</strong><span>1 mensaje válido/día</span></div>
+                <div class="rule"><strong>15 XP</strong><span>2 a 4 mensajes/día</span></div>
+                <div class="rule"><strong>20 XP</strong><span>5 o más/día · máximo</span></div>
+                <div class="rule"><strong>+ bono</strong><span>Por constancia</span></div>
+              </div>
+            </article>
+
+            <article class="info-card">
+              <h3><i class="fa-solid fa-brain" style="color:var(--teal)"></i> Calidad técnica</h3>
+              <p>Los aportes técnicos pueden recibir reconocimiento adicional según su valor para el aprendizaje colectivo.</p>
+              <ul>
+                <li>Aporte útil: <strong>25 XP</strong></li>
+                <li>Técnico fundamentado: <strong>50 XP</strong></li>
+                <li>Caso práctico / solución aplicable: <strong>75 XP</strong></li>
+                <li>Aporte excepcional: <strong>100 XP</strong></li>
+              </ul>
+            </article>
+
+            <article class="info-card">
+              <h3><i class="fa-solid fa-ranking-star" style="color:var(--yellow)"></i> Niveles y ranking</h3>
+              <p>El ranking reconoce trayectoria de participación. Tu nivel evoluciona con el XP acumulado.</p>
+              <div id="infoLevels" class="level-legend" style="grid-template-columns:repeat(2,1fr)"></div>
+            </article>
+
+            <article class="info-card">
+              <h3><i class="fa-solid fa-mobile-screen-button" style="color:var(--navy)"></i> Mobile Learning</h3>
+              <p>Los grupos de estudio se apoyan en WhatsApp para facilitar aprendizaje justo a tiempo, intercambio entre pares y participación desde el trabajo de campo.</p>
+            </article>
+
+            <article class="info-card">
+              <h3><i class="fa-solid fa-user-shield" style="color:var(--green)"></i> Privacidad</h3>
+              <p>El ranking público muestra únicamente información de reconocimiento profesional. Para consultar tu historial personal necesitas tu cédula y código de registro.</p>
+            </article>
+
+            <article class="info-card">
+              <h3><i class="fa-solid fa-link" style="color:var(--teal)"></i> Ecosistema La Movida</h3>
+              <p>Desde el portal principal puedes acceder al Directorio, Registro, Academia, Biblioteca, Tabulador y demás herramientas de La Movida SST.</p>
+              <a href="https://www.movidasst.com/" class="action-btn primary" style="margin-top:12px"><i class="fa-solid fa-house"></i> Ir a www.movidasst.com</a>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <strong>La Movida SST Plus</strong> · De la Reacción a la Prevención<br>
+      Comunidad de estudio y actualización profesional en Seguridad y Salud en el Trabajo.
+    </div>
+  </footer>
+
+  <nav class="mobile-nav" aria-label="Navegación móvil">
+    <button class="mobile-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i><span>Estudios</span></button>
+    <button class="mobile-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i><span>Histórico</span></button>
+    <button class="mobile-btn" data-nav="ranking"><i class="fa-solid fa-trophy"></i><span>Ranking</span></button>
+    <button class="mobile-btn" data-nav="mine"><i class="fa-solid fa-chart-line"></i><span>Mis puntos</span></button>
+    <button class="mobile-btn" data-nav="info"><i class="fa-regular fa-circle-question"></i><span>Info</span></button>
+  </nav>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const SUPABASE_URL = 'https://lfdmbkzghnwvsapxypvt.supabase.co';
+      const SUPABASE_KEY = 'sb_publishable_bRnkA6PA8-v073nrw9zxiQ_8rVGiOn1';
+      const DEFAULT_AVATAR = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+          <rect width="160" height="160" rx="32" fill="#edf3f7"/>
+          <circle cx="80" cy="62" r="28" fill="#9db0bf"/>
+          <path d="M31 142c5-30 23-45 49-45s44 15 49 45" fill="#9db0bf"/>
+        </svg>`);
+
+      const $ = id => document.getElementById(id);
+      const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: { persistSession:false, autoRefreshToken:false, detectSessionInUrl:false }
+      });
+
+      const state = {
+        sessions: [],
+        ranking: [],
+        levels: [],
+        rankingScope: 'global',
+        currentView: 'agenda'
+      };
+
+      const TYPE_LABELS = {
+        whatsapp_participacion: 'Participación en WhatsApp',
+        calidad_tecnica: 'Calidad técnica',
+        moderacion: 'Moderación',
+        actividad: 'Actividad',
+        ajuste: 'Ajuste',
+        historico: 'Puntaje histórico'
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]));
+      }
+
+      function safeUrl(value) {
+        const url = String(value || '').trim();
+        return /^https:\/\//i.test(url) ? url : '';
+      }
+
+      function imageUrl(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return DEFAULT_AVATAR;
+        const driveFile = raw.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+        if (driveFile) return `https://lh3.googleusercontent.com/d/${driveFile[1]}`;
+        const driveQuery = raw.match(/[?&]id=([^&]+)/i);
+        if (/drive\.google\.com/i.test(raw) && driveQuery) return `https://lh3.googleusercontent.com/d/${driveQuery[1]}`;
+        return raw;
+      }
+
+      function formatDate(value) {
+        if (!value) return 'Sin fecha';
+        const d = new Date(`${value}T12:00:00`);
+        if (Number.isNaN(d.getTime())) return String(value);
+        return new Intl.DateTimeFormat('es-VE',{day:'2-digit',month:'short',year:'numeric'}).format(d);
+      }
+
+      function formatDateTime(value) {
+        if (!value) return '';
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return '';
+        return new Intl.DateTimeFormat('es-VE',{day:'2-digit',month:'short',year:'numeric'}).format(d);
+      }
+
+      function num(value) {
+        return new Intl.NumberFormat('es-VE').format(Number(value || 0));
+      }
+
+      function statusBadge(status) {
+        const s = String(status || 'Programada');
+        const cls = s === 'En Curso' ? 'live' : s === 'Finalizada' || s === 'Concluida' ? 'done' : s === 'Pausada' ? 'pause' : 'soon';
+        const icon = s === 'En Curso' ? 'fa-signal' : s === 'Finalizada' || s === 'Concluida' ? 'fa-check' : s === 'Pausada' ? 'fa-pause' : 'fa-clock';
+        return `<span class="badge ${cls}"><i class="fa-solid ${icon}"></i>${escapeHtml(s)}</span>`;
+      }
+
+      function toast(message) {
+        const el = $('toast');
+        el.textContent = message;
+        el.classList.add('show');
+        clearTimeout(toast.timer);
+        toast.timer = setTimeout(() => el.classList.remove('show'), 2600);
+      }
+
+      async function rpc(name, args = {}) {
+        if (!client) throw new Error('No se pudo iniciar Supabase.');
+        const { data, error } = await client.rpc(name, args);
+        if (error) throw error;
+        return data;
+      }
+
+      function setView(view) {
+        state.currentView = view;
+        document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${view}`));
+        document.querySelectorAll('[data-nav]').forEach(el => el.classList.toggle('active', el.dataset.nav === view));
+        window.scrollTo({top:0,behavior:'smooth'});
+        if (view === 'ranking' && state.ranking.length === 0) loadRanking();
+      }
+
+      document.addEventListener('click', e => {
+        const nav = e.target.closest('[data-nav]');
+        if (nav) {
+          e.preventDefault();
+          setView(nav.dataset.nav);
+        }
+      });
+
+      function moderatorHtml(m) {
+        return `<span class="moderator"><img src="${escapeHtml(imageUrl(m.foto_url))}" alt="" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'"><span>${escapeHtml(m.nombre || 'Moderador')}</span></span>`;
+      }
+
+      function actionLink(url, label, icon, cls = '') {
+        const safe = safeUrl(url);
+        if (!safe) return '';
+        return `<a class="action-btn ${cls}" href="${escapeHtml(safe)}" target="_blank" rel="noopener noreferrer"><i class="${icon}"></i>${label}</a>`;
+      }
+
+      function studyCard(session, historical = false) {
+        const mods = Array.isArray(session.moderadores) ? session.moderadores : [];
+        const progress = Math.max(0, Math.min(100, Number(session.progreso || 0)));
+        const shareText = `📚 ${session.tema}\n\nEstudia con La Movida SST Plus\nhttps://estudia.movidasst.com/`;
+        const shareEncoded = encodeURIComponent(shareText);
+        const actions = [
+          actionLink(session.whatsapp_link, 'Grupo', 'fa-brands fa-whatsapp', 'whatsapp'),
+          actionLink(session.drive_link, 'Estudiar', 'fa-brands fa-google-drive', 'primary'),
+          actionLink(session.resumen_link, 'Resumen', 'fa-regular fa-file-lines'),
+          actionLink(session.archivo_link, 'Archivo', 'fa-solid fa-download')
+        ].filter(Boolean).join('');
+
+        return `
+          <article class="study-card" data-search="${escapeHtml(`${session.codigo} ${session.tema} ${session.tipo || ''}`.toLowerCase())}">
+            <div class="study-accent"></div>
+            <div class="study-body">
+              <div class="study-top">
+                <div style="min-width:0">
+                  <div class="study-code">${escapeHtml(session.codigo || 'ESTUDIO')}</div>
+                  <h3 class="study-title">${escapeHtml(session.tema)}</h3>
+                </div>
+                ${statusBadge(session.estado)}
+              </div>
+              <div class="study-meta">
+                ${session.tipo ? `<span class="meta-chip"><i class="fa-regular fa-file-lines"></i>${escapeHtml(session.tipo)}</span>` : ''}
+                <span class="meta-chip"><i class="fa-regular fa-calendar"></i>${escapeHtml(formatDate(session.fecha_inicio))}${session.fecha_fin ? ` — ${escapeHtml(formatDate(session.fecha_fin))}` : ''}</span>
+                ${session.total_articulos != null ? `<span class="meta-chip"><i class="fa-solid fa-list-check"></i>${escapeHtml(session.total_articulos)} unidades</span>` : ''}
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-label"><span>${historical ? 'Completado' : 'Progreso estimado'}</span><strong>${progress.toFixed(0)}%</strong></div>
+                <div class="progress"><span style="width:${progress}%"></span></div>
+              </div>
+              ${session.debate_actual && !historical ? `<div class="debate"><strong><i class="fa-regular fa-comments"></i> En debate:</strong> ${escapeHtml(session.debate_actual)}</div>` : ''}
+              ${mods.length ? `<div class="moderators"><span class="mod-label">Moderación</span>${mods.map(moderatorHtml).join('')}</div>` : ''}
+              <div class="study-actions">
+                ${actions || '<span style="grid-column:1/-1;color:#94a3b8;font-size:.75rem;text-align:center">Recursos no publicados todavía.</span>'}
+                <a class="action-btn" href="https://wa.me/?text=${shareEncoded}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-share-nodes"></i>Compartir</a>
+              </div>
+            </div>
+          </article>`;
+      }
+
+      function renderStudies() {
+        const agendaQuery = $('agendaSearch').value.trim().toLowerCase();
+        const agendaStatus = $('agendaStatus').value;
+        const historyQuery = $('historySearch').value.trim().toLowerCase();
+        const historyType = $('historyType').value;
+
+        const active = state.sessions.filter(s => !['Finalizada','Concluida'].includes(s.estado));
+        const historical = state.sessions.filter(s => ['Finalizada','Concluida'].includes(s.estado));
+
+        const agendaFiltered = active.filter(s => {
+          const hay = `${s.codigo || ''} ${s.tema || ''} ${s.tipo || ''}`.toLowerCase().includes(agendaQuery);
+          return hay && (agendaStatus === 'all' || s.estado === agendaStatus);
+        });
+
+        const historyFiltered = historical.filter(s => {
+          const hay = `${s.codigo || ''} ${s.tema || ''} ${s.tipo || ''}`.toLowerCase().includes(historyQuery);
+          return hay && (historyType === 'all' || String(s.tipo || '') === historyType);
+        });
+
+        $('agendaGrid').innerHTML = agendaFiltered.length ? agendaFiltered.map(s => studyCard(s,false)).join('') : `<div class="empty" style="grid-column:1/-1"><i class="fa-regular fa-calendar-xmark"></i><div>No hay estudios que coincidan con este filtro.</div></div>`;
+        $('historyGrid').innerHTML = historyFiltered.length ? historyFiltered.map(s => studyCard(s,true)).join('') : `<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-box-archive"></i><div>No hay estudios históricos que coincidan.</div></div>`;
+      }
+
+      function populateStudyFilters() {
+        const types = [...new Set(state.sessions.map(s => String(s.tipo || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+        $('historyType').innerHTML = `<option value="all">Todos los tipos</option>${types.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('')}`;
+
+        const opts = state.sessions.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.codigo || '')} · ${escapeHtml(s.tema)}</option>`).join('');
+        $('rankingScope').innerHTML = `<option value="global">Ranking global</option>${opts}`;
+      }
+
+      function renderLevels() {
+        const html = state.levels.map(l => `<div class="level-card"><strong>${escapeHtml(l.icono || '⭐')} ${escapeHtml(l.nombre)}</strong><span>Desde ${num(l.xp_min)} XP</span></div>`).join('');
+        $('levelsLegend').innerHTML = html;
+        $('infoLevels').innerHTML = html;
+      }
+
+      function podiumItem(row, position) {
+        if (!row) return `<div class="podium-item"><div class="podium-base">—</div></div>`;
+        const medals = {1:'🥇',2:'🥈',3:'🥉'};
+        return `<div class="podium-item ${position===1?'first':''}">
+          <div class="podium-avatar-wrap"><img class="podium-avatar" src="${escapeHtml(imageUrl(row.foto_url))}" alt="${escapeHtml(row.nombre)}" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'"><span class="medal">${medals[position]}</span></div>
+          <div class="podium-name">${escapeHtml(row.nombre)}</div>
+          <div class="podium-xp">${num(row.puntos)} XP</div>
+          <div class="podium-base">#${escapeHtml(row.posicion || position)}</div>
+        </div>`;
+      }
+
+      function renderRanking() {
+        const q = $('rankingSearch').value.trim().toLowerCase();
+        const rows = state.ranking.filter(r => `${r.nombre || ''} ${r.estado || ''}`.toLowerCase().includes(q));
+        const isSearching = Boolean(q);
+        const top = state.ranking.slice(0,3);
+        $('podium').classList.toggle('hidden', isSearching || state.ranking.length === 0);
+        $('podium').innerHTML = `${podiumItem(top[1],2)}${podiumItem(top[0],1)}${podiumItem(top[2],3)}`;
+
+        const list = isSearching ? rows : state.ranking.slice(3);
+        $('rankingList').innerHTML = list.map(r => `<div class="rank-row">
+          <div class="rank-pos">#${escapeHtml(r.posicion)}</div>
+          <img class="rank-avatar" src="${escapeHtml(imageUrl(r.foto_url))}" alt="" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'">
+          <div style="min-width:0"><div class="rank-name">${escapeHtml(r.nombre)}</div><div class="rank-state">${escapeHtml(r.estado || 'Venezuela')} · ${escapeHtml(r.nivel_icono || '')} ${escapeHtml(r.nivel || '')}</div></div>
+          <div class="rank-score"><strong>${num(r.puntos)} XP</strong><span>${escapeHtml(r.nivel || '')}</span></div>
+        </div>`).join('');
+
+        const noData = state.ranking.length === 0 || (isSearching && rows.length === 0);
+        $('rankingEmpty').classList.toggle('hidden', !noData);
+        if (isSearching && rows.length === 0) $('rankingEmpty').querySelector('div').textContent = 'No encontramos profesionales con ese nombre.';
+        else $('rankingEmpty').querySelector('div').textContent = 'Aún no hay puntos para mostrar en este ranking.';
+      }
+
+      async function loadRanking() {
+        const scope = $('rankingScope').value || 'global';
+        state.rankingScope = scope;
+        $('rankingList').innerHTML = `<div class="empty"><div class="spinner" style="width:30px;height:30px"></div>Cargando ranking…</div>`;
+        try {
+          let rows;
+          if (scope === 'global') {
+            rows = await rpc('ranking_publico',{p_limit:200,p_offset:0});
+            $('rankingTitle').textContent = 'Ranking global';
+          } else {
+            rows = await rpc('ranking_sesion_publico',{p_sesion_id:scope,p_limit:200});
+            const session = state.sessions.find(s => s.id === scope);
+            $('rankingTitle').textContent = session ? `${session.codigo} · ${session.tema}` : 'Ranking por estudio';
+          }
+          state.ranking = Array.isArray(rows) ? rows : [];
+          $('kpiRanked').textContent = num(scope === 'global' ? state.ranking.length : ($('kpiRanked').dataset.global || 0));
+          if (scope === 'global') $('kpiRanked').dataset.global = state.ranking.length;
+          renderRanking();
+        } catch (err) {
+          console.error(err);
+          state.ranking = [];
+          renderRanking();
+          toast('No fue posible cargar el ranking. Revisa la API pública de Estudios.');
+        }
+      }
+
+      function typeLabel(type) { return TYPE_LABELS[type] || String(type || 'Puntos').replaceAll('_',' '); }
+
+      function renderProgress(data) {
+        const p = data.perfil || {};
+        const r = data.ranking || {};
+        const a = data.actividad || {};
+        const breakdown = Array.isArray(data.desglose) ? data.desglose : [];
+        const bySession = Array.isArray(data.por_sesion) ? data.por_sesion : [];
+        const history = Array.isArray(data.historial) ? data.historial : [];
+
+        $('progressWelcome').classList.add('hidden');
+        $('progressResult').classList.remove('hidden');
+        $('myAvatar').src = imageUrl(p.foto_url);
+        $('myAvatar').onerror = () => { $('myAvatar').src = DEFAULT_AVATAR; };
+        $('myName').textContent = p.nombre || 'Integrante';
+        $('myState').textContent = p.estado || 'La Movida SST Plus';
+        $('myLevel').textContent = `${r.nivel_icono || '🥉'} ${r.nivel || 'Participante'}`;
+        $('myXp').textContent = num(r.puntos);
+        $('myPosition').textContent = r.fuera_de_ranking ? '—' : (Number(r.posicion) > 0 ? `#${r.posicion}` : '—');
+        $('myDays').textContent = num(a.dias_activos);
+        $('myStudies').textContent = num(a.estudios_con_puntos);
+        $('myMessages').textContent = num(a.mensajes_total);
+        $('myEvents').textContent = num(breakdown.reduce((sum,x)=>sum+Number(x.eventos||0),0));
+        $('myLevelShort').textContent = r.nivel || 'Participante';
+
+        if (r.fuera_de_ranking) {
+          $('nextLevelBox').innerHTML = `<div class="next-top"><span>Cuenta fuera del ranking competitivo</span><span>${escapeHtml(r.nivel_icono || '')} ${escapeHtml(r.nivel || '')}</span></div><div style="font-size:.7rem;color:#806d28;margin-top:6px">Tus puntos e historial siguen disponibles para tu consulta personal.</div>`;
+        } else if (r.siguiente_nivel_xp == null) {
+          $('nextLevelBox').innerHTML = `<div class="next-top"><span>¡Nivel máximo alcanzado!</span><span>${escapeHtml(r.nivel_icono || '👑')} ${escapeHtml(r.nivel || '')}</span></div><div class="mini-progress"><span style="width:100%"></span></div>`;
+        } else {
+          const currentMin = Number(r.nivel_xp_min || 0);
+          const nextMin = Number(r.siguiente_nivel_xp || currentMin + 1);
+          const points = Number(r.puntos || 0);
+          const pct = Math.max(0,Math.min(100,((points-currentMin)/Math.max(1,nextMin-currentMin))*100));
+          $('nextLevelBox').innerHTML = `<div class="next-top"><span>Siguiente: ${escapeHtml(r.siguiente_nivel_icono || '')} ${escapeHtml(r.siguiente_nivel || '')}</span><span>Faltan ${num(r.xp_faltante)} XP</span></div><div class="mini-progress"><span style="width:${pct}%"></span></div>`;
+        }
+
+        $('breakdownList').innerHTML = breakdown.length ? breakdown.map(x=>`<div class="break-row"><strong>${escapeHtml(typeLabel(x.tipo))}</strong><span>${Number(x.puntos)>0?'+':''}${num(x.puntos)} XP</span></div>`).join('') : `<div class="empty">Aún no tienes puntos registrados.</div>`;
+
+        $('sessionPointsList').innerHTML = bySession.length ? bySession.map(x=>`<div class="session-points-row"><div style="min-width:0"><strong>${escapeHtml(x.codigo || 'GENERAL')} · ${escapeHtml(x.tema || 'Puntos generales')}</strong><div style="font-size:.65rem;color:#94a3b8;margin-top:3px">${num(x.eventos)} movimiento(s)</div></div><span>${Number(x.puntos)>0?'+':''}${num(x.puntos)} XP</span></div>`).join('') : `<div class="empty">Todavía no hay puntos asociados a estudios.</div>`;
+
+        $('historyPointsList').innerHTML = history.length ? history.map(x=>`<div class="history-row"><div class="history-main"><strong>${escapeHtml(x.motivo || typeLabel(x.tipo))}</strong><small>${escapeHtml(x.codigo || 'GENERAL')} · ${escapeHtml(x.tema || 'Puntos generales')} · ${escapeHtml(formatDateTime(x.fecha))}</small></div><span class="${Number(x.puntos)>=0?'points-positive':'points-negative'}">${Number(x.puntos)>0?'+':''}${num(x.puntos)} XP</span></div>`).join('') : `<div class="empty">Aún no hay movimientos de puntos.</div>`;
+      }
+
+      async function submitProgress(e) {
+        e.preventDefault();
+        const cedula = $('cedulaInput').value.replace(/\D/g,'');
+        const codigo = $('codigoInput').value.trim().toUpperCase();
+        $('progressError').classList.add('hidden');
+        if (!/^\d{5,12}$/.test(cedula) || !/^[A-Z0-9]{5}$/.test(codigo)) {
+          $('progressError').textContent = 'Revisa tu cédula y tu código de 5 caracteres.';
+          $('progressError').classList.remove('hidden');
+          return;
+        }
+        const btn = $('progressSubmit');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando…`;
+        try {
+          const data = await rpc('estudia_mi_progreso',{p_cedula:cedula,p_codigo:codigo});
+          if (!data || data.ok !== true) {
+            throw new Error(data?.message || 'Las credenciales no coinciden.');
+          }
+          renderProgress(data);
+          $('codigoInput').value = '';
+          $('cedulaInput').value = '';
+          toast('Progreso cargado correctamente.');
+        } catch (err) {
+          console.error(err);
+          $('progressError').textContent = err.message || 'No fue posible consultar tus puntos.';
+          $('progressError').classList.remove('hidden');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="fa-solid fa-chart-line"></i> Ver mis puntos`;
+        }
+      }
+
+      function clearProgress() {
+        $('progressResult').classList.add('hidden');
+        $('progressWelcome').classList.remove('hidden');
+        $('credentialsForm').reset();
+        $('progressError').classList.add('hidden');
+      }
+
+      async function downloadRanking() {
+        if (!window.html2canvas) return toast('No se pudo cargar el generador de imagen.');
+        const btn = $('downloadRanking');
+        btn.disabled = true;
+        try {
+          const canvas = await html2canvas($('rankingCapture'),{scale:2,backgroundColor:'#f9fbfd',useCORS:true,logging:false});
+          const a = document.createElement('a');
+          a.download = `ranking-movida-sst-${state.rankingScope === 'global' ? 'global' : 'estudio'}.png`;
+          a.href = canvas.toDataURL('image/png');
+          a.click();
+        } catch (err) {
+          console.error(err);
+          toast('No fue posible crear la imagen del ranking.');
+        } finally { btn.disabled = false; }
+      }
+
+      async function init() {
+        try {
+          if (!client) throw new Error('Supabase JS no cargó.');
+          const [sessions, levels, ranking] = await Promise.all([
+            rpc('estudia_sesiones_publicas'),
+            rpc('estudia_niveles_publicos'),
+            rpc('ranking_publico',{p_limit:200,p_offset:0})
+          ]);
+          state.sessions = Array.isArray(sessions) ? sessions : [];
+          state.levels = Array.isArray(levels) ? levels : [];
+          state.ranking = Array.isArray(ranking) ? ranking : [];
+
+          populateStudyFilters();
+          renderStudies();
+          renderLevels();
+          renderRanking();
+
+          const active = state.sessions.filter(s => !['Finalizada','Concluida'].includes(s.estado)).length;
+          $('kpiStudies').textContent = num(state.sessions.length);
+          $('kpiActive').textContent = num(active);
+          $('kpiRanked').textContent = num(state.ranking.length);
+          $('kpiRanked').dataset.global = state.ranking.length;
+        } catch (err) {
+          console.error(err);
+          $('agendaGrid').innerHTML = `<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>No pudimos cargar Estudios.</strong><br>Ejecuta primero el SQL de la API pública en Supabase.</div></div>`;
+          toast('Falta activar la API pública de Estudios en Supabase.');
+        } finally {
+          setTimeout(() => $('loader').classList.add('hidden'), 180);
+        }
+      }
+
+      $('agendaSearch').addEventListener('input',renderStudies);
+      $('agendaStatus').addEventListener('change',renderStudies);
+      $('historySearch').addEventListener('input',renderStudies);
+      $('historyType').addEventListener('change',renderStudies);
+      $('rankingScope').addEventListener('change',loadRanking);
+      $('rankingSearch').addEventListener('input',renderRanking);
+      $('downloadRanking').addEventListener('click',downloadRanking);
+      $('credentialsForm').addEventListener('submit',submitProgress);
+      $('clearProgress').addEventListener('click',clearProgress);
+      $('toggleCode').addEventListener('click',() => {
+        const input = $('codigoInput');
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        $('toggleCode').innerHTML = `<i class="fa-regular ${show?'fa-eye-slash':'fa-eye'}"></i>`;
+      });
+      $('cedulaInput').addEventListener('input',e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,12); });
+      $('codigoInput').addEventListener('input',e => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase().slice(0,5); });
+
+      init();
+    })();
+  </script>
 </body>
 </html>
