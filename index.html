@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- LA MOVIDA SST · ESTUDIA v2 · Mis puntos detallado · 2026-08-08 -->
+  <!-- LA MOVIDA SST · ESTUDIA v3 · ranking público competitivo + acceso privado detallado · 2026-08-08 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#00205b">
@@ -304,6 +304,14 @@
       .study-detail-kpis{grid-template-columns:repeat(4,1fr)}
     }
 
+  
+    .ranking-public-note{
+      display:flex;align-items:flex-start;gap:8px;margin:0 0 12px;padding:10px 12px;
+      background:#F5FAFC;border:1px solid #DDECF0;border-radius:13px;
+      color:#59717C;font-size:.68rem;line-height:1.45;font-weight:750
+    }
+    .ranking-public-note i{color:var(--teal);margin-top:2px}
+
   </style>
 </head>
 <body>
@@ -405,7 +413,7 @@
           <div class="section-head">
             <div>
               <h2 class="section-title">Ranking público</h2>
-              <p class="section-desc">Reconocimiento a la participación y al aporte técnico en la comunidad de estudio.</p>
+              <p class="section-desc">Ranking competitivo público de integrantes. Moderadores y administradores no participan en la clasificación, aunque conservan sus XP y pueden consultarlos de forma privada.</p>
             </div>
             <span class="badge soon"><i class="fa-solid fa-star"></i> XP profesional</span>
           </div>
@@ -415,6 +423,10 @@
               <select id="rankingScope" class="select" aria-label="Seleccionar ranking"><option value="global">Ranking global</option></select>
               <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="rankingSearch" type="search" placeholder="Buscar profesional…" autocomplete="off"></div>
               <button id="downloadRanking" class="action-btn primary" type="button"><i class="fa-solid fa-download"></i> Descargar imagen</button>
+            </div>
+            <div class="ranking-public-note">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>Este ranking muestra únicamente participantes competitivos. La coordinación, administradores y moderadores excluidos no aparecen en las posiciones públicas.</span>
             </div>
 
             <div id="rankingCapture" class="ranking-capture">
@@ -433,8 +445,8 @@
         <div id="view-mine" class="view">
           <div class="section-head">
             <div>
-              <h2 class="section-title">Mis puntos</h2>
-              <p class="section-desc">Consulta de forma privada tu XP, posición, nivel e historial usando tus credenciales de La Movida.</p>
+              <h2 class="section-title">Mi actividad y mis puntos</h2>
+              <p class="section-desc">Acceso privado con tu cédula y código de registro para consultar XP, mensajes, días activos, rachas, constancia, calidad técnica y el detalle de cada estudio.</p>
             </div>
             <span class="badge live"><i class="fa-solid fa-shield-halved"></i> Consulta privada</span>
           </div>
@@ -481,7 +493,7 @@
                 </div>
                 <div class="profile-kpis">
                   <div class="profile-kpi"><strong id="myXp">0</strong><span>XP acumulado</span></div>
-                  <div class="profile-kpi"><strong id="myPosition">—</strong><span>Posición global</span></div>
+                  <div class="profile-kpi"><strong id="myPosition">—</strong><span>Posición pública</span></div>
                   <div class="profile-kpi"><strong id="myDays">0</strong><span>Días activo</span></div>
                   <div class="profile-kpi"><strong id="myStudies">0</strong><span>Estudios con XP</span></div>
                 </div>
@@ -874,7 +886,7 @@
         $('myState').textContent = p.estado || 'La Movida SST Plus';
         $('myLevel').textContent = `${r.nivel_icono || '🥉'} ${r.nivel || 'Participante'}`;
         $('myXp').textContent = num(r.puntos);
-        $('myPosition').textContent = r.fuera_de_ranking ? '—' : (Number(r.posicion) > 0 ? `#${r.posicion}` : '—');
+        $('myPosition').textContent = r.fuera_de_ranking ? 'No participa' : (Number(r.posicion) > 0 ? `#${r.posicion}` : '—');
         $('myDays').textContent = num(a.dias_activos);
         $('myStudies').textContent = num(a.estudios_con_puntos);
         $('myMessages').textContent = num(a.mensajes_total);
@@ -883,7 +895,7 @@
         $('myLevelShort').textContent = r.nivel || 'Participante';
 
         if (r.fuera_de_ranking) {
-          $('nextLevelBox').innerHTML = `<div class="next-top"><span>Cuenta fuera del ranking competitivo</span><span>${escapeHtml(r.nivel_icono || '')} ${escapeHtml(r.nivel || '')}</span></div><div style="font-size:.7rem;color:#806d28;margin-top:6px">Tus puntos e historial siguen disponibles para tu consulta personal.</div>`;
+          $('nextLevelBox').innerHTML = `<div class="next-top"><span>Cuenta excluida del ranking público competitivo</span><span>${escapeHtml(r.nivel_icono || '')} ${escapeHtml(r.nivel || '')}</span></div><div style="font-size:.7rem;color:#806d28;margin-top:6px">Tus puntos e historial siguen disponibles para tu consulta personal.</div>`;
         } else if (r.siguiente_nivel_xp == null) {
           $('nextLevelBox').innerHTML = `<div class="next-top"><span>¡Nivel máximo alcanzado!</span><span>${escapeHtml(r.nivel_icono || '👑')} ${escapeHtml(r.nivel || '')}</span></div><div class="mini-progress"><span style="width:100%"></span></div>`;
         } else {
