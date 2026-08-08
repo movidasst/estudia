@@ -1,970 +1,2880 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#00205b">
-  <meta name="description" content="Estudios, ranking y progreso profesional de La Movida SST Plus. Consulta estudios activos, histórico, ranking público y tus puntos con tus credenciales.">
-  <meta property="og:title" content="Estudia con La Movida SST Plus">
-  <meta property="og:description" content="Estudios, actualización profesional, ranking y progreso en Seguridad y Salud en el Trabajo.">
-  <meta property="og:image" content="https://assets.poap.xyz/cec12a20-fefb-4199-9cc0-b1ece87fe44d.png">
-  <meta property="og:url" content="https://estudia.movidasst.com/">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <title>Estudia | La Movida SST Plus</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0B2A6F" />
+  <!-- MOVIDA SST ADMIN ESTUDIOS v3.8 · personas + criterios de calidad multi-selección · 2026-08-08 -->
+  <title>Administración de Estudios · La Movida SST</title>
+  <meta name="description" content="Panel administrativo de Estudios y Actualización Profesional de La Movida SST." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    :root {
-      --navy:#00205b;
-      --navy-2:#071b40;
-      --teal:#007b85;
-      --teal-2:#00a6a6;
-      --green:#70ad47;
-      --yellow:#ffb600;
-      --red:#d83b3b;
-      --ink:#172033;
-      --muted:#64748b;
-      --line:#dbe4ee;
-      --bg:#f5f8fb;
-      --card:#ffffff;
-      --shadow:0 16px 42px rgba(0,32,91,.10);
-      --shadow-sm:0 8px 24px rgba(15,23,42,.07);
-      --radius:22px;
+    :root{
+      --navy:#0B2A6F;
+      --blue:#1455B8;
+      --petrol:#006D8F;
+      --teal:#008F9C;
+      --green:#58B947;
+      --ink:#10233F;
+      --muted:#64748B;
+      --line:#E5EAF1;
+      --soft:#F5F8FC;
+      --white:#fff;
+      --danger:#B42318;
+      --warning:#B54708;
+      --shadow:0 18px 50px rgba(16,35,63,.12);
+      --radius:20px;
     }
+
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family:'Outfit',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       color:var(--ink);
       background:
-        radial-gradient(circle at 8% -10%, rgba(0,123,133,.12), transparent 31%),
-        radial-gradient(circle at 95% 0%, rgba(255,182,0,.10), transparent 23%),
-        var(--bg);
+        radial-gradient(circle at 0 0, rgba(0,143,156,.08), transparent 26rem),
+        linear-gradient(180deg,#F8FBFF 0%,#F4F7FB 100%);
       min-height:100vh;
-      padding-bottom:82px;
     }
-    button,input,select{font:inherit}
-    button,a{touch-action:manipulation}
-    a{text-decoration:none;color:inherit}
-    img{max-width:100%}
-    .container{width:min(1180px,calc(100% - 28px));margin:0 auto}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .hidden{display:none!important}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    [hidden]{display:none!important}
+
+    .ven-line{
+      height:4px;
+      background:linear-gradient(90deg,#F4D000 0 33.333%,#164E9A 33.333% 66.666%,#D62828 66.666%);
+    }
+
+    .app-shell{min-height:100vh}
 
     .topbar{
-      position:sticky;top:0;z-index:70;
-      background:rgba(255,255,255,.90);
+      position:sticky;top:0;z-index:30;
+      background:rgba(255,255,255,.94);
       backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(219,228,238,.9);
+      border-bottom:1px solid rgba(229,234,241,.9);
     }
-    .topbar-inner{min-height:76px;display:flex;align-items:center;gap:14px}
-    .brand{display:flex;align-items:center;gap:11px;min-width:0;margin-right:auto}
-    .brand-logo{width:54px;height:54px;object-fit:contain;flex:0 0 auto}
-    .brand-title{font-size:1.02rem;font-weight:900;color:var(--navy);line-height:1.05;white-space:nowrap}
-    .brand-sub{font-size:.70rem;color:var(--teal);font-weight:800;margin-top:5px;letter-spacing:.02em}
-    .desktop-nav{display:none;gap:4px;align-items:center}
-    .nav-btn{
-      border:0;background:transparent;color:#64748b;padding:10px 12px;border-radius:12px;
-      font-size:.88rem;font-weight:800;cursor:pointer;transition:.2s;
+    .topbar-inner{
+      max-width:1180px;margin:auto;
+      min-height:72px;
+      display:flex;align-items:center;gap:14px;
+      padding:10px 16px;
     }
-    .nav-btn:hover{background:#edf7f7;color:var(--teal)}
-    .nav-btn.active{background:#e7f7f7;color:var(--teal);box-shadow:inset 0 0 0 1px rgba(0,123,133,.12)}
-    .header-actions{display:flex;gap:7px;align-items:center}
-    .icon-link{
-      width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
-      border:1px solid var(--line);background:white;color:var(--navy);box-shadow:0 4px 14px rgba(15,23,42,.05);
+    .logo{
+      width:62px;height:48px;object-fit:contain;flex:none;
     }
-    .icon-link:hover{color:var(--teal);border-color:rgba(0,123,133,.35)}
-
-    .hero{padding:34px 0 16px}
-    .hero-shell{
-      position:relative;overflow:hidden;border-radius:30px;padding:28px 22px;
-      background:linear-gradient(135deg,var(--navy-2),var(--navy) 50%,#006e7d);
-      color:white;box-shadow:0 20px 50px rgba(0,32,91,.20);
+    .brand{min-width:0}
+    .brand small{display:block;color:var(--muted);font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+    .brand strong{display:block;color:var(--navy);font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .top-actions{margin-left:auto;display:flex;gap:8px}
+    .icon-btn{
+      min-width:44px;height:44px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);
+      display:grid;place-items:center;font-weight:800;
     }
-    .hero-shell:before,.hero-shell:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
-    .hero-shell:before{width:230px;height:230px;background:rgba(255,182,0,.13);right:-75px;top:-115px}
-    .hero-shell:after{width:190px;height:190px;background:rgba(0,207,192,.14);left:-90px;bottom:-120px}
-    .hero-grid{position:relative;z-index:1;display:grid;gap:20px}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);padding:7px 11px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .hero h1{font-size:clamp(2rem,8vw,3.8rem);line-height:.98;margin:15px 0 12px;font-weight:900;letter-spacing:-.035em}
-    .hero h1 span{color:#82f0e7}
-    .hero p{margin:0;color:#d8e6f5;line-height:1.6;max-width:720px;font-size:.98rem}
-    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-    .hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 15px;border-radius:14px;font-weight:900;font-size:.88rem;border:1px solid rgba(255,255,255,.16)}
-    .hero-btn.primary{background:white;color:var(--navy)}
-    .hero-btn.secondary{background:rgba(255,255,255,.09);color:white}
-    .hero-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-self:end}
-    .hero-kpi{padding:14px 8px;text-align:center;border-radius:17px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13)}
-    .hero-kpi strong{display:block;font-size:1.35rem;font-weight:900;color:white}
-    .hero-kpi span{display:block;font-size:.66rem;color:#c9d9eb;font-weight:700;margin-top:3px}
 
-    .section{padding:20px 0 10px}
-    .view{display:none;animation:fade .25s ease}
-    .view.active{display:block}
-    @keyframes fade{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:none}}
-    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px}
-    .section-title{margin:0;color:var(--navy);font-size:1.55rem;font-weight:900;letter-spacing:-.02em}
-    .section-desc{margin:6px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
-    .badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;font-size:.7rem;font-weight:900;white-space:nowrap}
-    .badge.live{color:#087b55;background:#eafaf3;border:1px solid #c6eedf}
-    .badge.done{color:#536275;background:#eff3f7;border:1px solid #dbe4ee}
-    .badge.soon{color:#8c6100;background:#fff7d8;border:1px solid #f6df82}
-    .badge.pause{color:#9a4b11;background:#fff0e5;border:1px solid #f6c7a3}
+    main{max-width:1180px;margin:auto;padding:22px 16px 100px}
 
-    .toolbar{display:grid;gap:10px;margin-bottom:16px}
-    .searchbox{position:relative}
-    .searchbox i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
-    .searchbox input,.select{
-      width:100%;height:48px;border:1px solid var(--line);border-radius:15px;background:white;color:var(--ink);outline:none;padding:0 14px;
-      box-shadow:0 4px 18px rgba(15,23,42,.035);font-weight:600;
+    .hero{
+      display:grid;gap:16px;
+      margin-bottom:20px;
     }
-    .searchbox input{padding-left:41px}
-    .searchbox input:focus,.select:focus,.credential-input:focus{border-color:rgba(0,123,133,.6);box-shadow:0 0 0 4px rgba(0,123,133,.09)}
+    .hero h1{font-size:clamp(1.6rem,4vw,2.5rem);line-height:1.05;margin:0;color:var(--navy);letter-spacing:-.035em}
+    .hero p{margin:7px 0 0;color:var(--muted);max-width:700px;line-height:1.55}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
 
-    .studies-grid{display:grid;grid-template-columns:1fr;gap:14px}
-    .study-card{background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;position:relative}
-    .study-accent{height:5px;background:linear-gradient(90deg,var(--teal),var(--navy),var(--yellow))}
-    .study-body{padding:18px}
-    .study-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-    .study-code{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:.72rem;font-weight:900;letter-spacing:.06em}
-    .study-title{margin:7px 0 8px;color:var(--navy);font-size:1.16rem;line-height:1.25;font-weight:900}
-    .study-meta{display:flex;gap:7px;flex-wrap:wrap;color:#64748b;font-size:.76rem;font-weight:700}
-    .meta-chip{display:inline-flex;align-items:center;gap:6px;background:#f5f8fb;border:1px solid #e6edf4;border-radius:999px;padding:6px 8px}
-    .progress-wrap{margin:16px 0 11px}
-    .progress-label{display:flex;justify-content:space-between;color:#64748b;font-size:.72rem;font-weight:800;margin-bottom:6px}
-    .progress{height:8px;background:#eaf0f5;border-radius:999px;overflow:hidden}
-    .progress > span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),#02b2b0)}
-    .debate{margin:12px 0 0;padding:11px 12px;border-radius:14px;background:#f0fbfb;border:1px solid #cfecec;color:#36586a;font-size:.81rem;line-height:1.45}
-    .moderators{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
-    .mod-label{font-size:.68rem;color:#94a3b8;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-    .moderator{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #e4ebf2;border-radius:999px;padding:5px 9px 5px 5px;color:#40536b;font-size:.74rem;font-weight:800}
-    .moderator img,.avatar{object-fit:cover;background:#eef3f7}
-    .moderator img{width:26px;height:26px;border-radius:50%}
-    .study-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
-    .action-btn{min-height:42px;border-radius:12px;border:1px solid var(--line);background:white;color:#40536b;display:flex;align-items:center;justify-content:center;gap:7px;font-size:.76rem;font-weight:900;padding:8px;cursor:pointer}
-    .action-btn:hover{border-color:rgba(0,123,133,.35);color:var(--teal);background:#f5fdfd}
-    .action-btn.primary{background:var(--navy);border-color:var(--navy);color:white}
-    .action-btn.whatsapp{background:#effcf4;border-color:#c8efd7;color:#128c7e}
-    .empty{padding:40px 18px;text-align:center;background:white;border:1px dashed #cbd7e3;border-radius:22px;color:#64748b}
-    .empty i{font-size:2rem;color:#b6c3d1;margin-bottom:12px}
+    .btn{
+      min-height:46px;border:0;border-radius:14px;padding:0 16px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      font-weight:800;text-decoration:none;
+      transition:.18s ease;
+    }
+    .btn:active{transform:scale(.98)}
+    .btn-primary{background:var(--navy);color:#fff;box-shadow:0 10px 26px rgba(11,42,111,.18)}
+    .btn-secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
+    .btn-soft{background:#EDF5FF;color:var(--blue)}
+    .btn-danger{background:#FFF1F0;color:var(--danger);border:1px solid #FFD8D5}
+    .btn-full{width:100%}
 
-    .ranking-shell{display:grid;gap:14px}
-    .ranking-controls{display:grid;gap:10px;background:white;padding:14px;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
-    .ranking-capture{background:linear-gradient(180deg,#fff,#f9fbfd);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow)}
-    .ranking-brand{text-align:center;margin-bottom:16px}
-    .ranking-brand small{color:var(--teal);font-weight:900;letter-spacing:.1em;text-transform:uppercase}
-    .ranking-brand h3{margin:5px 0 0;color:var(--navy);font-size:1.5rem;font-weight:900}
-    .podium{display:grid;grid-template-columns:1fr 1.12fr 1fr;gap:7px;align-items:end;margin:18px 0 22px}
-    .podium-item{text-align:center;min-width:0}
-    .podium-avatar-wrap{position:relative;width:64px;height:64px;margin:0 auto 8px}
-    .podium-item.first .podium-avatar-wrap{width:78px;height:78px}
-    .podium-avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;border:4px solid white;box-shadow:0 8px 24px rgba(15,23,42,.15);background:#e7edf3}
-    .medal{position:absolute;right:-4px;bottom:-3px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:white;box-shadow:0 4px 12px rgba(15,23,42,.16);font-size:.9rem}
-    .podium-name{font-weight:900;color:var(--navy);font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .podium-xp{color:var(--teal);font-weight:900;font-size:.78rem;margin-top:3px}
-    .podium-base{margin-top:8px;border-radius:12px 12px 5px 5px;background:linear-gradient(180deg,#f0f5f9,#e3eaf1);padding:10px 4px;font-size:1.15rem;font-weight:900;color:var(--navy)}
-    .podium-item.first .podium-base{padding:17px 4px;background:linear-gradient(180deg,#fff7d7,#f6de84)}
-    .ranking-list{display:grid;gap:7px}
-    .rank-row{display:grid;grid-template-columns:38px 42px minmax(0,1fr) auto;gap:9px;align-items:center;border:1px solid #e5ecf3;background:white;border-radius:14px;padding:8px 10px}
-    .rank-pos{font-family:'JetBrains Mono',monospace;font-weight:900;color:#7a8a9c;text-align:center;font-size:.8rem}
-    .rank-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#edf2f6}
-    .rank-name{font-weight:900;color:var(--navy);font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .rank-state{font-size:.68rem;color:#94a3b8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .rank-score{text-align:right}
-    .rank-score strong{display:block;color:var(--teal);font-size:.9rem}
-    .rank-score span{display:block;color:#8291a2;font-size:.65rem;font-weight:800;margin-top:2px}
-    .level-legend{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:16px}
-    .level-card{padding:10px;border-radius:13px;background:#f5f8fb;border:1px solid #e7edf3;font-size:.72rem}
-    .level-card strong{display:block;color:var(--navy);font-size:.76rem}
-    .level-card span{color:#8291a2}
+    .stats{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0 22px;
+    }
+    .stat{
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;
+    }
+    .stat span{display:block;color:var(--muted);font-size:.78rem;font-weight:700}
+    .stat strong{display:block;margin-top:4px;font-size:1.45rem;color:var(--navy)}
 
-    .mine-grid{display:grid;gap:14px}
-    .credential-card,.panel{background:white;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow-sm)}
-    .credential-card{overflow:hidden;position:relative}
-    .credential-card:before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-60px;top:-70px;background:rgba(0,123,133,.08)}
-    .credential-title{position:relative;margin:0;color:var(--navy);font-size:1.25rem;font-weight:900}
-    .credential-copy{position:relative;color:#64748b;font-size:.84rem;line-height:1.55;margin:6px 0 16px}
-    .field{margin-top:11px}
-    .field label{display:block;color:#526277;font-size:.73rem;font-weight:900;margin:0 0 6px 2px}
-    .input-wrap{position:relative}
-    .credential-input{width:100%;height:49px;border:1px solid var(--line);border-radius:14px;padding:0 43px 0 13px;background:#fbfdff;outline:none;font-weight:800;color:var(--navy)}
-    .input-eye{position:absolute;right:5px;top:5px;width:39px;height:39px;border:0;background:transparent;border-radius:10px;color:#7c8b9d;cursor:pointer}
-    .submit-btn{width:100%;min-height:49px;margin-top:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--teal));color:white;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(0,80,110,.18)}
-    .submit-btn:disabled{opacity:.58;cursor:not-allowed}
-    .privacy-note{display:flex;gap:8px;margin-top:11px;color:#7b8b9e;font-size:.68rem;line-height:1.45}
-    .form-error{margin-top:10px;padding:10px 11px;border-radius:12px;background:#fff0f0;border:1px solid #f4caca;color:#9b2e2e;font-size:.78rem;font-weight:700}
+    .toolbar{
+      display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;
+    }
+    .search{
+      position:relative;flex:1;min-width:220px;
+    }
+    .search input{
+      width:100%;height:48px;border:1px solid var(--line);border-radius:14px;padding:0 14px 0 42px;background:#fff;outline:none;
+    }
+    .search:before{
+      content:"⌕";position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:1.3rem;color:var(--muted);
+    }
 
-    .profile-head{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;align-items:center}
-    .profile-head .avatar{width:62px;height:62px;border-radius:18px;border:2px solid #e5edf4}
-    .profile-name{font-size:1.1rem;font-weight:900;color:var(--navy);line-height:1.15}
-    .profile-state{font-size:.74rem;color:#8291a2;margin-top:4px}
-    .level-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:#edfafa;color:var(--teal);font-size:.7rem;font-weight:900;margin-top:7px}
-    .profile-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}
-    .profile-kpi{padding:14px 10px;border-radius:16px;background:#f6f9fc;border:1px solid #e7edf3;text-align:center}
-    .profile-kpi strong{display:block;font-size:1.25rem;color:var(--navy);font-weight:900}
-    .profile-kpi span{display:block;color:#8392a4;font-size:.66rem;font-weight:800;margin-top:3px}
-    .next-level{margin-top:14px;padding:13px;border-radius:15px;background:#fbfaf2;border:1px solid #efe3a6}
-    .next-top{display:flex;justify-content:space-between;gap:10px;font-size:.73rem;font-weight:900;color:#705d13}
-    .mini-progress{height:8px;background:#eee6c4;border-radius:999px;margin-top:8px;overflow:hidden}
-    .mini-progress span{height:100%;display:block;background:linear-gradient(90deg,#ffb600,#e89c00);border-radius:999px}
-    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
-    .stat{padding:11px 7px;background:#f8fafc;border-radius:14px;text-align:center;border:1px solid #e9eef3}
-    .stat strong{display:block;color:var(--teal);font-size:1rem;font-weight:900}
-    .stat span{font-size:.62rem;color:#8392a4;font-weight:800}
-    .subhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
-    .subhead h3{margin:0;color:var(--navy);font-size:1rem;font-weight:900}
-    .breakdown{display:grid;gap:7px}
-    .break-row,.history-row,.session-points-row{display:flex;justify-content:space-between;gap:10px;padding:10px 11px;border:1px solid #e8eef4;border-radius:13px;background:#fbfdff}
-    .break-row strong,.history-row strong,.session-points-row strong{color:var(--navy);font-size:.79rem}
-    .break-row span,.history-row span,.session-points-row span{color:var(--teal);font-size:.76rem;font-weight:900;white-space:nowrap}
-    .history-row{align-items:flex-start}
-    .history-main{min-width:0}
-    .history-main strong{display:block}
-    .history-main small{display:block;color:#8291a2;font-size:.66rem;margin-top:3px;line-height:1.35}
-    .points-positive{color:#087b55!important}.points-negative{color:#b33b3b!important}
-    .clear-btn{border:1px solid #dbe4ee;background:white;color:#64748b;border-radius:11px;padding:7px 9px;font-size:.7rem;font-weight:900;cursor:pointer}
+    .study-grid{display:grid;gap:12px}
+    .study-card{
+      background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;
+      box-shadow:0 8px 24px rgba(16,35,63,.05);
+    }
+    .study-head{display:flex;align-items:flex-start;gap:10px}
+    .code{
+      flex:none;background:#EEF4FF;color:var(--blue);border-radius:999px;padding:6px 9px;font-size:.72rem;font-weight:800;
+    }
+    .study-title{margin:0;font-size:1rem;line-height:1.35;color:var(--ink)}
+    .status{
+      display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 9px;font-size:.72rem;font-weight:800;
+    }
+    .status.Programada{background:#FFF8E8;color:#9A6700}
+    .status.En\ Curso{background:#EAF8EF;color:#166534}
+    .status.Finalizada{background:#EEF2F7;color:#475569}
+    .status.Borrador{background:#F4F4F5;color:#52525B}
+    .status:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 
-    .info-grid{display:grid;gap:14px}
-    .info-card{background:white;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow-sm)}
-    .info-card h3{color:var(--navy);margin:0 0 8px;font-size:1.05rem;font-weight:900}
-    .info-card p,.info-card li{color:#5f7187;font-size:.83rem;line-height:1.58}
-    .info-card ul{margin:8px 0 0;padding-left:18px}
-    .rule-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
-    .rule{padding:11px;border-radius:14px;background:#f5f9fb;border:1px solid #e5edf3;text-align:center}
-    .rule strong{display:block;color:var(--teal);font-size:1rem}
-    .rule span{font-size:.66rem;color:#718298;font-weight:800}
-    .footer{padding:28px 0 18px;text-align:center;color:#7f8da0;font-size:.73rem;line-height:1.6}
-    .footer strong{color:var(--navy)}
+    .study-meta{
+      display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;color:var(--muted);font-size:.82rem;
+    }
+    .study-meta span{background:var(--soft);border-radius:10px;padding:7px 9px}
 
-    .mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-top:1px solid #dce5ed;padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;box-shadow:0 -8px 28px rgba(15,23,42,.08)}
-    .mobile-btn{border:0;background:transparent;color:#91a0b1;border-radius:12px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.59rem;font-weight:900;cursor:pointer}
-    .mobile-btn i{font-size:1.1rem}
-    .mobile-btn.active{background:#eaf8f8;color:var(--teal)}
+    .progress-row{display:flex;align-items:center;gap:10px;margin:12px 0}
+    .progress{height:8px;background:#EDF1F6;border-radius:999px;overflow:hidden;flex:1}
+    .progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--petrol),var(--green));border-radius:999px}
+    .progress-row b{font-size:.78rem;color:var(--muted)}
 
-    .loader-overlay{position:fixed;inset:0;z-index:110;background:rgba(245,248,251,.94);display:flex;align-items:center;justify-content:center;padding:20px;transition:.25s}
-    .loader-card{text-align:center;color:var(--navy)}
-    .spinner{width:46px;height:46px;border-radius:50%;border:4px solid #dbe7ee;border-top-color:var(--teal);animation:spin .8s linear infinite;margin:0 auto 12px}
+    .mods{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:10px 0 2px}
+    .mod{
+      display:inline-flex;align-items:center;gap:7px;font-size:.75rem;font-weight:700;color:var(--ink);
+      background:#F7FAFD;border:1px solid var(--line);border-radius:999px;padding:5px 9px 5px 5px;
+    }
+    .mod img,.avatar{
+      width:28px;height:28px;border-radius:50%;object-fit:cover;background:#E7EDF5;
+    }
+    .avatar-fallback{
+      width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#DCE7F7;color:var(--navy);font-size:.7rem;font-weight:800;
+    }
+
+    .card-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+    .card-actions .btn{min-height:40px;padding:0 12px;font-size:.78rem}
+
+    .empty{
+      text-align:center;padding:50px 20px;background:#fff;border:1px dashed #CBD5E1;border-radius:20px;color:var(--muted);
+    }
+
+    /* Login */
+    .login-wrap{
+      min-height:100vh;display:grid;place-items:center;padding:24px;
+      background:
+        radial-gradient(circle at top right,rgba(0,143,156,.17),transparent 28rem),
+        linear-gradient(155deg,#F8FBFF,#EFF5FB);
+    }
+    .login-card{
+      width:min(100%,430px);background:#fff;border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:var(--shadow)
+    }
+    .login-logo{display:block;width:130px;height:74px;object-fit:contain;margin:0 auto 14px}
+    .login-card h1{text-align:center;margin:0;color:var(--navy);font-size:1.45rem}
+    .login-card>p{text-align:center;color:var(--muted);line-height:1.5;margin:8px 0 22px}
+    .field{display:grid;gap:7px;margin-bottom:14px}
+    .field label{font-size:.8rem;font-weight:800;color:#334155}
+    .field input,.field select,.field textarea{
+      width:100%;border:1px solid #D9E1EB;border-radius:13px;background:#fff;padding:12px 13px;outline:none;color:var(--ink);
+    }
+    .field input,.field select{min-height:48px}
+    .field textarea{min-height:96px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,143,156,.1)}
+    .hint{font-size:.72rem;color:var(--muted);line-height:1.45}
+
+    /* Drawer/form */
+    .backdrop{
+      position:fixed;inset:0;background:rgba(8,24,50,.48);z-index:50;display:flex;justify-content:flex-end;
+    }
+    .drawer{
+      width:min(100%,650px);height:100%;background:#fff;overflow:auto;box-shadow:-20px 0 55px rgba(8,24,50,.18);
+      animation:slideIn .2s ease;
+    }
+    @keyframes slideIn{from{transform:translateX(30px);opacity:.5}}
+    .drawer-head{
+      position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:2;
+    }
+    .drawer-head h2{margin:0;font-size:1.05rem;color:var(--navy)}
+    .drawer-body{padding:18px 16px 120px}
+    .section-title{margin:22px 0 10px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--petrol);font-weight:900}
+    .form-grid{display:grid;gap:12px}
+    .two{display:grid;gap:12px}
+
+    .switch-row{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--soft);border-radius:14px;padding:12px 13px;margin:10px 0;
+    }
+    .switch-row strong{display:block;font-size:.85rem}
+    .switch-row small{display:block;color:var(--muted);margin-top:2px}
+    .switch{
+      position:relative;width:48px;height:28px;background:#CBD5E1;border-radius:999px;flex:none;transition:.2s;
+    }
+    .switch:after{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s}
+    .switch.on{background:var(--green)}
+    .switch.on:after{transform:translateX(20px)}
+
+    .mod-search-results{
+      border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;margin-top:7px;
+    }
+    .person{
+      display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid var(--line);
+    }
+    .person:last-child{border-bottom:0}
+    .person-info{flex:1;min-width:0}
+    .person-info strong{display:block;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .person-info small{display:block;color:var(--muted);font-size:.7rem;margin-top:2px}
+    .person button{border:0;background:#EAF7F8;color:var(--petrol);border-radius:10px;padding:8px 10px;font-weight:800}
+
+    .selected-mods{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+    .selected-mod{
+      display:inline-flex;align-items:center;gap:7px;background:#EEF5FF;border:1px solid #D6E5FB;color:var(--navy);border-radius:999px;padding:7px 9px;font-size:.76rem;font-weight:800;
+    }
+    .selected-mod button{border:0;background:transparent;color:var(--danger);font-weight:900;padding:0;font-size:1rem}
+
+    .drawer-footer{
+      position:fixed;bottom:0;right:0;width:min(100%,650px);padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+      background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;gap:9px;z-index:60;
+    }
+    .drawer-footer .btn{flex:1}
+
+    .toast{
+      position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+      background:#10233F;color:#fff;padding:12px 16px;border-radius:14px;z-index:100;
+      box-shadow:var(--shadow);font-weight:700;font-size:.83rem;max-width:calc(100% - 30px);
+    }
+    .toast.error{background:#8A1C14}
+    .loading{
+      position:fixed;inset:0;background:rgba(255,255,255,.65);backdrop-filter:blur(3px);display:grid;place-items:center;z-index:90;
+    }
+    .spinner{width:40px;height:40px;border:4px solid #DCE6F3;border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .toast{position:fixed;left:50%;bottom:92px;z-index:120;transform:translate(-50%,20px);opacity:0;pointer-events:none;max-width:min(440px,calc(100% - 28px));background:#152137;color:white;padding:11px 14px;border-radius:13px;font-size:.78rem;font-weight:700;box-shadow:0 12px 34px rgba(15,23,42,.25);transition:.25s}
-    .toast.show{opacity:1;transform:translate(-50%,0)}
 
-    @media(min-width:720px){
-      body{padding-bottom:0}.desktop-nav{display:flex}.mobile-nav{display:none}
-      .hero{padding-top:40px}.hero-shell{padding:38px 40px}.hero-grid{grid-template-columns:minmax(0,1.65fr) minmax(270px,.65fr);align-items:center}
-      .hero-kpis{gap:10px}.hero-kpi{padding:18px 10px}.hero-kpi strong{font-size:1.65rem}
-      .toolbar{grid-template-columns:minmax(0,1fr) 220px}
-      .studies-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-      .study-body{padding:21px}.study-actions{grid-template-columns:repeat(4,1fr)}
-      .ranking-controls{grid-template-columns:minmax(0,1fr) 220px 180px;align-items:center}
-      .ranking-capture{padding:28px}.podium-avatar-wrap{width:78px;height:78px}.podium-item.first .podium-avatar-wrap{width:92px;height:92px}
-      .level-legend{grid-template-columns:repeat(4,1fr)}
-      .mine-grid{grid-template-columns:minmax(290px,.62fr) minmax(0,1.38fr);align-items:start}
-      .profile-kpis{grid-template-columns:repeat(4,1fr)}
-      .info-grid{grid-template-columns:repeat(2,1fr)}
-      .toast{bottom:24px}
+    @media(min-width:700px){
+      main{padding-top:30px}
+      .hero{grid-template-columns:1fr auto;align-items:end}
+      .hero-actions{justify-content:flex-end}
+      .stats{grid-template-columns:repeat(4,1fr)}
+      .study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .two{grid-template-columns:1fr 1fr}
+      .drawer-body{padding:22px 24px 120px}
+      .drawer-head{padding:16px 24px}
+      .drawer-footer{padding-left:24px;padding-right:24px}
     }
-    @media(min-width:1040px){
-      .studies-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .info-grid{grid-template-columns:repeat(3,1fr)}
+    @media(min-width:1050px){
+      .study-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     }
+    @media(prefers-reduced-motion:reduce){
+      *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    }
+  
+    /* Importador WhatsApp */
+    .import-drop{
+      border:2px dashed #C8D5E6;border-radius:18px;padding:18px;text-align:center;
+      background:#F8FBFF;transition:.18s;
+    }
+    .import-drop:hover{border-color:var(--teal);background:#F4FCFC}
+    .import-drop input{width:100%;margin-top:10px}
+    .import-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+    .import-kpi{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:11px}
+    .import-kpi span{display:block;font-size:.68rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+    .import-kpi strong{display:block;font-size:1.25rem;color:var(--navy);margin-top:3px}
+    .participant-list{display:grid;gap:8px;margin-top:12px}
+    .participant-row{
+      border:1px solid var(--line);border-radius:14px;background:#fff;padding:11px;
+      display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+    }
+    .participant-main{min-width:0}
+    .participant-main strong{display:block;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .participant-main small{display:block;color:var(--muted);font-size:.7rem;margin-top:3px;line-height:1.4}
+    .participant-count{text-align:right}
+    .participant-count b{display:block;color:var(--navy);font-size:.95rem}
+    .participant-count small{color:var(--muted);font-size:.67rem}
+    .match-badge{
+      display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 8px;font-size:.68rem;font-weight:900;
+      margin-top:6px;
+    }
+    .match-badge.ok{background:#EAF8EF;color:#166534}
+    .match-badge.pending{background:#FFF4E5;color:#9A5700}
+    .match-badge.ignored{background:#F1F5F9;color:#64748B}
+    .match-actions{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+    .mini-btn{
+      border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 9px;font-size:.7rem;font-weight:800;color:var(--navy)
+    }
+    .mini-btn.primary{background:#EAF7F8;color:var(--petrol);border-color:#CFE9EB}
+    .mini-btn.danger{background:#FFF1F0;color:var(--danger);border-color:#FFD8D5}
+    .resolve-box{grid-column:1/-1;background:#F8FBFF;border-radius:12px;padding:10px;margin-top:3px}
+    .resolve-results{display:grid;gap:6px;margin-top:7px}
+    .resolve-person{
+      display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px
+    }
+    .resolve-person .person-info{flex:1}
+    .privacy-note{
+      background:#F0F9FA;border:1px solid #CFE9EB;border-radius:14px;padding:12px;
+      color:#285E63;font-size:.76rem;line-height:1.5;margin-top:12px
+    }
+    .import-step{margin-top:18px}
+    .import-step h3{font-size:.88rem;margin:0 0 9px;color:var(--navy)}
+    .filename{font-weight:800;color:var(--ink);word-break:break-all}
+    @media(min-width:700px){
+      .import-kpis{grid-template-columns:repeat(4,1fr)}
+    }
+
+  
+    /* XP WhatsApp */
+    .xp-rule{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0 14px
+    }
+    .xp-rule div{
+      background:#F4F8FD;border:1px solid var(--line);border-radius:12px;
+      padding:10px 7px;text-align:center
+    }
+    .xp-rule b{display:block;color:var(--navy);font-size:1rem}
+    .xp-rule small{display:block;color:var(--muted);font-size:.66rem;margin-top:3px}
+    .xp-warning{
+      padding:12px;border-radius:14px;background:#FFF8E8;border:1px solid #F6D88A;
+      color:#805B00;font-size:.76rem;line-height:1.5;margin:10px 0
+    }
+    .xp-good{
+      padding:12px;border-radius:14px;background:#EAF8EF;border:1px solid #CBEAD4;
+      color:#166534;font-size:.76rem;line-height:1.5;margin:10px 0
+    }
+    .xp-list{display:grid;gap:8px;margin-top:12px}
+    .xp-row{
+      display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+      border:1px solid var(--line);border-radius:14px;padding:11px;background:#fff
+    }
+    .xp-row.excluded{opacity:.72;background:#F8FAFC}
+    .xp-person{min-width:0}
+    .xp-person strong{display:block;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .xp-person small{display:block;color:var(--muted);font-size:.69rem;margin-top:3px;line-height:1.45}
+    .xp-total{text-align:right;min-width:66px}
+    .xp-total b{display:block;font-size:1.05rem;color:var(--navy)}
+    .xp-total small{font-size:.66rem;color:var(--muted)}
+    .xp-badge{
+      display:inline-flex;margin-top:6px;border-radius:999px;padding:4px 7px;
+      font-size:.65rem;font-weight:900
+    }
+    .xp-badge.excluded{background:#F1F5F9;color:#64748B}
+    .xp-badge.done{background:#EAF8EF;color:#166534}
+    .xp-badge.pending{background:#EEF5FF;color:var(--blue)}
+
+  
+    /* Archivos WhatsApp ya asociados */
+    .existing-imports{
+      margin:10px 0 18px;border:1px solid var(--line);border-radius:16px;
+      background:#fff;overflow:hidden
+    }
+    .existing-imports-head{
+      padding:11px 12px;background:#F8FAFC;border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;gap:10px
+    }
+    .existing-imports-head strong{font-size:.78rem;color:var(--navy)}
+    .existing-imports-list{display:grid}
+    .existing-import{
+      padding:11px 12px;border-bottom:1px solid var(--line);
+      display:grid;gap:8px
+    }
+    .existing-import:last-child{border-bottom:0}
+    .existing-file{min-width:0}
+    .existing-file strong{
+      display:block;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+    }
+    .existing-file small{display:block;color:var(--muted);font-size:.68rem;margin-top:4px;line-height:1.45}
+    .existing-status{
+      display:inline-flex;width:max-content;border-radius:999px;padding:4px 7px;
+      font-size:.64rem;font-weight:900;margin-top:5px
+    }
+    .existing-status.borrador,.existing-status.revisado{background:#FFF4E5;color:#9A5700}
+    .existing-status.confirmado{background:#EAF8EF;color:#166534}
+    .existing-status.cancelado{background:#F1F5F9;color:#64748B}
+    .existing-actions{display:flex;gap:7px;flex-wrap:wrap}
+    .existing-empty{
+      padding:11px 12px;color:#166534;background:#F2FBF5;font-size:.74rem;font-weight:700
+    }
+    .existing-alert{
+      padding:10px 12px;background:#FFF8E8;color:#805B00;font-size:.72rem;line-height:1.45
+    }
+
+  
+    /* Calidad técnica */
+    .quality-levels{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 14px
+    }
+    .quality-level{
+      border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px;
+      text-align:left;min-height:78px;transition:.16s
+    }
+    .quality-level:hover{border-color:#A9C4E8;background:#F8FBFF}
+    .quality-level.selected{border-color:var(--teal);background:#EAF8F9;box-shadow:0 0 0 2px rgba(0,143,156,.09)}
+    .quality-level b{display:block;color:var(--navy);font-size:.92rem}
+    .quality-level small{display:block;color:var(--muted);font-size:.68rem;line-height:1.35;margin-top:4px}
+    .quality-level em{font-style:normal;color:var(--green);font-weight:900;font-size:.76rem}
+    .quality-selected-person{
+      display:flex;align-items:center;gap:10px;background:#F6FAFF;border:1px solid #D8E6F7;
+      padding:11px;border-radius:14px;margin-top:8px
+    }
+    .quality-selected-person .person-info{flex:1;min-width:0}
+    .quality-meter{height:8px;background:#E8EEF5;border-radius:999px;overflow:hidden;margin-top:7px}
+    .quality-meter i{display:block;height:100%;background:linear-gradient(90deg,var(--petrol),var(--green));border-radius:999px}
+    .quality-history{display:grid;gap:7px;margin-top:10px}
+    .quality-event{
+      display:grid;grid-template-columns:1fr auto;gap:9px;background:#fff;border:1px solid var(--line);
+      border-radius:13px;padding:10px
+    }
+    .quality-event strong{display:block;font-size:.78rem}
+    .quality-event small{display:block;color:var(--muted);font-size:.67rem;line-height:1.4;margin-top:3px}
+    .quality-points{font-weight:900;color:var(--green);white-space:nowrap}
+    @media(min-width:700px){.quality-levels{grid-template-columns:repeat(4,1fr)}}
+
+  
+    .avatar-wrap{
+      width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-grid;
+      place-items:center;flex:none;background:#E7EDF5
+    }
+    .avatar-wrap .avatar,
+    .avatar-wrap .avatar-fallback{
+      width:28px;height:28px;border-radius:50%;display:block
+    }
+    .avatar-wrap .avatar{
+      object-fit:cover;object-position:center
+    }
+    .avatar-wrap .avatar-fallback{
+      place-items:center
+    }
+
+  
+    /* Calidad técnica v3.7: selección múltiple */
+    .quality-batch-actions{
+      display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:8px 0 10px
+    }
+    .quality-batch-actions .btn-small{
+      width:auto;min-height:36px;padding:8px 11px;border-radius:11px;font-size:.72rem
+    }
+    .quality-selected-count{
+      margin-left:auto;font-size:.72rem;font-weight:900;color:var(--navy);
+      background:#EEF5FC;border:1px solid #D7E5F5;border-radius:999px;padding:7px 10px
+    }
+    .quality-select-person-btn.is-selected{
+      background:#EAF8F9 !important;color:#006B74 !important;border-color:#8CCFD5 !important
+    }
+    .quality-selected-list{
+      display:grid;gap:8px;margin-top:8px
+    }
+    .quality-selected-card{
+      display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;
+      background:#F6FAFF;border:1px solid #D8E6F7;padding:10px;border-radius:14px
+    }
+    .quality-selected-card .person-info{min-width:0}
+    .quality-selected-card .person-info strong{display:block;color:var(--navy);font-size:.82rem}
+    .quality-selected-card .person-info small{display:block;color:var(--muted);font-size:.67rem;line-height:1.4;margin-top:2px}
+    .quality-selected-card .quality-meter{margin-top:6px}
+    .quality-remove-person{
+      border:1px solid #E2E8F0;background:#fff;color:#64748B;border-radius:10px;
+      width:34px;height:34px;font-size:1rem;font-weight:900
+    }
+    .quality-remove-person:hover{background:#FFF1F2;color:#BE123C;border-color:#FECDD3}
+    .quality-note-moderator{
+      display:inline-block;margin-top:5px;padding:4px 7px;border-radius:999px;
+      background:#F3F0FF;color:#5B21B6;font-size:.62rem;font-weight:900
+    }
+    @media(max-width:640px){
+      .quality-selected-count{margin-left:0}
+      .quality-batch-actions{align-items:stretch}
+      .quality-batch-actions .btn-small{flex:1 1 auto}
+      .quality-selected-card{grid-template-columns:auto 1fr auto}
+    }
+
   </style>
 </head>
+
 <body>
-  <div id="loader" class="loader-overlay" aria-live="polite">
-    <div class="loader-card">
-      <div class="spinner"></div>
-      <strong>Cargando La Movida SST Plus</strong>
-      <div style="color:#718198;font-size:.78rem;margin-top:5px">Estudios, ranking y progreso profesional</div>
+  <div class="ven-line"></div>
+
+  <section id="loginView" class="login-wrap">
+    <div class="login-card">
+      <img
+        class="login-logo"
+        src="https://drive.google.com/thumbnail?id=1MjVa3JxeKC95xEdlcZ5ZFMCKlatbrU2s&sz=w700"
+        alt="La Movida SST"
+      />
+      <h1>Administración de Estudios</h1>
+      <p>Gestiona las sesiones de actualización profesional desde un solo lugar.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Correo administrativo</label>
+          <input id="email" type="email" autocomplete="email" required placeholder="tu@correo.com" />
+        </div>
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input id="password" type="password" autocomplete="current-password" required placeholder="••••••••" />
+        </div>
+        <button class="btn btn-primary btn-full" type="submit">Ingresar al panel</button>
+      </form>
     </div>
+  </section>
+
+  <div id="appView" class="app-shell" hidden>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <img
+          class="logo"
+          src="https://drive.google.com/thumbnail?id=1MjVa3JxeKC95xEdlcZ5ZFMCKlatbrU2s&sz=w500"
+          alt="La Movida SST"
+        />
+        <div class="brand">
+          <small>Academia · Administración</small>
+          <strong>Estudios y Actualización Profesional</strong>
+        </div>
+        <div class="top-actions">
+          <button id="refreshBtn" class="icon-btn" title="Actualizar" aria-label="Actualizar">↻</button>
+          <button id="logoutBtn" class="icon-btn" title="Cerrar sesión" aria-label="Cerrar sesión">⇥</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Estudios</h1>
+          <p>Crea, edita y organiza las sesiones sin tocar Google Sheets ni escribir SQL.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="importWhatsappBtn" class="btn btn-secondary">📥 Importar WhatsApp</button>
+          <button id="newStudyBtn" class="btn btn-primary">＋ Nuevo estudio</button>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat"><span>Total</span><strong id="statTotal">0</strong></div>
+        <div class="stat"><span>En curso</span><strong id="statActive">0</strong></div>
+        <div class="stat"><span>Programados</span><strong id="statScheduled">0</strong></div>
+        <div class="stat"><span>Finalizados</span><strong id="statFinished">0</strong></div>
+      </section>
+
+      <div class="toolbar">
+        <div class="search">
+          <input id="studySearch" type="search" placeholder="Buscar por tema, código o tipo…" />
+        </div>
+        <select id="statusFilter" class="btn btn-secondary" aria-label="Filtrar por estado">
+          <option value="">Todos</option>
+          <option value="En Curso">En curso</option>
+          <option value="Programada">Programados</option>
+          <option value="Finalizada">Finalizados</option>
+          <option value="Borrador">Borradores</option>
+        </select>
+      </div>
+
+      <section id="studyGrid" class="study-grid"></section>
+    </main>
   </div>
 
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a class="brand" href="https://www.movidasst.com/" aria-label="Ir al inicio de La Movida SST">
-        <img class="brand-logo" src="https://assets.poap.xyz/cec12a20-fefb-4199-9cc0-b1ece87fe44d.png" alt="La Movida SST Plus">
-        <div>
-          <div class="brand-title">La Movida SST Plus</div>
-          <div class="brand-sub">De la Reacción a la Prevención</div>
-        </div>
-      </a>
-
-      <nav class="desktop-nav" aria-label="Navegación principal">
-        <button class="nav-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i> Estudios</button>
-        <button class="nav-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i> Histórico</button>
-        <button class="nav-btn" data-nav="ranking"><i class="fa-solid fa-trophy"></i> Ranking</button>
-        <button class="nav-btn" data-nav="mine"><i class="fa-solid fa-chart-line"></i> Mis puntos</button>
-        <button class="nav-btn" data-nav="info"><i class="fa-regular fa-circle-question"></i> Info</button>
-      </nav>
-
-      <div class="header-actions">
-        <a class="icon-link" href="https://calificaciones.movidasst.com/" title="Calificaciones" aria-label="Calificaciones"><i class="fa-solid fa-graduation-cap"></i></a>
-        <a class="icon-link" href="https://whatsapp.com/channel/0029Va0mlH5Jf05mrcCz8r3e" target="_blank" rel="noopener noreferrer" title="Canal de WhatsApp" aria-label="Canal de WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+  <div id="drawerBackdrop" class="backdrop" hidden>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div class="drawer-head">
+        <button id="closeDrawerBtn" class="icon-btn" type="button" aria-label="Cerrar">←</button>
+        <h2 id="drawerTitle">Nuevo estudio</h2>
       </div>
-    </div>
-  </header>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <div class="hero-shell">
-          <div class="hero-grid">
-            <div>
-              <div class="eyebrow"><i class="fa-solid fa-users-viewfinder"></i> Profesionales protagonistas</div>
-              <h1>¡Estudia con <span>La Movida</span>!</h1>
-              <p>Actualización profesional continua en SST mediante aprendizaje móvil, participación técnica y construcción colectiva de conocimiento. Consulta los estudios, el ranking público y tu progreso personal.</p>
-              <div class="hero-actions">
-                <button class="hero-btn primary" data-nav="mine"><i class="fa-solid fa-key"></i> Ver mis puntos</button>
-                <button class="hero-btn secondary" data-nav="ranking"><i class="fa-solid fa-ranking-star"></i> Ver ranking</button>
-              </div>
+      <form id="studyForm">
+        <div class="drawer-body">
+          <input id="studyId" type="hidden" />
+
+          <div class="section-title">Información principal</div>
+
+          <div class="field">
+            <label for="tema">Tema del estudio *</label>
+            <textarea id="tema" required placeholder="Ej.: Norma Venezolana COVENIN…"></textarea>
+          </div>
+
+          <div class="two">
+            <div class="field">
+              <label for="tipo">Tipo</label>
+              <select id="tipo">
+                <option value="">Seleccionar…</option>
+                <option>Ley</option>
+                <option>Reglamento</option>
+                <option>Norma Técnica</option>
+                <option>Norma</option>
+                <option>Normas</option>
+                <option>Guía</option>
+                <option>Otro</option>
+              </select>
             </div>
-            <div class="hero-kpis" aria-label="Resumen de la plataforma">
-              <div class="hero-kpi"><strong id="kpiStudies">—</strong><span>Estudios visibles</span></div>
-              <div class="hero-kpi"><strong id="kpiActive">—</strong><span>En curso / próximos</span></div>
-              <div class="hero-kpi"><strong id="kpiRanked">—</strong><span>Con XP</span></div>
+
+            <div class="field">
+              <label for="totalArticulos">Artículos / unidades</label>
+              <input id="totalArticulos" type="number" min="0" inputmode="numeric" placeholder="Ej.: 39" />
             </div>
           </div>
+
+          <div class="two">
+            <div class="field">
+              <label for="fechaInicio">Fecha de inicio</label>
+              <input id="fechaInicio" type="date" />
+            </div>
+            <div class="field">
+              <label for="fechaFin">Fecha de finalización</label>
+              <input id="fechaFin" type="date" />
+            </div>
+          </div>
+
+          <div class="hint">El estado y el progreso se calculan automáticamente usando estas fechas.</div>
+
+          <div class="section-title">Moderadores</div>
+
+          <div class="field">
+            <label for="moderatorSearch">Buscar integrante</label>
+            <input id="moderatorSearch" type="search" placeholder="Nombre, cédula o código…" autocomplete="off" />
+            <div id="moderatorResults" class="mod-search-results" hidden></div>
+            <div id="selectedModerators" class="selected-mods"></div>
+          </div>
+
+          <div class="section-title">Accesos y materiales</div>
+
+          <div class="field">
+            <label for="whatsappLink">Grupo de WhatsApp</label>
+            <input id="whatsappLink" type="url" placeholder="https://chat.whatsapp.com/…" />
+          </div>
+
+          <div class="field">
+            <label for="driveLink">Carpeta / material en Drive</label>
+            <input id="driveLink" type="url" placeholder="https://drive.google.com/…" />
+          </div>
+
+          <div class="field">
+            <label for="resumenLink">Resumen</label>
+            <input id="resumenLink" type="url" placeholder="https://…" />
+          </div>
+
+          <div class="field">
+            <label for="archivoLink">Archivo final / documento</label>
+            <input id="archivoLink" type="url" placeholder="https://…" />
+          </div>
+
+          <div class="section-title">Publicación</div>
+
+          <div class="field">
+            <label for="debateActual">Texto destacado / debate actual</label>
+            <textarea id="debateActual" placeholder="Ej.: Inicia el 11 ago"></textarea>
+          </div>
+
+          <div id="visibilityRow" class="switch-row" role="button" tabindex="0">
+            <div>
+              <strong>Visible en la página pública</strong>
+              <small>Puedes guardar un estudio oculto mientras lo preparas.</small>
+            </div>
+            <div id="visibleSwitch" class="switch on" aria-label="Visibilidad"></div>
+          </div>
         </div>
+
+        <div class="drawer-footer">
+          <button type="button" id="cancelBtn" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar estudio</button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+
+  <!-- IMPORTADOR WHATSAPP -->
+  <div id="whatsappBackdrop" class="backdrop" hidden>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="whatsappTitle">
+      <div class="drawer-head">
+        <button id="closeWhatsappBtn" class="icon-btn" type="button" aria-label="Cerrar">←</button>
+        <h2 id="whatsappTitle">Importar participación de WhatsApp</h2>
       </div>
-    </section>
 
-    <section class="section">
-      <div class="container">
-        <div id="view-agenda" class="view active">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">Estudios y agenda</h2>
-              <p class="section-desc">Sesiones activas, próximas y recursos de estudio disponibles.</p>
-            </div>
-            <span class="badge live"><i class="fa-solid fa-signal"></i> Actualización continua</span>
-          </div>
-          <div class="toolbar">
-            <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="agendaSearch" type="search" placeholder="Buscar por tema, tipo o código…" autocomplete="off"></div>
-            <select id="agendaStatus" class="select" aria-label="Filtrar estudios">
-              <option value="all">Todos los activos</option>
-              <option value="En Curso">En curso</option>
-              <option value="Programada">Programados</option>
-              <option value="Pausada">Pausados</option>
-            </select>
-          </div>
-          <div id="agendaGrid" class="studies-grid"></div>
+      <div class="drawer-body">
+        <div class="section-title">1 · Selecciona el estudio</div>
+        <div class="field">
+          <label for="importStudySelect">Sesión / estudio *</label>
+          <select id="importStudySelect"></select>
         </div>
 
-        <div id="view-history" class="view">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">Histórico de estudios</h2>
-              <p class="section-desc">Consulta los estudios finalizados y sus recursos disponibles.</p>
-            </div>
-            <span class="badge done"><i class="fa-solid fa-box-archive"></i> Archivo técnico</span>
+        <div id="existingImportsBox" class="existing-imports">
+          <div class="existing-imports-head">
+            <strong>Archivos asociados a esta sesión</strong>
+            <button id="deleteAllDraftsBtn" class="mini-btn danger" type="button" hidden>🗑 Limpiar borradores</button>
           </div>
-          <div class="toolbar">
-            <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="historySearch" type="search" placeholder="Buscar en el histórico…" autocomplete="off"></div>
-            <select id="historyType" class="select" aria-label="Filtrar histórico por tipo"><option value="all">Todos los tipos</option></select>
-          </div>
-          <div id="historyGrid" class="studies-grid"></div>
-        </div>
-
-        <div id="view-ranking" class="view">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">Ranking público</h2>
-              <p class="section-desc">Reconocimiento a la participación y al aporte técnico en la comunidad de estudio.</p>
-            </div>
-            <span class="badge soon"><i class="fa-solid fa-star"></i> XP profesional</span>
-          </div>
-
-          <div class="ranking-shell">
-            <div class="ranking-controls">
-              <select id="rankingScope" class="select" aria-label="Seleccionar ranking"><option value="global">Ranking global</option></select>
-              <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="rankingSearch" type="search" placeholder="Buscar profesional…" autocomplete="off"></div>
-              <button id="downloadRanking" class="action-btn primary" type="button"><i class="fa-solid fa-download"></i> Descargar imagen</button>
-            </div>
-
-            <div id="rankingCapture" class="ranking-capture">
-              <div class="ranking-brand">
-                <small>La Movida SST Plus</small>
-                <h3 id="rankingTitle">Ranking global</h3>
-              </div>
-              <div id="podium" class="podium"></div>
-              <div id="rankingList" class="ranking-list"></div>
-              <div id="rankingEmpty" class="empty hidden"><i class="fa-solid fa-trophy"></i><div>Aún no hay puntos para mostrar en este ranking.</div></div>
-              <div id="levelsLegend" class="level-legend"></div>
-            </div>
+          <div id="existingImportsContent">
+            <div class="existing-empty">Selecciona una sesión para revisar sus archivos.</div>
           </div>
         </div>
 
-        <div id="view-mine" class="view">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">Mis puntos</h2>
-              <p class="section-desc">Consulta de forma privada tu XP, posición, nivel e historial usando tus credenciales de La Movida.</p>
-            </div>
-            <span class="badge live"><i class="fa-solid fa-shield-halved"></i> Consulta privada</span>
-          </div>
-
-          <div class="mine-grid">
-            <form id="credentialsForm" class="credential-card" autocomplete="off">
-              <h3 class="credential-title">Accede a tu progreso</h3>
-              <p class="credential-copy">Coloca tu número de cédula y tu código de registro. El código se valida en el servidor y no se muestra en el ranking público.</p>
-
-              <div class="field">
-                <label for="cedulaInput">Número de cédula</label>
-                <input id="cedulaInput" class="credential-input" inputmode="numeric" pattern="[0-9]{5,12}" maxlength="12" placeholder="Ej. 12345678" required autocomplete="off">
-              </div>
-              <div class="field">
-                <label for="codigoInput">Código de registro</label>
-                <div class="input-wrap">
-                  <input id="codigoInput" class="credential-input" type="password" maxlength="5" placeholder="•••••" required autocomplete="new-password" autocapitalize="characters">
-                  <button id="toggleCode" class="input-eye" type="button" aria-label="Mostrar u ocultar código"><i class="fa-regular fa-eye"></i></button>
-                </div>
-              </div>
-              <button id="progressSubmit" class="submit-btn" type="submit"><i class="fa-solid fa-chart-line"></i> Ver mis puntos</button>
-              <div class="privacy-note"><i class="fa-solid fa-lock"></i><span>No guardamos tu cédula ni tu código en este navegador. Evita compartir tu código con otras personas.</span></div>
-              <div id="progressError" class="form-error hidden" role="alert"></div>
-            </form>
-
-            <div id="progressWelcome" class="panel">
-              <div class="empty" style="border:0;background:#f8fbfd">
-                <i class="fa-solid fa-chart-simple"></i>
-                <div style="font-weight:900;color:var(--navy);margin-bottom:5px">Tu progreso profesional, en un solo lugar</div>
-                <div>Al validar tus credenciales verás tus puntos acumulados, nivel, posición, participación por estudio y movimientos de XP.</div>
-              </div>
-            </div>
-
-            <div id="progressResult" class="hidden" style="display:grid;gap:14px">
-              <div class="panel">
-                <div class="subhead"><h3>Mi progreso</h3><button id="clearProgress" class="clear-btn" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar</button></div>
-                <div class="profile-head">
-                  <img id="myAvatar" class="avatar" alt="Foto de perfil">
-                  <div>
-                    <div id="myName" class="profile-name"></div>
-                    <div id="myState" class="profile-state"></div>
-                    <div id="myLevel" class="level-pill"></div>
-                  </div>
-                </div>
-                <div class="profile-kpis">
-                  <div class="profile-kpi"><strong id="myXp">0</strong><span>XP acumulado</span></div>
-                  <div class="profile-kpi"><strong id="myPosition">—</strong><span>Posición global</span></div>
-                  <div class="profile-kpi"><strong id="myDays">0</strong><span>Días activo</span></div>
-                  <div class="profile-kpi"><strong id="myStudies">0</strong><span>Estudios con XP</span></div>
-                </div>
-                <div id="nextLevelBox" class="next-level"></div>
-                <div class="stats-grid">
-                  <div class="stat"><strong id="myMessages">0</strong><span>Mensajes registrados</span></div>
-                  <div class="stat"><strong id="myEvents">0</strong><span>Eventos de puntos</span></div>
-                  <div class="stat"><strong id="myLevelShort">—</strong><span>Nivel actual</span></div>
-                </div>
-              </div>
-
-              <div class="panel">
-                <div class="subhead"><h3>¿De dónde vienen mis puntos?</h3></div>
-                <div id="breakdownList" class="breakdown"></div>
-              </div>
-
-              <div class="panel">
-                <div class="subhead"><h3>Puntos por estudio</h3></div>
-                <div id="sessionPointsList" class="breakdown"></div>
-              </div>
-
-              <div class="panel">
-                <div class="subhead"><h3>Historial reciente</h3><span style="font-size:.68rem;color:#94a3b8;font-weight:800">Últimos movimientos</span></div>
-                <div id="historyPointsList" class="breakdown"></div>
-              </div>
-            </div>
-          </div>
+        <div class="section-title">2 · Carga el chat exportado</div>
+        <div class="import-drop">
+          <strong>Chat de WhatsApp en formato .txt</strong>
+          <div class="hint" style="margin-top:5px">Exporta el chat sin multimedia. El archivo se procesa en tu navegador.</div>
+          <input id="whatsappFile" type="file" accept=".txt,text/plain" />
         </div>
 
-        <div id="view-info" class="view">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">Cómo funciona</h2>
-              <p class="section-desc">Aprendizaje móvil, participación técnica y reconocimiento transparente.</p>
-            </div>
-          </div>
-
-          <div class="info-grid">
-            <article class="info-card">
-              <h3><i class="fa-brands fa-whatsapp" style="color:#25D366"></i> XP por participación</h3>
-              <p>La participación válida en los estudios de WhatsApp genera XP diario, evitando premiar cantidad de mensajes sin límite.</p>
-              <div class="rule-grid">
-                <div class="rule"><strong>10 XP</strong><span>1 mensaje válido/día</span></div>
-                <div class="rule"><strong>15 XP</strong><span>2 a 4 mensajes/día</span></div>
-                <div class="rule"><strong>20 XP</strong><span>5 o más/día · máximo</span></div>
-                <div class="rule"><strong>+ bono</strong><span>Por constancia</span></div>
-              </div>
-            </article>
-
-            <article class="info-card">
-              <h3><i class="fa-solid fa-brain" style="color:var(--teal)"></i> Calidad técnica</h3>
-              <p>Los aportes técnicos pueden recibir reconocimiento adicional según su valor para el aprendizaje colectivo.</p>
-              <ul>
-                <li>Aporte útil: <strong>25 XP</strong></li>
-                <li>Técnico fundamentado: <strong>50 XP</strong></li>
-                <li>Caso práctico / solución aplicable: <strong>75 XP</strong></li>
-                <li>Aporte excepcional: <strong>100 XP</strong></li>
-              </ul>
-            </article>
-
-            <article class="info-card">
-              <h3><i class="fa-solid fa-ranking-star" style="color:var(--yellow)"></i> Niveles y ranking</h3>
-              <p>El ranking reconoce trayectoria de participación. Tu nivel evoluciona con el XP acumulado.</p>
-              <div id="infoLevels" class="level-legend" style="grid-template-columns:repeat(2,1fr)"></div>
-            </article>
-
-            <article class="info-card">
-              <h3><i class="fa-solid fa-mobile-screen-button" style="color:var(--navy)"></i> Mobile Learning</h3>
-              <p>Los grupos de estudio se apoyan en WhatsApp para facilitar aprendizaje justo a tiempo, intercambio entre pares y participación desde el trabajo de campo.</p>
-            </article>
-
-            <article class="info-card">
-              <h3><i class="fa-solid fa-user-shield" style="color:var(--green)"></i> Privacidad</h3>
-              <p>El ranking público muestra únicamente información de reconocimiento profesional. Para consultar tu historial personal necesitas tu cédula y código de registro.</p>
-            </article>
-
-            <article class="info-card">
-              <h3><i class="fa-solid fa-link" style="color:var(--teal)"></i> Ecosistema La Movida</h3>
-              <p>Desde el portal principal puedes acceder al Directorio, Registro, Academia, Biblioteca, Tabulador y demás herramientas de La Movida SST.</p>
-              <a href="https://www.movidasst.com/" class="action-btn primary" style="margin-top:12px"><i class="fa-solid fa-house"></i> Ir a www.movidasst.com</a>
-            </article>
-          </div>
+        <div class="field" style="margin-top:12px">
+          <label for="ignoredSenders">Remitentes a excluir del conteo</label>
+          <input id="ignoredSenders" value="Meta AI, Casimiro Bot" />
+          <div class="hint">Sepáralos con coma. Podrás cambiar esta lista en cada importación.</div>
         </div>
+
+        <div class="privacy-note">
+          🔒 El texto de las conversaciones <strong>no se guarda en Supabase</strong>. El navegador calcula remitente, cantidad de mensajes, días activos, texto/multimedia y fechas; solo esas métricas agregadas se envían.
+        </div>
+
+        <div style="margin-top:14px">
+          <button id="analyzeWhatsappBtn" class="btn btn-primary btn-full" type="button">Analizar archivo</button>
+        </div>
+
+        <section id="analysisSection" class="import-step" hidden>
+          <div class="section-title">3 · Vista previa</div>
+          <div id="analysisFilename" class="filename"></div>
+          <div class="import-kpis">
+            <div class="import-kpi"><span>Intervenciones</span><strong id="kpiMessages">0</strong></div>
+            <div class="import-kpi"><span>Remitentes</span><strong id="kpiParticipants">0</strong></div>
+            <div class="import-kpi"><span>Días</span><strong id="kpiDays">0</strong></div>
+            <div class="import-kpi"><span>Multimedia</span><strong id="kpiMedia">0</strong></div>
+          </div>
+          <div id="previewParticipants" class="participant-list"></div>
+
+          <div style="margin-top:14px">
+            <button id="sendWhatsappBtn" class="btn btn-primary btn-full" type="button">Cruzar con Directorio y preparar importación</button>
+          </div>
+        </section>
+
+        <section id="matchingSection" class="import-step" hidden>
+          <div class="section-title">4 · Identificación</div>
+          <div class="import-kpis">
+            <div class="import-kpi"><span>Reconocidos</span><strong id="kpiMatched">0</strong></div>
+            <div class="import-kpi"><span>Por revisar</span><strong id="kpiPending">0</strong></div>
+          </div>
+          <div id="matchingParticipants" class="participant-list"></div>
+
+          <div class="privacy-note">
+            Los aliases que vincules manualmente pueden guardarse como aprendizaje. En la próxima importación ese mismo nombre se reconocerá automáticamente.
+          </div>
+
+          <div style="margin-top:14px">
+            <button id="confirmWhatsappBtn" class="btn btn-primary btn-full" type="button">Confirmar participación</button>
+          </div>
+          <div class="hint" style="margin-top:8px">
+            Esta etapa confirma las métricas. Todavía no crea XP automático; definiremos la regla de puntos por separado.
+          </div>
+        </section>
       </div>
-    </section>
-  </main>
+    </aside>
+  </div>
 
-  <footer class="footer">
-    <div class="container">
-      <strong>La Movida SST Plus</strong> · De la Reacción a la Prevención<br>
-      Comunidad de estudio y actualización profesional en Seguridad y Salud en el Trabajo.
-    </div>
-  </footer>
 
-  <nav class="mobile-nav" aria-label="Navegación móvil">
-    <button class="mobile-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i><span>Estudios</span></button>
-    <button class="mobile-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i><span>Histórico</span></button>
-    <button class="mobile-btn" data-nav="ranking"><i class="fa-solid fa-trophy"></i><span>Ranking</span></button>
-    <button class="mobile-btn" data-nav="mine"><i class="fa-solid fa-chart-line"></i><span>Mis puntos</span></button>
-    <button class="mobile-btn" data-nav="info"><i class="fa-regular fa-circle-question"></i><span>Info</span></button>
-  </nav>
+  <!-- XP WHATSAPP -->
+  <div id="xpBackdrop" class="backdrop" hidden>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="xpTitle">
+      <div class="drawer-head">
+        <button id="closeXpBtn" class="icon-btn" type="button" aria-label="Cerrar">←</button>
+        <h2 id="xpTitle">XP de participación WhatsApp</h2>
+      </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <div class="drawer-body">
+        <div id="xpStudyName" style="font-weight:900;color:var(--navy);line-height:1.4"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <div class="section-title">Fórmula WXP-V1</div>
+        <div class="xp-rule">
+          <div><b>+10 XP</b><small>1 intervención/día</small></div>
+          <div><b>+15 XP</b><small>2–4 intervenciones/día</small></div>
+          <div><b>+20 XP</b><small>5+ intervenciones/día</small></div>
+        </div>
+
+        <div class="hint">
+          Bono de constancia: +25 / +50 / +75 / +100 XP según presencia en
+          25% / 50% / 75% / 100% de los días reales de actividad del grupo.
+        </div>
+
+        <div id="xpNotice"></div>
+
+        <div class="import-kpis" style="margin-top:14px">
+          <div class="import-kpi"><span>Participantes</span><strong id="xpKpiPeople">0</strong></div>
+          <div class="import-kpi"><span>Días del grupo</span><strong id="xpKpiDays">0</strong></div>
+          <div class="import-kpi"><span>XP calculado</span><strong id="xpKpiTotal">0</strong></div>
+          <div class="import-kpi"><span>Excluidos</span><strong id="xpKpiExcluded">0</strong></div>
+        </div>
+
+        <div id="xpList" class="xp-list"></div>
+
+        <div style="height:90px"></div>
+      </div>
+
+      <div class="drawer-footer">
+        <button id="xpCancelBtn" class="btn btn-secondary" type="button">Cerrar</button>
+        <button id="xpApplyBtn" class="btn btn-primary" type="button">Otorgar XP</button>
+      </div>
+    </aside>
+  </div>
+
+
+  <!-- CALIDAD TÉCNICA -->
+  <div id="qualityBackdrop" class="backdrop" hidden>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="qualityTitle">
+      <div class="drawer-head">
+        <button id="closeQualityBtn" class="icon-btn" type="button" aria-label="Cerrar">←</button>
+        <h2 id="qualityTitle">⭐ Calidad técnica</h2>
+      </div>
+
+      <div class="drawer-body">
+        <div id="qualityStudyName" style="font-weight:900;color:var(--navy);line-height:1.4"></div>
+        <div id="qualityProtection"></div>
+
+        <div class="import-kpis" style="margin-top:14px">
+          <div class="import-kpi"><span>XP calidad</span><strong id="qualityKpiXp">0</strong></div>
+          <div class="import-kpi"><span>Aportes premiados</span><strong id="qualityKpiEvents">0</strong></div>
+          <div class="import-kpi"><span>Personas</span><strong id="qualityKpiPeople">0</strong></div>
+          <div class="import-kpi"><span>Tope/persona</span><strong>500</strong></div>
+        </div>
+
+        <section id="qualityAwardSection">
+          <div class="section-title">1 · Selecciona uno o varios integrantes</div>
+          <div class="field">
+            <label for="qualitySearch">Buscar por nombre, cédula o código</label>
+            <input id="qualitySearch" type="search" autocomplete="off" placeholder="Ej.: Daniel Morales" />
+            <div class="quality-batch-actions">
+              <button id="qualityShowPeopleBtn" type="button" class="btn btn-light btn-small">Mostrar integrantes</button>
+              <button id="qualitySelectVisibleBtn" type="button" class="btn btn-light btn-small" disabled>Seleccionar visibles</button>
+              <button id="qualityClearSelectionBtn" type="button" class="btn btn-light btn-small" disabled>Limpiar selección</button>
+              <span id="qualitySelectedCount" class="quality-selected-count">0 seleccionados</span>
+            </div>
+            <div id="qualitySearchResults" class="mod-search-results" hidden></div>
+          </div>
+
+          <div id="qualitySelectedWrap" hidden>
+            <div id="qualitySelectedPeople" class="quality-selected-list"></div>
+
+            <div class="section-title">2 · Valora el aporte para la selección <span style="font-weight:700;color:var(--muted);font-size:.72em">· puedes elegir varios</span></div>
+            <div class="quality-levels">
+              <button type="button" class="quality-level" data-quality="aporte_util" aria-pressed="false">
+                <b>Aporte útil</b>
+                <em>+25 XP</em>
+                <small>Contribuye de forma pertinente a la discusión.</small>
+              </button>
+              <button type="button" class="quality-level" data-quality="tecnico_fundamentado" aria-pressed="false">
+                <b>Técnico fundamentado</b>
+                <em>+50 XP</em>
+                <small>Argumenta con criterio técnico, norma o evidencia.</small>
+              </button>
+              <button type="button" class="quality-level" data-quality="caso_practico" aria-pressed="false">
+                <b>Caso / solución</b>
+                <em>+75 XP</em>
+                <small>Aporta experiencia o solución aplicable.</small>
+              </button>
+              <button type="button" class="quality-level" data-quality="excepcional" aria-pressed="false">
+                <b>Excepcional</b>
+                <em>+100 XP</em>
+                <small>Síntesis o aporte de especial valor para el grupo.</small>
+              </button>
+            </div>
+            <div id="qualityLevelsSummary" class="xp-good" style="margin:-2px 0 12px">
+              Selecciona uno o varios criterios. Los XP se suman y cada criterio queda registrado por separado.
+            </div>
+
+            <div class="field">
+              <label for="qualityObservation">Observación <span style="font-weight:500;color:var(--muted)">(opcional)</span></label>
+              <textarea id="qualityObservation" placeholder="Ej.: Excelente análisis del artículo 17 y aplicación al caso planteado."></textarea>
+            </div>
+
+            <button id="qualityAwardBtn" type="button" class="btn btn-primary btn-full" disabled>
+              Otorgar XP de calidad
+            </button>
+          </div>
+        </section>
+
+        <div class="section-title">Historial de esta sesión</div>
+        <div id="qualityHistory" class="quality-history"></div>
+
+        <div style="height:40px"></div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="loading" class="loading" hidden><div class="spinner"></div></div>
+  <div id="toast" class="toast" hidden></div>
+
   <script>
-    (() => {
-      'use strict';
+    // Proyecto activo de La Movida SST.
+    const SUPABASE_URL = 'https://lfdmbkzghnwvsapxypvt.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_bRnkA6PA8-v073nrw9zxiQ_8rVGiOn1';
 
-      const SUPABASE_URL = 'https://lfdmbkzghnwvsapxypvt.supabase.co';
-      const SUPABASE_KEY = 'sb_publishable_bRnkA6PA8-v073nrw9zxiQ_8rVGiOn1';
-      const DEFAULT_AVATAR = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
-          <rect width="160" height="160" rx="32" fill="#edf3f7"/>
-          <circle cx="80" cy="62" r="28" fill="#9db0bf"/>
-          <path d="M31 142c5-30 23-45 49-45s44 15 49 45" fill="#9db0bf"/>
-        </svg>`);
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      const $ = id => document.getElementById(id);
-      const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY, {
-        auth: { persistSession:false, autoRefreshToken:false, detectSessionInUrl:false }
-      });
+    let studies = [];
+    let selectedModerators = [];
+    let currentVisibility = true;
+    let moderatorTimer = null;
 
-      const state = {
-        sessions: [],
-        ranking: [],
-        levels: [],
-        rankingScope: 'global',
-        currentView: 'agenda'
-      };
+    // Importador WhatsApp
+    let whatsappAnalysis = null;
+    let currentImportId = null;
+    let importDetails = [];
 
-      const TYPE_LABELS = {
-        whatsapp_participacion: 'Participación en WhatsApp',
-        calidad_tecnica: 'Calidad técnica',
-        moderacion: 'Moderación',
-        actividad: 'Actividad',
-        ajuste: 'Ajuste',
-        historico: 'Puntaje histórico'
-      };
+    // XP WhatsApp
+    let xpCurrentStudyId = null;
+    let xpPreviewRows = [];
 
-      function escapeHtml(value) {
-        return String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]));
-      }
+    // Importaciones existentes de la sesión seleccionada
+    let sessionWhatsappImports = [];
 
-      function safeUrl(value) {
-        const url = String(value || '').trim();
-        return /^https:\/\//i.test(url) ? url : '';
-      }
+    // Calidad técnica
+    let qualityStudyId = null;
+    let qualitySelectedLevels = new Set();
+    let qualitySummary = null;
+    let qualitySearchTimer = null;
+    // Resultados visibles y selección múltiple de Calidad.
+    let qualitySearchPeople = new Map();
+    let qualitySelectedPeople = new Map();
 
-      function imageUrl(value) {
-        const raw = String(value || '').trim();
-        if (!raw) return DEFAULT_AVATAR;
-        const driveFile = raw.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
-        if (driveFile) return `https://lh3.googleusercontent.com/d/${driveFile[1]}`;
-        const driveQuery = raw.match(/[?&]id=([^&]+)/i);
-        if (/drive\.google\.com/i.test(raw) && driveQuery) return `https://lh3.googleusercontent.com/d/${driveQuery[1]}`;
+    const $ = (id) => document.getElementById(id);
+
+    function showLoading(v){ $('loading').hidden = !v; }
+
+    function toast(message, error=false){
+      const t = $('toast');
+      t.textContent = message;
+      t.className = 'toast' + (error ? ' error' : '');
+      t.hidden = false;
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.hidden = true, 3200);
+    }
+
+    function safeText(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+
+    function initials(name){
+      return String(name || '?').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+    }
+
+    function normalizePhotoUrl(url){
+      const raw = String(url || '').trim();
+      if(!raw) return '';
+
+      // Ya es una imagen directa de Google.
+      if(raw.includes('lh3.googleusercontent.com/')){
         return raw;
       }
 
-      function formatDate(value) {
-        if (!value) return 'Sin fecha';
-        const d = new Date(`${value}T12:00:00`);
-        if (Number.isNaN(d.getTime())) return String(value);
-        return new Intl.DateTimeFormat('es-VE',{day:'2-digit',month:'short',year:'numeric'}).format(d);
+      // Google Drive: /file/d/FILE_ID/view...
+      let m = raw.match(/drive\.google\.com\/file\/d\/([^/?#]+)/i);
+      if(m && m[1]){
+        return `https://drive.google.com/thumbnail?id=${encodeURIComponent(m[1])}&sz=w240`;
       }
 
-      function formatDateTime(value) {
-        if (!value) return '';
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return '';
-        return new Intl.DateTimeFormat('es-VE',{day:'2-digit',month:'short',year:'numeric'}).format(d);
-      }
-
-      function num(value) {
-        return new Intl.NumberFormat('es-VE').format(Number(value || 0));
-      }
-
-      function statusBadge(status) {
-        const s = String(status || 'Programada');
-        const cls = s === 'En Curso' ? 'live' : s === 'Finalizada' || s === 'Concluida' ? 'done' : s === 'Pausada' ? 'pause' : 'soon';
-        const icon = s === 'En Curso' ? 'fa-signal' : s === 'Finalizada' || s === 'Concluida' ? 'fa-check' : s === 'Pausada' ? 'fa-pause' : 'fa-clock';
-        return `<span class="badge ${cls}"><i class="fa-solid ${icon}"></i>${escapeHtml(s)}</span>`;
-      }
-
-      function toast(message) {
-        const el = $('toast');
-        el.textContent = message;
-        el.classList.add('show');
-        clearTimeout(toast.timer);
-        toast.timer = setTimeout(() => el.classList.remove('show'), 2600);
-      }
-
-      async function rpc(name, args = {}) {
-        if (!client) throw new Error('No se pudo iniciar Supabase.');
-        const { data, error } = await client.rpc(name, args);
-        if (error) throw error;
-        return data;
-      }
-
-      function setView(view) {
-        state.currentView = view;
-        document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${view}`));
-        document.querySelectorAll('[data-nav]').forEach(el => el.classList.toggle('active', el.dataset.nav === view));
-        window.scrollTo({top:0,behavior:'smooth'});
-        if (view === 'ranking' && state.ranking.length === 0) loadRanking();
-      }
-
-      document.addEventListener('click', e => {
-        const nav = e.target.closest('[data-nav]');
-        if (nav) {
-          e.preventDefault();
-          setView(nav.dataset.nav);
+      // Google Drive: /uc?export=view&id=FILE_ID
+      try{
+        const u = new URL(raw);
+        if(u.hostname === 'drive.google.com'){
+          const id = u.searchParams.get('id');
+          if(id){
+            return `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w240`;
+          }
         }
+      }catch(e){}
+
+      return raw;
+    }
+
+    function avatarHtml(person){
+      const name = person?.nombre || '';
+      const photo = normalizePhotoUrl(person?.foto_url);
+
+      if(photo){
+        const fallback = safeText(initials(name));
+        return `
+          <span class="avatar-wrap" title="${safeText(name)}">
+            <img
+              class="avatar"
+              src="${safeText(photo)}"
+              alt="${safeText(name)}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              onerror="
+                this.style.display='none';
+                const f=this.nextElementSibling;
+                if(f) f.style.display='grid';
+              "
+            >
+            <span class="avatar-fallback" style="display:none">${fallback}</span>
+          </span>
+        `;
+      }
+
+      return `<span class="avatar-fallback" title="${safeText(name)}">${safeText(initials(name))}</span>`;
+    }
+
+    function fmtDate(value){
+      if(!value) return 'Sin fecha';
+      const [y,m,d] = value.split('-').map(Number);
+      return new Intl.DateTimeFormat('es-VE',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(y,m-1,d));
+    }
+
+    async function ensureAdmin(){
+      const { data: { session } } = await sb.auth.getSession();
+      if(!session){
+        showLogin();
+        return false;
+      }
+      try{
+        const { error } = await sb.rpc('admin_estudios_listar');
+        if(error) throw error;
+        showApp();
+        return true;
+      }catch(err){
+        await sb.auth.signOut();
+        showLogin();
+        toast('La cuenta existe, pero no tiene permiso de administrador.', true);
+        return false;
+      }
+    }
+
+    function showLogin(){
+      $('loginView').hidden = false;
+      $('appView').hidden = true;
+    }
+
+    function showApp(){
+      $('loginView').hidden = true;
+      $('appView').hidden = false;
+    }
+
+    async function loadStudies(){
+      showLoading(true);
+      try{
+        const { data, error } = await sb.rpc('admin_estudios_listar');
+        if(error) throw error;
+        studies = data || [];
+        renderStats();
+        renderStudies();
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudieron cargar los estudios.', true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function renderStats(){
+      $('statTotal').textContent = studies.length;
+      $('statActive').textContent = studies.filter(x=>x.estado_auto === 'En Curso').length;
+      $('statScheduled').textContent = studies.filter(x=>x.estado_auto === 'Programada').length;
+      $('statFinished').textContent = studies.filter(x=>x.estado_auto === 'Finalizada').length;
+    }
+
+    function renderStudies(){
+      const q = $('studySearch').value.trim().toLowerCase();
+      const status = $('statusFilter').value;
+
+      const filtered = studies.filter(s => {
+        const hay = [s.tema,s.codigo,s.tipo].join(' ').toLowerCase();
+        return (!q || hay.includes(q)) && (!status || s.estado_auto === status);
       });
 
-      function moderatorHtml(m) {
-        return `<span class="moderator"><img src="${escapeHtml(imageUrl(m.foto_url))}" alt="" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'"><span>${escapeHtml(m.nombre || 'Moderador')}</span></span>`;
+      const grid = $('studyGrid');
+      if(!filtered.length){
+        grid.innerHTML = `<div class="empty">No hay estudios que coincidan con el filtro.</div>`;
+        return;
       }
 
-      function actionLink(url, label, icon, cls = '') {
-        const safe = safeUrl(url);
-        if (!safe) return '';
-        return `<a class="action-btn ${cls}" href="${escapeHtml(safe)}" target="_blank" rel="noopener noreferrer"><i class="${icon}"></i>${label}</a>`;
-      }
-
-      function studyCard(session, historical = false) {
-        const mods = Array.isArray(session.moderadores) ? session.moderadores : [];
-        const progress = Math.max(0, Math.min(100, Number(session.progreso || 0)));
-        const shareText = `📚 ${session.tema}\n\nEstudia con La Movida SST Plus\nhttps://estudia.movidasst.com/`;
-        const shareEncoded = encodeURIComponent(shareText);
-        const actions = [
-          actionLink(session.whatsapp_link, 'Grupo', 'fa-brands fa-whatsapp', 'whatsapp'),
-          actionLink(session.drive_link, 'Estudiar', 'fa-brands fa-google-drive', 'primary'),
-          actionLink(session.resumen_link, 'Resumen', 'fa-regular fa-file-lines'),
-          actionLink(session.archivo_link, 'Archivo', 'fa-solid fa-download')
-        ].filter(Boolean).join('');
+      grid.innerHTML = filtered.map(s => {
+        const mods = Array.isArray(s.moderadores) ? s.moderadores : [];
+        const modHtml = mods.length
+          ? mods.map(m => `<span class="mod">${avatarHtml(m)}${safeText(m.nombre)}</span>`).join('')
+          : `<span class="hint">Sin moderadores asignados</span>`;
 
         return `
-          <article class="study-card" data-search="${escapeHtml(`${session.codigo} ${session.tema} ${session.tipo || ''}`.toLowerCase())}">
-            <div class="study-accent"></div>
-            <div class="study-body">
-              <div class="study-top">
-                <div style="min-width:0">
-                  <div class="study-code">${escapeHtml(session.codigo || 'ESTUDIO')}</div>
-                  <h3 class="study-title">${escapeHtml(session.tema)}</h3>
-                </div>
-                ${statusBadge(session.estado)}
+          <article class="study-card">
+            <div class="study-head">
+              <span class="code">${safeText(s.codigo)}</span>
+              <div style="flex:1;min-width:0">
+                <h3 class="study-title">${safeText(s.tema)}</h3>
               </div>
-              <div class="study-meta">
-                ${session.tipo ? `<span class="meta-chip"><i class="fa-regular fa-file-lines"></i>${escapeHtml(session.tipo)}</span>` : ''}
-                <span class="meta-chip"><i class="fa-regular fa-calendar"></i>${escapeHtml(formatDate(session.fecha_inicio))}${session.fecha_fin ? ` — ${escapeHtml(formatDate(session.fecha_fin))}` : ''}</span>
-                ${session.total_articulos != null ? `<span class="meta-chip"><i class="fa-solid fa-list-check"></i>${escapeHtml(session.total_articulos)} unidades</span>` : ''}
-              </div>
-              <div class="progress-wrap">
-                <div class="progress-label"><span>${historical ? 'Completado' : 'Progreso estimado'}</span><strong>${progress.toFixed(0)}%</strong></div>
-                <div class="progress"><span style="width:${progress}%"></span></div>
-              </div>
-              ${session.debate_actual && !historical ? `<div class="debate"><strong><i class="fa-regular fa-comments"></i> En debate:</strong> ${escapeHtml(session.debate_actual)}</div>` : ''}
-              ${mods.length ? `<div class="moderators"><span class="mod-label">Moderación</span>${mods.map(moderatorHtml).join('')}</div>` : ''}
-              <div class="study-actions">
-                ${actions || '<span style="grid-column:1/-1;color:#94a3b8;font-size:.75rem;text-align:center">Recursos no publicados todavía.</span>'}
-                <a class="action-btn" href="https://wa.me/?text=${shareEncoded}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-share-nodes"></i>Compartir</a>
-              </div>
+              <span class="status ${safeText(s.estado_auto)}">${safeText(s.estado_auto)}</span>
             </div>
-          </article>`;
+
+            <div class="study-meta">
+              <span>${safeText(s.tipo || 'Sin tipo')}</span>
+              <span>${s.total_articulos ?? '—'} unidades</span>
+              <span>${fmtDate(s.fecha_inicio)} → ${fmtDate(s.fecha_fin)}</span>
+              ${!s.visible ? '<span>Oculto</span>' : ''}
+            </div>
+
+            <div class="progress-row">
+              <div class="progress"><i style="width:${Number(s.progreso_auto || 0)}%"></i></div>
+              <b>${Number(s.progreso_auto || 0).toFixed(0)}%</b>
+            </div>
+
+            <div class="mods">${modHtml}</div>
+
+            <div class="card-actions">
+              <button class="btn btn-soft" onclick="editStudy('${s.id}')">Editar</button>
+              <button class="btn btn-secondary" onclick="openQualityPanel('${s.id}')">⭐ Calidad</button>
+              <button class="btn btn-secondary" onclick="openXpPreview('${s.id}')">⚡ XP WhatsApp</button>
+              <button class="btn btn-secondary" onclick="duplicateStudy('${s.id}')">Duplicar</button>
+              <button class="btn ${s.visible ? 'btn-danger' : 'btn-secondary'}"
+                onclick="toggleVisibility('${s.id}', ${s.visible ? 'false' : 'true'})">
+                ${s.visible ? 'Archivar' : 'Reactivar'}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function resetForm(){
+      $('studyForm').reset();
+      $('studyId').value = '';
+      selectedModerators = [];
+      currentVisibility = true;
+      renderSelectedModerators();
+      syncVisibility();
+      $('moderatorResults').hidden = true;
+      $('moderatorResults').innerHTML = '';
+    }
+
+    function openDrawer(title='Nuevo estudio'){
+      $('drawerTitle').textContent = title;
+      $('drawerBackdrop').hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer(){
+      $('drawerBackdrop').hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    function newStudy(){
+      resetForm();
+      openDrawer('Nuevo estudio');
+    }
+
+    window.editStudy = function(id){
+      const s = studies.find(x=>x.id===id);
+      if(!s) return;
+
+      resetForm();
+      $('studyId').value = s.id;
+      $('tema').value = s.tema || '';
+      $('tipo').value = s.tipo || '';
+      $('totalArticulos').value = s.total_articulos ?? '';
+      $('fechaInicio').value = s.fecha_inicio || '';
+      $('fechaFin').value = s.fecha_fin || '';
+      $('debateActual').value = s.debate_actual || '';
+      $('driveLink').value = s.drive_link || '';
+      $('whatsappLink').value = s.whatsapp_link || '';
+      $('resumenLink').value = s.resumen_link || '';
+      $('archivoLink').value = s.archivo_link || '';
+      currentVisibility = !!s.visible;
+      selectedModerators = (s.moderadores || []).map(m => ({
+        id:Number(m.integrante_id),
+        nombre:m.nombre,
+        estado:m.estado,
+        foto_url:m.foto_url
+      }));
+      renderSelectedModerators();
+      syncVisibility();
+      openDrawer(`Editar · ${s.codigo}`);
+    }
+
+    window.duplicateStudy = function(id){
+      const s = studies.find(x=>x.id===id);
+      if(!s) return;
+
+      resetForm();
+      $('tema').value = `Copia de ${s.tema || ''}`;
+      $('tipo').value = s.tipo || '';
+      $('totalArticulos').value = s.total_articulos ?? '';
+
+      // Duplicamos estructura, no datos operativos.
+      $('fechaInicio').value = '';
+      $('fechaFin').value = '';
+      $('debateActual').value = '';
+      $('driveLink').value = '';
+      $('whatsappLink').value = '';
+      $('resumenLink').value = '';
+      $('archivoLink').value = '';
+
+      selectedModerators = (s.moderadores || []).map(m => ({
+        id:Number(m.integrante_id),
+        nombre:m.nombre,
+        estado:m.estado,
+        foto_url:m.foto_url
+      }));
+      renderSelectedModerators();
+      currentVisibility = false;
+      syncVisibility();
+      openDrawer(`Duplicar · ${s.codigo}`);
+    }
+
+    window.toggleVisibility = async function(id, visible){
+      const s = studies.find(x=>x.id===id);
+      if(!s) return;
+      const action = visible ? 'reactivar' : 'archivar';
+      if(!confirm(`¿Quieres ${action} ${s.codigo}?`)) return;
+
+      showLoading(true);
+      try{
+        const { error } = await sb.rpc('admin_estudio_visibilidad', {p_id:id,p_visible:visible});
+        if(error) throw error;
+        toast(visible ? 'Estudio reactivado.' : 'Estudio archivado.');
+        await loadStudies();
+      }catch(err){
+        toast(err.message || 'No se pudo actualizar.', true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function syncVisibility(){
+      $('visibleSwitch').classList.toggle('on', currentVisibility);
+    }
+
+    function renderSelectedModerators(){
+      const wrap = $('selectedModerators');
+      if(!selectedModerators.length){
+        wrap.innerHTML = `<span class="hint">Todavía no has seleccionado moderadores.</span>`;
+        return;
+      }
+      wrap.innerHTML = selectedModerators.map(m => `
+        <span class="selected-mod">
+          ${safeText(m.nombre)}
+          <button type="button" aria-label="Quitar" onclick="removeModerator(${Number(m.id)})">×</button>
+        </span>
+      `).join('');
+    }
+
+    window.removeModerator = function(id){
+      selectedModerators = selectedModerators.filter(x=>Number(x.id)!==Number(id));
+      renderSelectedModerators();
+    }
+
+    async function searchModerators(q){
+      const box = $('moderatorResults');
+      if(q.trim().length < 2){
+        box.hidden = true;
+        box.innerHTML = '';
+        return;
       }
 
-      function renderStudies() {
-        const agendaQuery = $('agendaSearch').value.trim().toLowerCase();
-        const agendaStatus = $('agendaStatus').value;
-        const historyQuery = $('historySearch').value.trim().toLowerCase();
-        const historyType = $('historyType').value;
+      try{
+        const { data, error } = await sb.rpc('admin_buscar_integrantes',{p_q:q.trim(),p_limit:12});
+        if(error) throw error;
+        const results = (data || []).filter(p => !selectedModerators.some(m=>Number(m.id)===Number(p.id)));
 
-        const active = state.sessions.filter(s => !['Finalizada','Concluida'].includes(s.estado));
-        const historical = state.sessions.filter(s => ['Finalizada','Concluida'].includes(s.estado));
+        if(!results.length){
+          box.innerHTML = `<div class="person"><div class="person-info"><strong>Sin resultados</strong><small>Prueba con otro nombre o cédula.</small></div></div>`;
+        }else{
+          box.innerHTML = results.map(p => `
+            <div class="person">
+              ${avatarHtml(p)}
+              <div class="person-info">
+                <strong>${safeText(p.nombre)}</strong>
+                <small>${safeText(p.estado || '')}${p.cedula ? ' · '+safeText(p.cedula) : ''}</small>
+              </div>
+              <button type="button" onclick='addModerator(${JSON.stringify({
+                id:null,nombre:null,estado:null,foto_url:null
+              }).replace('"id":null',`"id":${Number(p.id)}`)
+                .replace('"nombre":null',`"nombre":${JSON.stringify(p.nombre)}`)
+                .replace('"estado":null',`"estado":${JSON.stringify(p.estado || '')}`)
+                .replace('"foto_url":null',`"foto_url":${JSON.stringify(p.foto_url || '')}`)})'>Añadir</button>
+            </div>
+          `).join('');
+        }
+        box.hidden = false;
+      }catch(err){
+        console.error(err);
+        box.hidden = true;
+        toast('No se pudo buscar integrantes.', true);
+      }
+    }
 
-        const agendaFiltered = active.filter(s => {
-          const hay = `${s.codigo || ''} ${s.tema || ''} ${s.tipo || ''}`.toLowerCase().includes(agendaQuery);
-          return hay && (agendaStatus === 'all' || s.estado === agendaStatus);
+    window.addModerator = function(person){
+      if(!selectedModerators.some(m=>Number(m.id)===Number(person.id))){
+        selectedModerators.push(person);
+        renderSelectedModerators();
+      }
+      $('moderatorSearch').value = '';
+      $('moderatorResults').hidden = true;
+    }
+
+    async function saveStudy(e){
+      e.preventDefault();
+
+      const start = $('fechaInicio').value || null;
+      const end = $('fechaFin').value || null;
+      if(start && end && end < start){
+        toast('La fecha final no puede ser anterior a la fecha de inicio.', true);
+        return;
+      }
+
+      const totalRaw = $('totalArticulos').value.trim();
+      const payload = {
+        p_id: $('studyId').value || null,
+        p_tema: $('tema').value.trim(),
+        p_tipo: $('tipo').value || null,
+        p_total_articulos: totalRaw === '' ? null : Number(totalRaw),
+        p_fecha_inicio: start,
+        p_fecha_fin: end,
+        p_debate_actual: $('debateActual').value.trim() || null,
+        p_drive_link: $('driveLink').value.trim() || null,
+        p_whatsapp_link: $('whatsappLink').value.trim() || null,
+        p_resumen_link: $('resumenLink').value.trim() || null,
+        p_archivo_link: $('archivoLink').value.trim() || null,
+        p_visible: currentVisibility,
+        p_moderadores: selectedModerators.map(m=>Number(m.id))
+      };
+
+      showLoading(true);
+      try{
+        const { data, error } = await sb.rpc('admin_estudio_guardar', payload);
+        if(error) throw error;
+        closeDrawer();
+        toast(payload.p_id ? 'Estudio actualizado.' : 'Nuevo estudio creado.');
+        await loadStudies();
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo guardar el estudio.', true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+
+    // ================================================================
+    // IMPORTADOR WHATSAPP
+    // ================================================================
+
+    function normalizeWhatsappAlias(value){
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu,'')
+        .replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/g,'')
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s+.\-]/gu,' ')
+        .replace(/\s+/g,' ')
+        .trim();
+    }
+
+    function normalizeDetectedPhone(value){
+      const d = String(value || '').replace(/\D/g,'');
+      if(/^04\d{9}$/.test(d)) return '58' + d.slice(1);
+      if(/^4\d{9}$/.test(d)) return '58' + d;
+      return d || null;
+    }
+
+    function looksLikePhoneSender(sender){
+      const raw = String(sender || '').trim();
+      const digits = raw.replace(/\D/g,'');
+      return (/^\+/.test(raw) || /^[\d\s()+\-]+$/.test(raw)) && digits.length >= 10;
+    }
+
+    function chatTimestampToIso(day, month, year, hour, minute, ampm){
+      let h = Number(hour);
+      if(ampm){
+        const ap = ampm.toLowerCase();
+        if(ap === 'p' && h !== 12) h += 12;
+        if(ap === 'a' && h === 12) h = 0;
+      }
+      const pad = n => String(n).padStart(2,'0');
+      // Los chats de esta comunidad se gestionan en horario Venezuela (-04:00).
+      return `${year}-${pad(month)}-${pad(day)}T${pad(h)}:${pad(minute)}:00-04:00`;
+    }
+
+    function parseWhatsappExport(text, ignoredRaw){
+      const normalizedText = String(text || '')
+        .replace(/\u202f/g,' ')
+        .replace(/\u00a0/g,' ')
+        .replace(/\r\n?/g,'\n');
+
+      const ignored = new Set(
+        String(ignoredRaw || '')
+          .split(',')
+          .map(normalizeWhatsappAlias)
+          .filter(Boolean)
+      );
+
+      const lines = normalizedText.split('\n');
+      const startRe = /^(\d{1,2})\/(\d{1,2})\/(\d{4}),\s*(\d{1,2}):(\d{2})(?:\s*([ap])\.\s*m\.)?\s*-\s*(.*)$/i;
+
+      const events = [];
+      let current = null;
+
+      function pushCurrent(){
+        if(current) events.push(current);
+        current = null;
+      }
+
+      for(const rawLine of lines){
+        const line = rawLine.replace(/\u202f/g,' ').replace(/\u00a0/g,' ');
+        const m = line.match(startRe);
+        if(m){
+          pushCurrent();
+          current = {
+            day:Number(m[1]), month:Number(m[2]), year:Number(m[3]),
+            hour:Number(m[4]), minute:Number(m[5]), ampm:m[6] || null,
+            payload:m[7] || ''
+          };
+        }else if(current){
+          current.payload += '\n' + rawLine;
+        }
+      }
+      pushCurrent();
+
+      const participants = new Map();
+      const daysMap = new Map();
+      let minIso = null, maxIso = null;
+
+      const deletedPatterns = [
+        /^eliminaste este mensaje\.?$/i,
+        /^se elimin[oó] este mensaje\.?$/i,
+        /^este mensaje fue eliminado\.?$/i
+      ];
+
+      function meaningfulText(content){
+        let t = String(content || '');
+        t = t.replace(/<multimedia omitido>/ig,' ');
+        t = t.replace(/[^\n]*\.(jpg|jpeg|png|webp|gif|opus|mp3|mp4|pdf|docx?|xlsx?)\s*\(archivo adjunto\)/ig,' ');
+        t = t.replace(/\(archivo adjunto\)/ig,' ');
+        t = t.replace(/\s+/g,' ').trim();
+        return t;
+      }
+
+      for(const ev of events){
+        const payload = ev.payload || '';
+
+        // Los eventos del sistema no tienen "remitente: mensaje".
+        const sm = payload.match(/^([^:\n]+?):(?:\s?)([\s\S]*)$/);
+        if(!sm) continue;
+
+        const sender = sm[1].trim()
+          .replace(/^[\u200e\u200f\u202a-\u202e\u2066-\u2069]+/g,'')
+          .trim();
+        const content = (sm[2] || '').trim();
+
+        const senderNorm = normalizeWhatsappAlias(sender);
+        if(!senderNorm || ignored.has(senderNorm)) continue;
+        if(!content) continue;
+        if(deletedPatterns.some(r => r.test(content.trim()))) continue;
+
+        const hasMedia =
+          /<multimedia omitido>/i.test(content) ||
+          /\(archivo adjunto\)/i.test(content);
+
+        const textPart = meaningfulText(content);
+        const hasText = !!textPart;
+
+        // Si quedó vacío y tampoco era multimedia, no cuenta.
+        if(!hasText && !hasMedia) continue;
+
+        const iso = chatTimestampToIso(ev.day, ev.month, ev.year, ev.hour, ev.minute, ev.ampm);
+        const dateKey = iso.slice(0,10);
+
+        if(!minIso || iso < minIso) minIso = iso;
+        if(!maxIso || iso > maxIso) maxIso = iso;
+
+        let p = participants.get(senderNorm);
+        if(!p){
+          p = {
+            alias_detectado:sender,
+            alias_normalizado:senderNorm,
+            telefono_detectado:looksLikePhoneSender(sender) ? normalizeDetectedPhone(sender) : null,
+            message_count:0,
+            text_messages:0,
+            multimedia_messages:0,
+            first_message_at:iso,
+            last_message_at:iso,
+            days:new Set()
+          };
+          participants.set(senderNorm,p);
+        }
+
+        p.message_count++;
+        if(hasText) p.text_messages++;
+        if(hasMedia) p.multimedia_messages++;
+        p.days.add(dateKey);
+        if(iso < p.first_message_at) p.first_message_at = iso;
+        if(iso > p.last_message_at) p.last_message_at = iso;
+
+        const dk = `${senderNorm}|||${dateKey}`;
+        let d = daysMap.get(dk);
+        if(!d){
+          d = {
+            alias_normalizado:senderNorm,
+            fecha:dateKey,
+            message_count:0,
+            text_messages:0,
+            multimedia_messages:0
+          };
+          daysMap.set(dk,d);
+        }
+        d.message_count++;
+        if(hasText) d.text_messages++;
+        if(hasMedia) d.multimedia_messages++;
+      }
+
+      const details = [...participants.values()]
+        .map(p => ({
+          alias_detectado:p.alias_detectado,
+          alias_normalizado:p.alias_normalizado,
+          telefono_detectado:p.telefono_detectado,
+          message_count:p.message_count,
+          active_days:p.days.size,
+          text_messages:p.text_messages,
+          multimedia_messages:p.multimedia_messages,
+          first_message_at:p.first_message_at,
+          last_message_at:p.last_message_at
+        }))
+        .sort((a,b)=>b.message_count-a.message_count || a.alias_detectado.localeCompare(b.alias_detectado));
+
+      const days = [...daysMap.values()];
+      const uniqueDays = new Set(days.map(d=>d.fecha)).size;
+
+      return {
+        details,
+        days,
+        periodStart:minIso,
+        periodEnd:maxIso,
+        totalMessages:details.reduce((a,b)=>a+b.message_count,0),
+        totalParticipants:details.length,
+        totalMedia:details.reduce((a,b)=>a+b.multimedia_messages,0),
+        uniqueDays
+      };
+    }
+
+    async function sha256Text(text){
+      const bytes = new TextEncoder().encode(text);
+      const digest = await crypto.subtle.digest('SHA-256',bytes);
+      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+
+    async function loadExistingWhatsappImports(){
+      const studyId = $('importStudySelect').value;
+      const content = $('existingImportsContent');
+      const cleanBtn = $('deleteAllDraftsBtn');
+
+      sessionWhatsappImports = [];
+      cleanBtn.hidden = true;
+
+      if(!studyId){
+        content.innerHTML = `<div class="existing-empty">Selecciona una sesión para revisar sus archivos.</div>`;
+        return;
+      }
+
+      content.innerHTML = `<div class="existing-empty" style="color:var(--muted)">Revisando archivos…</div>`;
+
+      try{
+        const {data,error} = await sb.rpc('admin_whatsapp_importaciones_listar',{p_limit:100});
+        if(error) throw error;
+
+        sessionWhatsappImports = (data || []).filter(x=>x.sesion_id === studyId);
+        renderExistingWhatsappImports();
+      }catch(err){
+        console.error(err);
+        content.innerHTML = `<div class="existing-alert">No se pudieron consultar los archivos existentes.</div>`;
+      }
+    }
+
+    function renderExistingWhatsappImports(){
+      const content = $('existingImportsContent');
+      const cleanBtn = $('deleteAllDraftsBtn');
+
+      if(!sessionWhatsappImports.length){
+        cleanBtn.hidden = true;
+        content.innerHTML = `<div class="existing-empty">✓ Esta sesión no tiene archivos importados todavía.</div>`;
+        return;
+      }
+
+      const drafts = sessionWhatsappImports.filter(x =>
+        ['borrador','revisado','cancelado'].includes(x.estado)
+      );
+      cleanBtn.hidden = drafts.length === 0;
+      cleanBtn.textContent = drafts.length > 1
+        ? `🗑 Limpiar ${drafts.length} borradores`
+        : `🗑 Eliminar borrador`;
+
+      let topAlert = '';
+      if(drafts.length){
+        topAlert = `
+          <div class="existing-alert">
+            ⚠️ Ya ${drafts.length === 1 ? 'hay una importación pendiente' : `hay ${drafts.length} importaciones pendientes`}.
+            <strong>No tienes que subir el TXT otra vez.</strong> Pulsa Continuar para recuperar la revisión,
+            o Eliminar si quieres empezar de cero.
+          </div>`;
+      }
+
+      const rows = sessionWhatsappImports.map(item=>{
+        const canManage = ['borrador','revisado','cancelado'].includes(item.estado);
+        const created = item.created_at
+          ? new Intl.DateTimeFormat('es-VE',{dateStyle:'short',timeStyle:'short'}).format(new Date(item.created_at))
+          : '';
+
+        return `
+          <div class="existing-import">
+            <div class="existing-file">
+              <strong>${safeText(item.archivo_nombre)}</strong>
+              <small>
+                ${Number(item.total_mensajes || 0)} mensajes ·
+                ${Number(item.total_participantes || 0)} remitentes ·
+                ${Number(item.identificados || 0)} identificados
+                ${created ? ' · '+safeText(created) : ''}
+              </small>
+              <span class="existing-status ${safeText(item.estado)}">${safeText(item.estado)}</span>
+            </div>
+            <div class="existing-actions">
+              ${canManage ? `
+                <button class="mini-btn primary" type="button"
+                  onclick="continueWhatsappImport('${item.id}')">▶ Continuar</button>
+                <button class="mini-btn danger" type="button"
+                  onclick="deleteWhatsappImport('${item.id}')">🗑 Eliminar</button>
+              ` : `
+                <span class="match-badge ok">✓ Importación confirmada</span>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      content.innerHTML = topAlert + `<div class="existing-imports-list">${rows}</div>`;
+    }
+
+    window.continueWhatsappImport = async function(importId){
+      const item = sessionWhatsappImports.find(x=>x.id===importId);
+      if(!item) return;
+
+      currentImportId = importId;
+      whatsappAnalysis = null;
+
+      showLoading(true);
+      try{
+        await loadImportDetails();
+        $('analysisSection').hidden = true;
+        $('matchingSection').hidden = false;
+        $('matchingSection').scrollIntoView({behavior:'smooth',block:'start'});
+        toast(`Continuando ${item.archivo_nombre}. No necesitas volver a subirlo.`);
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo recuperar la importación.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    window.deleteWhatsappImport = async function(importId){
+      const item = sessionWhatsappImports.find(x=>x.id===importId);
+      if(!item) return;
+
+      if(!confirm(
+        `¿Eliminar este borrador?\n\n${item.archivo_nombre}\n\nEsto borra la importación pendiente y sus métricas, pero no elimina integrantes ni aliases aprendidos.`
+      )) return;
+
+      showLoading(true);
+      try{
+        const {error} = await sb.rpc('admin_whatsapp_importacion_eliminar',{
+          p_importacion_id:importId
         });
+        if(error) throw error;
 
-        const historyFiltered = historical.filter(s => {
-          const hay = `${s.codigo || ''} ${s.tema || ''} ${s.tipo || ''}`.toLowerCase().includes(historyQuery);
-          return hay && (historyType === 'all' || String(s.tipo || '') === historyType);
+        if(currentImportId === importId){
+          currentImportId = null;
+          importDetails = [];
+          $('matchingSection').hidden = true;
+        }
+
+        $('whatsappFile').value = '';
+        $('analysisSection').hidden = true;
+
+        toast('Borrador eliminado. Ya puedes cargar el archivo de nuevo.');
+        await loadExistingWhatsappImports();
+      }catch(err){
+        console.error(err);
+        let msg = String(err.message || '');
+        if(msg.includes('IMPORTACION_CONFIRMADA_NO_SE_PUEDE_ELIMINAR')){
+          msg = 'Una importación confirmada no se puede borrar desde este botón.';
+        }
+        toast(msg || 'No se pudo eliminar el borrador.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    async function deleteAllWhatsappDrafts(){
+      const studyId = $('importStudySelect').value;
+      if(!studyId) return;
+
+      const drafts = sessionWhatsappImports.filter(x =>
+        ['borrador','revisado','cancelado'].includes(x.estado)
+      );
+
+      if(!drafts.length) return;
+
+      if(!confirm(
+        `¿Eliminar ${drafts.length} borrador(es) de esta sesión?\n\nLas importaciones confirmadas NO se tocarán.`
+      )) return;
+
+      showLoading(true);
+      try{
+        const {data,error} = await sb.rpc('admin_whatsapp_borradores_eliminar_sesion',{
+          p_sesion_id:studyId
         });
+        if(error) throw error;
 
-        $('agendaGrid').innerHTML = agendaFiltered.length ? agendaFiltered.map(s => studyCard(s,false)).join('') : `<div class="empty" style="grid-column:1/-1"><i class="fa-regular fa-calendar-xmark"></i><div>No hay estudios que coincidan con este filtro.</div></div>`;
-        $('historyGrid').innerHTML = historyFiltered.length ? historyFiltered.map(s => studyCard(s,true)).join('') : `<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-box-archive"></i><div>No hay estudios históricos que coincidan.</div></div>`;
+        currentImportId = null;
+        importDetails = [];
+        whatsappAnalysis = null;
+        $('whatsappFile').value = '';
+        $('analysisSection').hidden = true;
+        $('matchingSection').hidden = true;
+
+        toast(`${Number(data.eliminados || 0)} borrador(es) eliminado(s).`);
+        await loadExistingWhatsappImports();
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudieron limpiar los borradores.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function populateImportStudies(){
+      const sel = $('importStudySelect');
+      const ordered = [...studies].sort((a,b)=>
+        String(b.fecha_inicio || '').localeCompare(String(a.fecha_inicio || ''))
+      );
+      sel.innerHTML = ordered.map(s =>
+        `<option value="${safeText(s.id)}">${safeText(s.codigo)} · ${safeText(s.tema)}</option>`
+      ).join('');
+    }
+
+    function openWhatsappImporter(){
+      whatsappAnalysis = null;
+      currentImportId = null;
+      importDetails = [];
+      $('whatsappFile').value = '';
+      $('analysisSection').hidden = true;
+      $('matchingSection').hidden = true;
+      populateImportStudies();
+      $('whatsappBackdrop').hidden = false;
+      loadExistingWhatsappImports();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWhatsappImporter(){
+      $('whatsappBackdrop').hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    function renderWhatsappPreview(){
+      const a = whatsappAnalysis;
+      $('analysisFilename').textContent = a.fileName;
+      $('kpiMessages').textContent = a.totalMessages;
+      $('kpiParticipants').textContent = a.totalParticipants;
+      $('kpiDays').textContent = a.uniqueDays;
+      $('kpiMedia').textContent = a.totalMedia;
+
+      $('previewParticipants').innerHTML = a.details.slice(0,80).map(p => `
+        <div class="participant-row">
+          <div class="participant-main">
+            <strong>${safeText(p.alias_detectado)}</strong>
+            <small>${p.active_days} día(s) activo(s) · ${p.text_messages} con texto · ${p.multimedia_messages} multimedia</small>
+          </div>
+          <div class="participant-count">
+            <b>${p.message_count}</b>
+            <small>mensajes</small>
+          </div>
+        </div>
+      `).join('');
+
+      $('analysisSection').hidden = false;
+    }
+
+    async function analyzeWhatsappFile(){
+      const file = $('whatsappFile').files[0];
+      if(!file){
+        toast('Selecciona primero un archivo .txt.',true);
+        return;
+      }
+      if(!/\.txt$/i.test(file.name)){
+        toast('El archivo debe ser .txt.',true);
+        return;
       }
 
-      function populateStudyFilters() {
-        const types = [...new Set(state.sessions.map(s => String(s.tipo || '').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
-        $('historyType').innerHTML = `<option value="all">Todos los tipos</option>${types.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('')}`;
-
-        const opts = state.sessions.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.codigo || '')} · ${escapeHtml(s.tema)}</option>`).join('');
-        $('rankingScope').innerHTML = `<option value="global">Ranking global</option>${opts}`;
-      }
-
-      function renderLevels() {
-        const html = state.levels.map(l => `<div class="level-card"><strong>${escapeHtml(l.icono || '⭐')} ${escapeHtml(l.nombre)}</strong><span>Desde ${num(l.xp_min)} XP</span></div>`).join('');
-        $('levelsLegend').innerHTML = html;
-        $('infoLevels').innerHTML = html;
-      }
-
-      function podiumItem(row, position) {
-        if (!row) return `<div class="podium-item"><div class="podium-base">—</div></div>`;
-        const medals = {1:'🥇',2:'🥈',3:'🥉'};
-        return `<div class="podium-item ${position===1?'first':''}">
-          <div class="podium-avatar-wrap"><img class="podium-avatar" src="${escapeHtml(imageUrl(row.foto_url))}" alt="${escapeHtml(row.nombre)}" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'"><span class="medal">${medals[position]}</span></div>
-          <div class="podium-name">${escapeHtml(row.nombre)}</div>
-          <div class="podium-xp">${num(row.puntos)} XP</div>
-          <div class="podium-base">#${escapeHtml(row.posicion || position)}</div>
-        </div>`;
-      }
-
-      function renderRanking() {
-        const q = $('rankingSearch').value.trim().toLowerCase();
-        const rows = state.ranking.filter(r => `${r.nombre || ''} ${r.estado || ''}`.toLowerCase().includes(q));
-        const isSearching = Boolean(q);
-        const top = state.ranking.slice(0,3);
-        $('podium').classList.toggle('hidden', isSearching || state.ranking.length === 0);
-        $('podium').innerHTML = `${podiumItem(top[1],2)}${podiumItem(top[0],1)}${podiumItem(top[2],3)}`;
-
-        const list = isSearching ? rows : state.ranking.slice(3);
-        $('rankingList').innerHTML = list.map(r => `<div class="rank-row">
-          <div class="rank-pos">#${escapeHtml(r.posicion)}</div>
-          <img class="rank-avatar" src="${escapeHtml(imageUrl(r.foto_url))}" alt="" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'">
-          <div style="min-width:0"><div class="rank-name">${escapeHtml(r.nombre)}</div><div class="rank-state">${escapeHtml(r.estado || 'Venezuela')} · ${escapeHtml(r.nivel_icono || '')} ${escapeHtml(r.nivel || '')}</div></div>
-          <div class="rank-score"><strong>${num(r.puntos)} XP</strong><span>${escapeHtml(r.nivel || '')}</span></div>
-        </div>`).join('');
-
-        const noData = state.ranking.length === 0 || (isSearching && rows.length === 0);
-        $('rankingEmpty').classList.toggle('hidden', !noData);
-        if (isSearching && rows.length === 0) $('rankingEmpty').querySelector('div').textContent = 'No encontramos profesionales con ese nombre.';
-        else $('rankingEmpty').querySelector('div').textContent = 'Aún no hay puntos para mostrar en este ranking.';
-      }
-
-      async function loadRanking() {
-        const scope = $('rankingScope').value || 'global';
-        state.rankingScope = scope;
-        $('rankingList').innerHTML = `<div class="empty"><div class="spinner" style="width:30px;height:30px"></div>Cargando ranking…</div>`;
-        try {
-          let rows;
-          if (scope === 'global') {
-            rows = await rpc('ranking_publico',{p_limit:200,p_offset:0});
-            $('rankingTitle').textContent = 'Ranking global';
-          } else {
-            rows = await rpc('ranking_sesion_publico',{p_sesion_id:scope,p_limit:200});
-            const session = state.sessions.find(s => s.id === scope);
-            $('rankingTitle').textContent = session ? `${session.codigo} · ${session.tema}` : 'Ranking por estudio';
-          }
-          state.ranking = Array.isArray(rows) ? rows : [];
-          $('kpiRanked').textContent = num(scope === 'global' ? state.ranking.length : ($('kpiRanked').dataset.global || 0));
-          if (scope === 'global') $('kpiRanked').dataset.global = state.ranking.length;
-          renderRanking();
-        } catch (err) {
-          console.error(err);
-          state.ranking = [];
-          renderRanking();
-          toast('No fue posible cargar el ranking. Revisa la API pública de Estudios.');
+      showLoading(true);
+      try{
+        const text = await file.text();
+        const parsed = parseWhatsappExport(text,$('ignoredSenders').value);
+        if(!parsed.details.length){
+          throw new Error('No se detectaron mensajes de participantes en este archivo.');
         }
+        parsed.fileName = file.name;
+        parsed.fileHash = await sha256Text(text);
+        whatsappAnalysis = parsed;
+        renderWhatsappPreview();
+        $('matchingSection').hidden = true;
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo analizar el archivo.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    async function sendWhatsappToSupabase(){
+      if(!whatsappAnalysis) return;
+      const studyId = $('importStudySelect').value;
+      if(!studyId){
+        toast('Selecciona el estudio.',true);
+        return;
       }
 
-      function typeLabel(type) { return TYPE_LABELS[type] || String(type || 'Puntos').replaceAll('_',' '); }
+      showLoading(true);
+      try{
+        const a = whatsappAnalysis;
+        const {data,error} = await sb.rpc('admin_whatsapp_importar_preparar',{
+          p_sesion_id:studyId,
+          p_archivo_nombre:a.fileName,
+          p_archivo_hash:a.fileHash,
+          p_periodo_desde:a.periodStart,
+          p_periodo_hasta:a.periodEnd,
+          p_detalles:a.details,
+          p_dias:a.days
+        });
+        if(error) throw error;
 
-      function renderProgress(data) {
-        const p = data.perfil || {};
-        const r = data.ranking || {};
-        const a = data.actividad || {};
-        const breakdown = Array.isArray(data.desglose) ? data.desglose : [];
-        const bySession = Array.isArray(data.por_sesion) ? data.por_sesion : [];
-        const history = Array.isArray(data.historial) ? data.historial : [];
+        currentImportId = data.importacion_id;
 
-        $('progressWelcome').classList.add('hidden');
-        $('progressResult').classList.remove('hidden');
-        $('myAvatar').src = imageUrl(p.foto_url);
-        $('myAvatar').onerror = () => { $('myAvatar').src = DEFAULT_AVATAR; };
-        $('myName').textContent = p.nombre || 'Integrante';
-        $('myState').textContent = p.estado || 'La Movida SST Plus';
-        $('myLevel').textContent = `${r.nivel_icono || '🥉'} ${r.nivel || 'Participante'}`;
-        $('myXp').textContent = num(r.puntos);
-        $('myPosition').textContent = r.fuera_de_ranking ? '—' : (Number(r.posicion) > 0 ? `#${r.posicion}` : '—');
-        $('myDays').textContent = num(a.dias_activos);
-        $('myStudies').textContent = num(a.estudios_con_puntos);
-        $('myMessages').textContent = num(a.mensajes_total);
-        $('myEvents').textContent = num(breakdown.reduce((sum,x)=>sum+Number(x.eventos||0),0));
-        $('myLevelShort').textContent = r.nivel || 'Participante';
-
-        if (r.fuera_de_ranking) {
-          $('nextLevelBox').innerHTML = `<div class="next-top"><span>Cuenta fuera del ranking competitivo</span><span>${escapeHtml(r.nivel_icono || '')} ${escapeHtml(r.nivel || '')}</span></div><div style="font-size:.7rem;color:#806d28;margin-top:6px">Tus puntos e historial siguen disponibles para tu consulta personal.</div>`;
-        } else if (r.siguiente_nivel_xp == null) {
-          $('nextLevelBox').innerHTML = `<div class="next-top"><span>¡Nivel máximo alcanzado!</span><span>${escapeHtml(r.nivel_icono || '👑')} ${escapeHtml(r.nivel || '')}</span></div><div class="mini-progress"><span style="width:100%"></span></div>`;
-        } else {
-          const currentMin = Number(r.nivel_xp_min || 0);
-          const nextMin = Number(r.siguiente_nivel_xp || currentMin + 1);
-          const points = Number(r.puntos || 0);
-          const pct = Math.max(0,Math.min(100,((points-currentMin)/Math.max(1,nextMin-currentMin))*100));
-          $('nextLevelBox').innerHTML = `<div class="next-top"><span>Siguiente: ${escapeHtml(r.siguiente_nivel_icono || '')} ${escapeHtml(r.siguiente_nivel || '')}</span><span>Faltan ${num(r.xp_faltante)} XP</span></div><div class="mini-progress"><span style="width:${pct}%"></span></div>`;
+        if(data.reanudada){
+          toast(`Importación pendiente recuperada. ${data.automaticos} participantes ya reconocidos.`);
+        }else{
+          toast(`${data.automaticos} participantes reconocidos automáticamente.`);
         }
 
-        $('breakdownList').innerHTML = breakdown.length ? breakdown.map(x=>`<div class="break-row"><strong>${escapeHtml(typeLabel(x.tipo))}</strong><span>${Number(x.puntos)>0?'+':''}${num(x.puntos)} XP</span></div>`).join('') : `<div class="empty">Aún no tienes puntos registrados.</div>`;
-
-        $('sessionPointsList').innerHTML = bySession.length ? bySession.map(x=>`<div class="session-points-row"><div style="min-width:0"><strong>${escapeHtml(x.codigo || 'GENERAL')} · ${escapeHtml(x.tema || 'Puntos generales')}</strong><div style="font-size:.65rem;color:#94a3b8;margin-top:3px">${num(x.eventos)} movimiento(s)</div></div><span>${Number(x.puntos)>0?'+':''}${num(x.puntos)} XP</span></div>`).join('') : `<div class="empty">Todavía no hay puntos asociados a estudios.</div>`;
-
-        $('historyPointsList').innerHTML = history.length ? history.map(x=>`<div class="history-row"><div class="history-main"><strong>${escapeHtml(x.motivo || typeLabel(x.tipo))}</strong><small>${escapeHtml(x.codigo || 'GENERAL')} · ${escapeHtml(x.tema || 'Puntos generales')} · ${escapeHtml(formatDateTime(x.fecha))}</small></div><span class="${Number(x.puntos)>=0?'points-positive':'points-negative'}">${Number(x.puntos)>0?'+':''}${num(x.puntos)} XP</span></div>`).join('') : `<div class="empty">Aún no hay movimientos de puntos.</div>`;
-      }
-
-      async function submitProgress(e) {
-        e.preventDefault();
-        const cedula = $('cedulaInput').value.replace(/\D/g,'');
-        const codigo = $('codigoInput').value.trim().toUpperCase();
-        $('progressError').classList.add('hidden');
-        if (!/^\d{5,12}$/.test(cedula) || !/^[A-Z0-9]{5}$/.test(codigo)) {
-          $('progressError').textContent = 'Revisa tu cédula y tu código de 5 caracteres.';
-          $('progressError').classList.remove('hidden');
-          return;
+        await loadImportDetails();
+        await loadExistingWhatsappImports();
+      }catch(err){
+        console.error(err);
+        const msg = String(err.message || '');
+        if(msg.includes('ARCHIVO_YA_CONFIRMADO')){
+          toast('Este archivo ya está confirmado para esta sesión. No hace falta volver a importarlo.',true);
+        }else if(msg.includes('ARCHIVO_YA_IMPORTADO_OTRA_SESION')){
+          toast('Este mismo archivo ya está asociado a otra sesión. Revisa el estudio seleccionado.',true);
+        }else if(msg.includes('ARCHIVO_YA_IMPORTADO')){
+          toast('Este archivo ya fue importado anteriormente. No se duplicó.',true);
+        }else{
+          toast(msg || 'No se pudo preparar la importación.',true);
         }
-        const btn = $('progressSubmit');
-        btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando…`;
-        try {
-          const data = await rpc('estudia_mi_progreso',{p_cedula:cedula,p_codigo:codigo});
-          if (!data || data.ok !== true) {
-            throw new Error(data?.message || 'Las credenciales no coinciden.');
-          }
-          renderProgress(data);
-          $('codigoInput').value = '';
-          $('cedulaInput').value = '';
-          toast('Progreso cargado correctamente.');
-        } catch (err) {
-          console.error(err);
-          $('progressError').textContent = err.message || 'No fue posible consultar tus puntos.';
-          $('progressError').classList.remove('hidden');
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = `<i class="fa-solid fa-chart-line"></i> Ver mis puntos`;
-        }
+      }finally{
+        showLoading(false);
       }
+    }
 
-      function clearProgress() {
-        $('progressResult').classList.add('hidden');
-        $('progressWelcome').classList.remove('hidden');
-        $('credentialsForm').reset();
-        $('progressError').classList.add('hidden');
-      }
-
-      async function downloadRanking() {
-        if (!window.html2canvas) return toast('No se pudo cargar el generador de imagen.');
-        const btn = $('downloadRanking');
-        btn.disabled = true;
-        try {
-          const canvas = await html2canvas($('rankingCapture'),{scale:2,backgroundColor:'#f9fbfd',useCORS:true,logging:false});
-          const a = document.createElement('a');
-          a.download = `ranking-movida-sst-${state.rankingScope === 'global' ? 'global' : 'estudio'}.png`;
-          a.href = canvas.toDataURL('image/png');
-          a.click();
-        } catch (err) {
-          console.error(err);
-          toast('No fue posible crear la imagen del ranking.');
-        } finally { btn.disabled = false; }
-      }
-
-      async function init() {
-        try {
-          if (!client) throw new Error('Supabase JS no cargó.');
-          const [sessions, levels, ranking] = await Promise.all([
-            rpc('estudia_sesiones_publicas'),
-            rpc('estudia_niveles_publicos'),
-            rpc('ranking_publico',{p_limit:200,p_offset:0})
-          ]);
-          state.sessions = Array.isArray(sessions) ? sessions : [];
-          state.levels = Array.isArray(levels) ? levels : [];
-          state.ranking = Array.isArray(ranking) ? ranking : [];
-
-          populateStudyFilters();
-          renderStudies();
-          renderLevels();
-          renderRanking();
-
-          const active = state.sessions.filter(s => !['Finalizada','Concluida'].includes(s.estado)).length;
-          $('kpiStudies').textContent = num(state.sessions.length);
-          $('kpiActive').textContent = num(active);
-          $('kpiRanked').textContent = num(state.ranking.length);
-          $('kpiRanked').dataset.global = state.ranking.length;
-        } catch (err) {
-          console.error(err);
-          $('agendaGrid').innerHTML = `<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>No pudimos cargar Estudios.</strong><br>Ejecuta primero el SQL de la API pública en Supabase.</div></div>`;
-          toast('Falta activar la API pública de Estudios en Supabase.');
-        } finally {
-          setTimeout(() => $('loader').classList.add('hidden'), 180);
-        }
-      }
-
-      $('agendaSearch').addEventListener('input',renderStudies);
-      $('agendaStatus').addEventListener('change',renderStudies);
-      $('historySearch').addEventListener('input',renderStudies);
-      $('historyType').addEventListener('change',renderStudies);
-      $('rankingScope').addEventListener('change',loadRanking);
-      $('rankingSearch').addEventListener('input',renderRanking);
-      $('downloadRanking').addEventListener('click',downloadRanking);
-      $('credentialsForm').addEventListener('submit',submitProgress);
-      $('clearProgress').addEventListener('click',clearProgress);
-      $('toggleCode').addEventListener('click',() => {
-        const input = $('codigoInput');
-        const show = input.type === 'password';
-        input.type = show ? 'text' : 'password';
-        $('toggleCode').innerHTML = `<i class="fa-regular ${show?'fa-eye-slash':'fa-eye'}"></i>`;
+    async function loadImportDetails(){
+      if(!currentImportId) return;
+      const {data,error} = await sb.rpc('admin_whatsapp_importacion_detalles',{
+        p_importacion_id:currentImportId
       });
-      $('cedulaInput').addEventListener('input',e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,12); });
-      $('codigoInput').addEventListener('input',e => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase().slice(0,5); });
+      if(error) throw error;
+      importDetails = data || [];
+      renderMatchingDetails();
+    }
 
-      init();
+    function renderMatchingDetails(){
+      const matched = importDetails.filter(d=>['automatico','confirmado'].includes(d.match_status)).length;
+      const pending = importDetails.filter(d=>d.match_status==='pendiente').length;
+      $('kpiMatched').textContent = matched;
+      $('kpiPending').textContent = pending;
+
+      $('matchingParticipants').innerHTML = importDetails.map(d => {
+        const ok = ['automatico','confirmado'].includes(d.match_status);
+        const ignored = d.match_status === 'ignorado';
+
+        let badge = ok
+          ? `<span class="match-badge ok">✓ ${safeText(d.integrante_nombre || 'Identificado')}</span>`
+          : ignored
+            ? `<span class="match-badge ignored">Ignorado</span>`
+            : `<span class="match-badge pending">⚠ Por identificar</span>`;
+
+        let actions = '';
+        if(d.match_status === 'pendiente'){
+          actions = `
+            <div class="match-actions">
+              <button class="mini-btn primary" type="button" onclick="openResolve('${d.detalle_id}')">Vincular integrante</button>
+              <button class="mini-btn danger" type="button" onclick="ignoreImportDetail('${d.detalle_id}')">Ignorar</button>
+            </div>
+            <div id="resolve-${d.detalle_id}" class="resolve-box" hidden>
+              <input id="resolve-input-${d.detalle_id}" style="width:100%;height:42px;border:1px solid var(--line);border-radius:10px;padding:0 10px"
+                placeholder="Buscar nombre, cédula o código…" />
+              <div id="resolve-results-${d.detalle_id}" class="resolve-results"></div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="participant-row">
+            <div class="participant-main">
+              <strong>${safeText(d.alias_detectado)}</strong>
+              <small>${d.active_days} día(s) · ${d.text_messages} texto · ${d.multimedia_messages} multimedia</small>
+              ${badge}
+              ${actions}
+            </div>
+            <div class="participant-count">
+              <b>${d.message_count}</b>
+              <small>mensajes</small>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      $('matchingSection').hidden = false;
+    }
+
+    window.openResolve = function(detailId){
+      const box = $(`resolve-${detailId}`);
+      box.hidden = !box.hidden;
+      if(!box.hidden){
+        const input = $(`resolve-input-${detailId}`);
+        input.focus();
+
+        let timer;
+        input.oninput = ()=>{
+          clearTimeout(timer);
+          timer = setTimeout(()=>resolveSearch(detailId,input.value),250);
+        };
+
+        const d = importDetails.find(x=>x.detalle_id===detailId);
+        if(d){
+          const suggestion = String(d.alias_detectado || '')
+            .replace(/^[A-Z]{2,4}\s*-\s*/i,'')
+            .replace(/[^\p{L}\p{N}\s]/gu,' ')
+            .replace(/\s+/g,' ')
+            .trim();
+          if(suggestion.length >= 2){
+            input.value = suggestion;
+            resolveSearch(detailId,suggestion);
+          }
+        }
+      }
+    }
+
+    async function resolveSearch(detailId,q){
+      const results = $(`resolve-results-${detailId}`);
+      if(!q || q.trim().length < 2){
+        results.innerHTML = '';
+        return;
+      }
+      const {data,error} = await sb.rpc('admin_buscar_integrantes',{p_q:q.trim(),p_limit:8});
+      if(error){
+        results.innerHTML = `<div class="hint">No se pudo buscar.</div>`;
+        return;
+      }
+      results.innerHTML = (data || []).map(p => `
+        <div class="resolve-person">
+          ${avatarHtml(p)}
+          <div class="person-info">
+            <strong>${safeText(p.nombre)}</strong>
+            <small>${safeText(p.estado || '')}${p.cedula ? ' · '+safeText(p.cedula) : ''}</small>
+          </div>
+          <button class="mini-btn primary" type="button"
+            onclick="linkImportDetail('${detailId}',${Number(p.id)})">Vincular</button>
+        </div>
+      `).join('') || `<div class="hint">Sin coincidencias.</div>`;
+    }
+
+    window.linkImportDetail = async function(detailId,integranteId){
+      showLoading(true);
+      try{
+        const {error} = await sb.rpc('admin_whatsapp_vincular',{
+          p_detalle_id:detailId,
+          p_integrante_id:integranteId,
+          p_recordar_alias:true
+        });
+        if(error) throw error;
+        toast('Alias vinculado y aprendido.');
+        await loadImportDetails();
+      }catch(err){
+        toast(err.message || 'No se pudo vincular.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    window.ignoreImportDetail = async function(detailId){
+      if(!confirm('¿Ignorar este remitente en esta importación?')) return;
+      showLoading(true);
+      try{
+        const {error} = await sb.rpc('admin_whatsapp_ignorar',{p_detalle_id:detailId});
+        if(error) throw error;
+        await loadImportDetails();
+      }catch(err){
+        toast(err.message || 'No se pudo ignorar.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    async function confirmWhatsappImport(){
+      if(!currentImportId) return;
+      const pending = importDetails.filter(d=>d.match_status==='pendiente').length;
+
+      if(pending){
+        const ok = confirm(
+          `Quedan ${pending} remitente(s) sin identificar. Puedes confirmar igualmente; quedarán pendientes y no se asociarán a ningún integrante. ¿Continuar?`
+        );
+        if(!ok) return;
+      }
+
+      showLoading(true);
+      try{
+        const {data,error} = await sb.rpc('admin_whatsapp_confirmar',{
+          p_importacion_id:currentImportId
+        });
+        if(error) throw error;
+        toast(`Importación confirmada: ${data.identificados} identificados.`);
+        await loadExistingWhatsappImports();
+        closeWhatsappImporter();
+      }catch(err){
+        toast(err.message || 'No se pudo confirmar.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+
+
+    // ================================================================
+    // XP WHATSAPP v1
+    // ================================================================
+
+    window.openXpPreview = async function(studyId){
+      const s = studies.find(x=>x.id===studyId);
+      if(!s) return;
+
+      xpCurrentStudyId = studyId;
+      xpPreviewRows = [];
+      $('xpStudyName').textContent = `${s.codigo} · ${s.tema}`;
+      $('xpNotice').innerHTML = '';
+      $('xpList').innerHTML = '';
+      $('xpKpiPeople').textContent = '0';
+      $('xpKpiDays').textContent = '0';
+      $('xpKpiTotal').textContent = '0';
+      $('xpKpiExcluded').textContent = '0';
+      $('xpApplyBtn').disabled = true;
+      $('xpApplyBtn').style.opacity = '.55';
+
+      $('xpBackdrop').hidden = false;
+      document.body.style.overflow = 'hidden';
+
+      showLoading(true);
+      try{
+        const {data,error} = await sb.rpc('admin_whatsapp_xp_previsualizar',{
+          p_sesion_id:studyId
+        });
+        if(error) throw error;
+
+        xpPreviewRows = data || [];
+        renderXpPreview();
+      }catch(err){
+        console.error(err);
+        $('xpNotice').innerHTML =
+          `<div class="xp-warning">${safeText(err.message || 'No fue posible calcular el XP.')}</div>`;
+        toast(err.message || 'No fue posible calcular el XP.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function closeXpPreview(){
+      $('xpBackdrop').hidden = true;
+      document.body.style.overflow = '';
+      xpCurrentStudyId = null;
+      xpPreviewRows = [];
+    }
+
+    function renderXpPreview(){
+      if(!xpPreviewRows.length){
+        $('xpNotice').innerHTML = `<div class="xp-warning">No hay participantes identificados para calcular.</div>`;
+        return;
+      }
+
+      const first = xpPreviewRows[0];
+      const eligible = xpPreviewRows.filter(r=>!r.excluido_ranking);
+      const excluded = xpPreviewRows.filter(r=>r.excluido_ranking);
+      const xpTotal = eligible.reduce((sum,r)=>sum + Number(r.xp_total || 0),0);
+      const alreadyAll = eligible.length > 0 && eligible.every(r=>r.ya_otorgado);
+
+      $('xpKpiPeople').textContent = eligible.length;
+      $('xpKpiDays').textContent = first.dias_grupo || 0;
+      $('xpKpiTotal').textContent = xpTotal;
+      $('xpKpiExcluded').textContent = excluded.length;
+
+      let notice = '';
+      let canApply = true;
+
+      if(first.sesion_tiene_historico){
+        canApply = false;
+        notice = `
+          <div class="xp-warning">
+            🛡️ <strong>Protección histórica activa.</strong>
+            Esta sesión ya tiene puntos históricos. Puedes estudiar esta simulación,
+            pero el sistema bloquea “Otorgar XP” para evitar contar dos veces la misma etapa.
+          </div>`;
+      }else if(!first.sesion_finalizada){
+        canApply = false;
+        notice = `
+          <div class="xp-warning">
+            ⏳ Este estudio todavía no ha finalizado. La vista previa funciona,
+            pero el XP definitivo se otorga al cierre para que el bono de constancia sea correcto.
+          </div>`;
+      }else if(alreadyAll){
+        canApply = false;
+        notice = `
+          <div class="xp-good">
+            ✓ El XP WXP-V1 ya fue otorgado a los participantes elegibles de esta sesión.
+            La protección contra duplicados está activa.
+          </div>`;
+      }else{
+        notice = `
+          <div class="xp-good">
+            ✓ Vista previa lista. Revisa los valores y, cuando estés conforme,
+            pulsa <strong>Otorgar XP</strong>. No se podrá duplicar accidentalmente.
+          </div>`;
+      }
+
+      $('xpNotice').innerHTML = notice;
+      $('xpApplyBtn').disabled = !canApply;
+      $('xpApplyBtn').style.opacity = canApply ? '1' : '.55';
+
+      $('xpList').innerHTML = xpPreviewRows.map(r=>{
+        let badge = '';
+        if(r.excluido_ranking){
+          badge = `<span class="xp-badge excluded">Moderador / excluido del ranking · 0 XP otorgable</span>`;
+        }else if(r.ya_otorgado){
+          badge = `<span class="xp-badge done">✓ XP ya otorgado</span>`;
+        }else{
+          badge = `<span class="xp-badge pending">Pendiente de otorgar</span>`;
+        }
+
+        return `
+          <div class="xp-row ${r.excluido_ranking ? 'excluded' : ''}">
+            <div class="xp-person">
+              <strong>${safeText(r.nombre)}</strong>
+              <small>
+                ${Number(r.mensajes || 0)} mensajes ·
+                ${Number(r.dias_activos || 0)}/${Number(r.dias_grupo || 0)} días ·
+                ${Number(r.porcentaje_constancia || 0).toFixed(1)}% constancia
+              </small>
+              <small>
+                Actividad: ${Number(r.xp_actividad || 0)} XP ·
+                Bono: +${Number(r.bono_constancia || 0)} XP
+              </small>
+              ${badge}
+            </div>
+            <div class="xp-total">
+              <b>${r.excluido_ranking ? '—' : Number(r.xp_total || 0)}</b>
+              <small>${r.excluido_ranking ? 'sin XP' : 'XP'}</small>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function applyWhatsappXp(){
+      if(!xpCurrentStudyId || $('xpApplyBtn').disabled) return;
+
+      const s = studies.find(x=>x.id===xpCurrentStudyId);
+      if(!s) return;
+
+      const eligible = xpPreviewRows.filter(r=>!r.excluido_ranking && !r.ya_otorgado);
+      const total = eligible.reduce((sum,r)=>sum+Number(r.xp_total || 0),0);
+
+      if(!confirm(
+        `¿Otorgar ${total} XP de participación a ${eligible.length} participante(s) de ${s.codigo}?`
+      )) return;
+
+      showLoading(true);
+      try{
+        const {data,error} = await sb.rpc('admin_whatsapp_xp_aplicar',{
+          p_sesion_id:xpCurrentStudyId
+        });
+        if(error) throw error;
+
+        toast(`XP otorgado: ${Number(data.xp_otorgado || 0)} XP en ${Number(data.eventos_insertados || 0)} eventos.`);
+        const {data:preview,error:previewError} = await sb.rpc('admin_whatsapp_xp_previsualizar',{
+          p_sesion_id:xpCurrentStudyId
+        });
+        if(previewError) throw previewError;
+        xpPreviewRows = preview || [];
+        renderXpPreview();
+      }catch(err){
+        console.error(err);
+        let msg = String(err.message || '');
+        if(msg.includes('XP_HISTORICO_EXISTENTE')){
+          msg = 'Esta sesión tiene XP histórico. Se bloqueó el XP automático para evitar doble puntuación.';
+        }else if(msg.includes('XP_NO_FINALIZADO')){
+          msg = 'El estudio todavía no ha finalizado. Puedes previsualizar, pero el XP definitivo se otorga al cierre.';
+        }
+        toast(msg || 'No se pudo otorgar el XP.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+
+
+    // ================================================================
+    // CALIDAD TÉCNICA · v3.5
+    // Permite calidad también en sesiones con XP histórico.
+    // Los históricos no se reescriben: la calidad se suma aparte.
+    // ================================================================
+
+    window.openQualityPanel = async function(studyId){
+      const s = studies.find(x=>x.id===studyId);
+      if(!s) return;
+
+      qualityStudyId = studyId;
+      qualitySelectedPeople = new Map();
+      qualitySelectedLevels = new Set();
+
+      $('qualityStudyName').textContent = `${s.codigo} · ${s.tema}`;
+      $('qualitySearch').value = '';
+      $('qualitySearchResults').hidden = true;
+      $('qualitySearchResults').innerHTML = '';
+      $('qualitySelectedWrap').hidden = true;
+      $('qualitySelectedPeople').innerHTML = '';
+      $('qualitySelectedCount').textContent = '0 seleccionados';
+      $('qualityClearSelectionBtn').disabled = true;
+      $('qualitySelectVisibleBtn').disabled = true;
+      $('qualityObservation').value = '';
+      $('qualityHistory').innerHTML = '';
+      clearQualityLevelSelection();
+
+      $('qualityBackdrop').hidden = false;
+      document.body.style.overflow = 'hidden';
+
+      await loadQualityPanel();
+    }
+
+    function closeQualityPanel(){
+      $('qualityBackdrop').hidden = true;
+      document.body.style.overflow = '';
+      qualityStudyId = null;
+      qualitySelectedPeople = new Map();
+      qualitySelectedLevels = new Set();
+    }
+
+    async function loadQualityPanel(){
+      if(!qualityStudyId) return;
+      showLoading(true);
+      try{
+        const [summaryRes, historyRes] = await Promise.all([
+          sb.rpc('admin_calidad_resumen',{p_sesion_id:qualityStudyId}),
+          sb.rpc('admin_calidad_historial',{p_sesion_id:qualityStudyId,p_limit:100})
+        ]);
+
+        if(summaryRes.error) throw summaryRes.error;
+        if(historyRes.error) throw historyRes.error;
+
+        qualitySummary = summaryRes.data || {};
+        renderQualitySummary();
+        renderQualityHistory(historyRes.data || []);
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo cargar el módulo de calidad.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function renderQualitySummary(){
+      const q = qualitySummary || {};
+      $('qualityKpiXp').textContent = Number(q.xp_calidad_total || 0);
+      $('qualityKpiEvents').textContent = Number(q.eventos_calidad || 0);
+      $('qualityKpiPeople').textContent = Number(q.personas_con_calidad || 0);
+
+      // La existencia de puntos históricos NO bloquea la calidad técnica.
+      // Los históricos permanecen intactos y cada reconocimiento nuevo se registra
+      // como un evento independiente tipo "calidad_tecnica".
+      if(q.sesion_tiene_historico){
+        $('qualityProtection').innerHTML = `
+          <div class="xp-warning">
+            🛡️ <strong>Sesión con XP histórico.</strong>
+            Los puntos históricos existentes se conservan sin cambios. Puedes otorgar
+            calidad técnica normalmente; estos XP se suman como eventos separados y auditables.
+            Máximo: 500 XP de calidad por persona en esta sesión.
+          </div>`;
+      }else{
+        $('qualityProtection').innerHTML = `
+          <div class="xp-good">
+            Puedes otorgar calidad durante el estudio. Cada reconocimiento queda
+            registrado individualmente y el máximo es 500 XP por persona en esta sesión.
+          </div>`;
+      }
+      $('qualityAwardSection').hidden = false;
+    }
+
+    function renderQualityHistory(rows){
+      const box = $('qualityHistory');
+      if(!rows.length){
+        box.innerHTML = `<div class="empty" style="padding:25px 14px">Todavía no se han otorgado puntos de calidad en esta sesión.</div>`;
+        return;
+      }
+
+      box.innerHTML = rows.map(r=>{
+        const date = r.created_at
+          ? new Intl.DateTimeFormat('es-VE',{dateStyle:'short',timeStyle:'short'}).format(new Date(r.created_at))
+          : '';
+        return `
+          <div class="quality-event">
+            <div>
+              <strong>${safeText(r.nombre)}</strong>
+              <small>${safeText(r.motivo)}${r.observacion ? ' · '+safeText(r.observacion) : ''}</small>
+              <small>${safeText(date)}</small>
+            </div>
+            <div class="quality-points">+${Number(r.puntos || 0)} XP</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function searchQualityPeople(q, showAll = false){
+      const box = $('qualitySearchResults');
+      const query = String(q || '').trim();
+
+      if(!showAll && query.length < 2){
+        box.hidden = true;
+        box.innerHTML = '';
+        qualitySearchPeople = new Map();
+        $('qualitySelectVisibleBtn').disabled = true;
+        return;
+      }
+
+      try{
+        const {data,error} = await sb.rpc('admin_buscar_integrantes',{
+          p_q: showAll ? '' : query,
+          p_limit:30
+        });
+        if(error) throw error;
+
+        const rows = data || [];
+        qualitySearchPeople = new Map(
+          rows.map(p => [Number(p.id), {
+            id:Number(p.id),
+            nombre:String(p.nombre || ''),
+            estado:String(p.estado || ''),
+            foto_url:String(p.foto_url || ''),
+            cedula:String(p.cedula || '')
+          }])
+        );
+
+        if(!rows.length){
+          box.innerHTML = `<div class="person"><div class="person-info"><strong>Sin resultados</strong></div></div>`;
+        }else{
+          box.innerHTML = rows.map(p=>{
+            const id = Number(p.id);
+            const selected = qualitySelectedPeople.has(id);
+            return `
+              <div class="person">
+                ${avatarHtml(p)}
+                <div class="person-info">
+                  <strong>${safeText(p.nombre)}</strong>
+                  <small>${safeText(p.estado || '')}${p.cedula ? ' · '+safeText(p.cedula) : ''}</small>
+                </div>
+                <button
+                  type="button"
+                  class="quality-select-person-btn ${selected ? 'is-selected' : ''}"
+                  data-quality-person-id="${id}">
+                  ${selected ? '✓ Seleccionado' : 'Seleccionar'}
+                </button>
+              </div>
+            `;
+          }).join('');
+        }
+
+        box.hidden = false;
+        $('qualitySelectVisibleBtn').disabled = rows.length === 0;
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo buscar integrantes.',true);
+      }
+    }
+
+    async function getQualityStateForPerson(person){
+      const {data,error} = await sb.rpc('admin_calidad_integrante',{
+        p_sesion_id:qualityStudyId,
+        p_integrante_id:Number(person.id)
+      });
+      if(error) throw error;
+      return data || {};
+    }
+
+    async function addQualityPerson(person){
+      const id = Number(person.id);
+      if(qualitySelectedPeople.has(id)){
+        qualitySelectedPeople.delete(id);
+        renderQualitySelectedPeople();
+        refreshQualitySearchButtons();
+        return;
+      }
+
+      showLoading(true);
+      try{
+        const quality = await getQualityStateForPerson(person);
+        qualitySelectedPeople.set(id,{...person,quality});
+        renderQualitySelectedPeople();
+        refreshQualitySearchButtons();
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo consultar el integrante.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    async function addAllVisibleQualityPeople(){
+      const people = [...qualitySearchPeople.values()].filter(p=>!qualitySelectedPeople.has(Number(p.id)));
+      if(!people.length){
+        toast('Todos los resultados visibles ya están seleccionados.');
+        return;
+      }
+
+      showLoading(true);
+      try{
+        const states = await Promise.all(
+          people.map(async p => ({p, quality: await getQualityStateForPerson(p)}))
+        );
+        states.forEach(({p,quality})=>{
+          qualitySelectedPeople.set(Number(p.id),{...p,quality});
+        });
+        renderQualitySelectedPeople();
+        refreshQualitySearchButtons();
+        toast(`${states.length} integrante(s) añadidos a la selección.`);
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo completar la selección múltiple.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    function clearQualityPeople(){
+      qualitySelectedPeople = new Map();
+      renderQualitySelectedPeople();
+      refreshQualitySearchButtons();
+    }
+
+    function refreshQualitySearchButtons(){
+      document.querySelectorAll('.quality-select-person-btn').forEach(btn=>{
+        const id = Number(btn.dataset.qualityPersonId);
+        const selected = qualitySelectedPeople.has(id);
+        btn.classList.toggle('is-selected',selected);
+        btn.textContent = selected ? '✓ Seleccionado' : 'Seleccionar';
+      });
+    }
+
+    function renderQualitySelectedPeople(){
+      const wrap = $('qualitySelectedWrap');
+      const box = $('qualitySelectedPeople');
+      const selected = [...qualitySelectedPeople.values()];
+
+      $('qualitySelectedCount').textContent =
+        `${selected.length} seleccionado${selected.length === 1 ? '' : 's'}`;
+      $('qualityClearSelectionBtn').disabled = selected.length === 0;
+
+      if(!selected.length){
+        wrap.hidden = true;
+        box.innerHTML = '';
+        updateQualityAwardButton();
+        return;
+      }
+
+      box.innerHTML = selected.map(p=>{
+        const q = p.quality || {};
+        const total = Number(q.xp_calidad || 0);
+        const available = Number(q.disponible ?? (500-total));
+        const pct = Math.max(0,Math.min(100,(total/500)*100));
+        return `
+          <div class="quality-selected-card">
+            ${avatarHtml(p)}
+            <div class="person-info">
+              <strong>${safeText(p.nombre)}</strong>
+              <small>Calidad acumulada: <strong>${total} XP</strong> · Disponible: ${available} XP</small>
+              <div class="quality-meter"><i style="width:${pct}%"></i></div>
+              ${q.excluido_ranking
+                ? `<span class="quality-note-moderator">Moderador / fuera del ranking competitivo · sí puede recibir XP</span>`
+                : ''
+              }
+            </div>
+            <button type="button" class="quality-remove-person" data-remove-quality-person="${Number(p.id)}" aria-label="Quitar">×</button>
+          </div>
+        `;
+      }).join('');
+
+      wrap.hidden = false;
+      updateQualityAwardButton();
+    }
+
+    const QUALITY_RULES = {
+      aporte_util:{
+        puntos:25,
+        etiqueta:'Aporte útil',
+        icono:'✓'
+      },
+      tecnico_fundamentado:{
+        puntos:50,
+        etiqueta:'Técnico fundamentado',
+        icono:'📚'
+      },
+      caso_practico:{
+        puntos:75,
+        etiqueta:'Caso práctico / solución aplicable',
+        icono:'🛠️'
+      },
+      excepcional:{
+        puntos:100,
+        etiqueta:'Aporte excepcional',
+        icono:'⭐'
+      }
+    };
+
+    function qualitySelectedPoints(){
+      return [...qualitySelectedLevels].reduce(
+        (sum,level)=>sum + Number(QUALITY_RULES[level]?.puntos || 0),
+        0
+      );
+    }
+
+    function clearQualityLevelSelection(){
+      qualitySelectedLevels = new Set();
+      document.querySelectorAll('.quality-level').forEach(el=>{
+        el.classList.remove('selected');
+        el.setAttribute('aria-pressed','false');
+      });
+      updateQualityAwardButton();
+    }
+
+    function selectQualityLevel(level,button){
+      if(!QUALITY_RULES[level]) return;
+
+      if(qualitySelectedLevels.has(level)){
+        qualitySelectedLevels.delete(level);
+        button.classList.remove('selected');
+        button.setAttribute('aria-pressed','false');
+      }else{
+        qualitySelectedLevels.add(level);
+        button.classList.add('selected');
+        button.setAttribute('aria-pressed','true');
+      }
+
+      updateQualityAwardButton();
+    }
+
+    function updateQualityAwardButton(){
+      const btn = $('qualityAwardBtn');
+      if(!btn) return;
+
+      const selectedPeople = [...qualitySelectedPeople.values()];
+      const selectedRules = [...qualitySelectedLevels];
+      const totalPoints = qualitySelectedPoints();
+
+      const withoutCapacity = selectedPeople.filter(p=>
+        totalPoints > Number(p?.quality?.disponible ?? 500)
+      );
+
+      btn.disabled =
+        selectedPeople.length === 0 ||
+        selectedRules.length === 0 ||
+        totalPoints <= 0 ||
+        withoutCapacity.length > 0;
+
+      btn.style.opacity = btn.disabled ? '.55' : '1';
+
+      if(selectedRules.length){
+        const labels = selectedRules.map(level=>QUALITY_RULES[level].etiqueta);
+        $('qualityLevelsSummary').innerHTML = `
+          <strong>${selectedRules.length} criterio${selectedRules.length===1?'':'s'} seleccionado${selectedRules.length===1?'':'s'} · +${totalPoints} XP por persona</strong>
+          <div style="margin-top:4px;font-size:.72rem">${labels.map(x=>safeText(x)).join(' + ')}</div>
+        `;
+      }else{
+        $('qualityLevelsSummary').innerHTML =
+          'Selecciona uno o varios criterios. Los XP se suman y cada criterio queda registrado por separado.';
+      }
+
+      if(totalPoints && selectedPeople.length){
+        btn.textContent =
+          selectedPeople.length === 1
+            ? `Otorgar +${totalPoints} XP de calidad`
+            : `Otorgar +${totalPoints} XP a ${selectedPeople.length} integrantes`;
+      }else{
+        btn.textContent = 'Otorgar XP de calidad';
+      }
+
+      if(withoutCapacity.length){
+        btn.title =
+          `${withoutCapacity.length} seleccionado(s) no tienen suficiente saldo dentro del tope de 500 XP para recibir +${totalPoints} XP.`;
+      }else{
+        btn.title = '';
+      }
+    }
+
+    async function awardQualityXp(){
+      const selectedPeople = [...qualitySelectedPeople.values()];
+      const selectedRules = [...qualitySelectedLevels];
+
+      if(!qualityStudyId || !selectedPeople.length || !selectedRules.length) return;
+
+      const totalPoints = qualitySelectedPoints();
+      const ruleText = selectedRules
+        .map(level=>`${QUALITY_RULES[level].etiqueta} (+${QUALITY_RULES[level].puntos})`)
+        .join(', ');
+
+      const targetText = selectedPeople.length === 1
+        ? selectedPeople[0].nombre
+        : `${selectedPeople.length} integrantes seleccionados`;
+
+      if(!confirm(
+        `¿Otorgar +${totalPoints} XP a ${targetText}?\n\nCriterios:\n${ruleText}`
+      )) return;
+
+      const observation = $('qualityObservation').value.trim() || null;
+      showLoading(true);
+
+      let successEvents = 0;
+      let successPeople = 0;
+      const errors = [];
+
+      try{
+        /*
+         * Se crea UN EVENTO POR CRITERIO Y PERSONA.
+         * Ejemplo: Técnico (50) + Caso práctico (75) = dos eventos auditables,
+         * total +125 XP. Esto permite que "Mis puntos" muestre el desglose real.
+         */
+        for(const person of selectedPeople){
+          let personOk = true;
+
+          for(const level of selectedRules){
+            try{
+              const {data,error} = await sb.rpc('admin_calidad_otorgar',{
+                p_sesion_id:qualityStudyId,
+                p_integrante_id:Number(person.id),
+                p_nivel:level,
+                p_observacion:observation,
+                p_request_id:crypto.randomUUID()
+              });
+              if(error) throw error;
+              if(Number(data?.xp_agregado || 0) > 0) successEvents++;
+            }catch(err){
+              personOk = false;
+              console.error(err);
+              let msg = String(err.message || 'Error desconocido');
+
+              if(msg.includes('CALIDAD_HISTORICO_BLOQUEADO')){
+                msg = 'El backend todavía tiene activa la protección antigua para sesiones históricas.';
+              }else if(msg.includes('CALIDAD_INTEGRANTE_EXCLUIDO')){
+                msg = 'El backend todavía bloquea moderadores/excluidos. Ejecuta la corrección SQL v3.7.';
+              }else if(msg.includes('CALIDAD_TOPE_500')){
+                msg = msg.replace('CALIDAD_TOPE_500: ','');
+              }
+
+              errors.push(
+                `${person.nombre} · ${QUALITY_RULES[level]?.etiqueta || level}: ${msg}`
+              );
+            }
+          }
+
+          if(personOk) successPeople++;
+
+          try{
+            const refreshed = await getQualityStateForPerson(person);
+            qualitySelectedPeople.set(
+              Number(person.id),
+              {...person,quality:refreshed}
+            );
+          }catch(refreshErr){
+            console.warn('No se pudo refrescar el total de',person.nombre,refreshErr);
+          }
+        }
+
+        renderQualitySelectedPeople();
+        clearQualityLevelSelection();
+        $('qualityObservation').value = '';
+
+        const [summaryRes,historyRes] = await Promise.all([
+          sb.rpc('admin_calidad_resumen',{p_sesion_id:qualityStudyId}),
+          sb.rpc('admin_calidad_historial',{p_sesion_id:qualityStudyId,p_limit:100})
+        ]);
+
+        if(summaryRes.error) throw summaryRes.error;
+        if(historyRes.error) throw historyRes.error;
+
+        qualitySummary = summaryRes.data || {};
+        renderQualitySummary();
+        renderQualityHistory(historyRes.data || []);
+
+        if(errors.length){
+          toast(
+            `${successEvents} reconocimiento(s) registrados; ${errors.length} con error. Revisa la consola.`,
+            true
+          );
+          console.warn('Errores de calidad:',errors);
+        }else{
+          toast(
+            `+${totalPoints} XP otorgados correctamente a ${successPeople} integrante(s) · ${successEvents} reconocimiento(s).`
+          );
+        }
+      }catch(err){
+        console.error(err);
+        toast(err.message || 'No se pudo completar la asignación de calidad.',true);
+      }finally{
+        showLoading(false);
+      }
+    }
+
+    // Eventos
+    $('loginForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      showLoading(true);
+      try{
+        const { error } = await sb.auth.signInWithPassword({
+          email:$('email').value.trim(),
+          password:$('password').value
+        });
+        if(error) throw error;
+        if(await ensureAdmin()) await loadStudies();
+      }catch(err){
+        toast(err.message || 'No fue posible iniciar sesión.', true);
+      }finally{
+        showLoading(false);
+      }
+    });
+
+    $('logoutBtn').addEventListener('click', async ()=>{
+      await sb.auth.signOut();
+      showLogin();
+      toast('Sesión cerrada.');
+    });
+
+    $('refreshBtn').addEventListener('click', loadStudies);
+    $('newStudyBtn').addEventListener('click', newStudy);
+    $('closeDrawerBtn').addEventListener('click', closeDrawer);
+    $('cancelBtn').addEventListener('click', closeDrawer);
+    $('studyForm').addEventListener('submit', saveStudy);
+
+    $('drawerBackdrop').addEventListener('click',(e)=>{
+      if(e.target === $('drawerBackdrop')) closeDrawer();
+    });
+
+    $('visibilityRow').addEventListener('click',()=>{
+      currentVisibility = !currentVisibility;
+      syncVisibility();
+    });
+    $('visibilityRow').addEventListener('keydown',(e)=>{
+      if(e.key==='Enter' || e.key===' '){
+        e.preventDefault();
+        currentVisibility = !currentVisibility;
+        syncVisibility();
+      }
+    });
+
+    $('moderatorSearch').addEventListener('input',(e)=>{
+      clearTimeout(moderatorTimer);
+      moderatorTimer = setTimeout(()=>searchModerators(e.target.value),280);
+    });
+
+    $('studySearch').addEventListener('input',renderStudies);
+    $('statusFilter').addEventListener('change',renderStudies);
+
+    $('importWhatsappBtn').addEventListener('click',openWhatsappImporter);
+    $('importStudySelect').addEventListener('change',()=>{
+      currentImportId = null;
+      importDetails = [];
+      whatsappAnalysis = null;
+      $('whatsappFile').value = '';
+      $('analysisSection').hidden = true;
+      $('matchingSection').hidden = true;
+      loadExistingWhatsappImports();
+    });
+    $('deleteAllDraftsBtn').addEventListener('click',deleteAllWhatsappDrafts);
+    $('closeWhatsappBtn').addEventListener('click',closeWhatsappImporter);
+    $('whatsappBackdrop').addEventListener('click',(e)=>{
+      if(e.target === $('whatsappBackdrop')) closeWhatsappImporter();
+    });
+    $('analyzeWhatsappBtn').addEventListener('click',analyzeWhatsappFile);
+    $('sendWhatsappBtn').addEventListener('click',sendWhatsappToSupabase);
+    $('confirmWhatsappBtn').addEventListener('click',confirmWhatsappImport);
+
+    $('closeQualityBtn').addEventListener('click',closeQualityPanel);
+    $('qualityBackdrop').addEventListener('click',(e)=>{
+      if(e.target === $('qualityBackdrop')) closeQualityPanel();
+    });
+    $('qualitySearch').addEventListener('input',(e)=>{
+      clearTimeout(qualitySearchTimer);
+      qualitySearchTimer = setTimeout(()=>searchQualityPeople(e.target.value),260);
+    });
+
+    $('qualityShowPeopleBtn').addEventListener('click',()=>{
+      $('qualitySearch').value = '';
+      searchQualityPeople('',true);
+    });
+
+    $('qualitySelectVisibleBtn').addEventListener('click',addAllVisibleQualityPeople);
+    $('qualityClearSelectionBtn').addEventListener('click',clearQualityPeople);
+
+    // Los botones "Seleccionar" son dinámicos: cada toque alterna seleccionado/no seleccionado.
+    $('qualitySearchResults').addEventListener('click', async (e)=>{
+      const btn = e.target.closest('.quality-select-person-btn');
+      if(!btn) return;
+
+      const id = Number(btn.dataset.qualityPersonId);
+      const p = qualitySearchPeople.get(id);
+      if(!p){
+        toast('No se pudo recuperar el integrante seleccionado. Vuelve a buscarlo.', true);
+        return;
+      }
+
+      btn.disabled = true;
+      try{
+        await addQualityPerson(p);
+      }finally{
+        if(document.body.contains(btn)) btn.disabled = false;
+      }
+    });
+
+    $('qualitySelectedPeople').addEventListener('click',(e)=>{
+      const btn = e.target.closest('[data-remove-quality-person]');
+      if(!btn) return;
+      const id = Number(btn.dataset.removeQualityPerson);
+      qualitySelectedPeople.delete(id);
+      renderQualitySelectedPeople();
+      refreshQualitySearchButtons();
+    });
+
+    document.querySelectorAll('.quality-level').forEach(btn=>{
+      btn.addEventListener('click',()=>selectQualityLevel(btn.dataset.quality,btn));
+    });
+    $('qualityAwardBtn').addEventListener('click',awardQualityXp);
+
+    $('closeXpBtn').addEventListener('click',closeXpPreview);
+    $('xpCancelBtn').addEventListener('click',closeXpPreview);
+    $('xpApplyBtn').addEventListener('click',applyWhatsappXp);
+    $('xpBackdrop').addEventListener('click',(e)=>{
+      if(e.target === $('xpBackdrop')) closeXpPreview();
+    });
+
+    // Inicio
+    (async ()=>{
+      const ok = await ensureAdmin();
+      if(ok) await loadStudies();
     })();
   </script>
 </body>
