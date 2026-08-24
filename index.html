@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- LA MOVIDA SST · ESTUDIA v3 · ranking público competitivo + acceso privado detallado · 2026-08-08 -->
+  <!-- LA MOVIDA SST · ESTUDIA v4 · estudios + biblioteca + ranking + progreso · 2026-08-24 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#00205b">
-  <meta name="description" content="Estudios, ranking y progreso profesional de La Movida SST Plus. Consulta estudios activos, histórico, ranking público y tus puntos con tus credenciales.">
+  <meta name="description" content="Estudios, guías interactivas, ranking y progreso profesional de La Movida SST Plus. Aprende SST con recursos gratuitos y consulta tu participación.">
   <meta property="og:title" content="Estudia con La Movida SST Plus">
-  <meta property="og:description" content="Estudios, actualización profesional, ranking y progreso en Seguridad y Salud en el Trabajo.">
+  <meta property="og:description" content="Estudios, biblioteca de guías, actualización profesional, ranking y progreso en Seguridad y Salud en el Trabajo.">
   <meta property="og:image" content="https://drive.google.com/thumbnail?id=1Qy0e_J7IUXfJVLhLDNUJNuHOmg3_M0fh&sz=w1000">
   <meta property="og:url" content="https://estudia.movidasst.com/">
   <meta property="og:type" content="website">
@@ -156,6 +156,31 @@
     .empty{padding:40px 18px;text-align:center;background:white;border:1px dashed #cbd7e3;border-radius:22px;color:#64748b}
     .empty i{font-size:2rem;color:#b6c3d1;margin-bottom:12px}
 
+    .library-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 16px}
+    .library-stat{display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--line);border-radius:16px;background:white;box-shadow:0 5px 18px rgba(15,23,42,.04)}
+    .library-stat i{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--teal),var(--navy))}
+    .library-stat strong{display:block;color:var(--navy);font-size:1rem;font-weight:900}
+    .library-stat span{display:block;color:#7b8b9e;font-size:.67rem;font-weight:800;margin-top:1px}
+    .guides-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .guide-card{position:relative;display:flex;flex-direction:column;min-height:100%;overflow:hidden;background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .guide-card:hover{transform:translateY(-3px);border-color:rgba(0,123,133,.34);box-shadow:0 15px 34px rgba(0,32,91,.11)}
+    .guide-card:before{content:"";height:5px;background:linear-gradient(90deg,var(--teal),var(--navy),var(--yellow))}
+    .guide-card.complementary:before{background:linear-gradient(90deg,#64748b,#8b5cf6,var(--yellow))}
+    .guide-body{display:flex;flex-direction:column;flex:1;padding:18px}
+    .guide-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .guide-icon{width:46px;height:46px;flex:0 0 auto;border-radius:15px;display:grid;place-items:center;color:white;font-size:1.15rem;background:linear-gradient(145deg,var(--teal),var(--navy));box-shadow:0 9px 20px rgba(0,123,133,.18)}
+    .guide-card.complementary .guide-icon{background:linear-gradient(145deg,#64748b,#6750a4);box-shadow:0 9px 20px rgba(71,85,105,.17)}
+    .guide-kind{display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border-radius:999px;background:#eaf9f8;color:#087b80;border:1px solid #caece9;font-size:.63rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .guide-card.complementary .guide-kind{background:#f4f1ff;color:#6646a4;border-color:#e5dcff}
+    .guide-title{margin:14px 0 7px;color:var(--navy);font-size:1.12rem;line-height:1.25;font-weight:900}
+    .guide-copy{margin:0;color:#64748b;font-size:.8rem;line-height:1.52}
+    .guide-tags{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0 16px}
+    .guide-tag{padding:5px 7px;border-radius:999px;background:#f4f7fa;border:1px solid #e4ebf2;color:#637389;font-size:.63rem;font-weight:800}
+    .guide-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:13px;border-top:1px solid #edf1f5}
+    .guide-area{display:inline-flex;align-items:center;gap:6px;color:#718196;font-size:.68rem;font-weight:900}
+    .guide-open{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:39px;padding:8px 11px;border-radius:11px;background:var(--navy);color:white;font-size:.72rem;font-weight:900}
+    .guide-open:hover{background:var(--teal)}
+
     .ranking-shell{display:grid;gap:14px}
     .ranking-controls{display:grid;gap:10px;background:white;padding:14px;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
     .ranking-capture{background:linear-gradient(180deg,#fff,#f9fbfd);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow)}
@@ -244,7 +269,7 @@
     .footer{padding:28px 0 18px;text-align:center;color:#7f8da0;font-size:.73rem;line-height:1.6}
     .footer strong{color:var(--navy)}
 
-    .mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-top:1px solid #dce5ed;padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;box-shadow:0 -8px 28px rgba(15,23,42,.08)}
+    .mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);border-top:1px solid #dce5ed;padding:7px max(6px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));display:grid;grid-template-columns:repeat(6,1fr);gap:2px;box-shadow:0 -8px 28px rgba(15,23,42,.08)}
     .mobile-btn{border:0;background:transparent;color:#91a0b1;border-radius:12px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.59rem;font-weight:900;cursor:pointer}
     .mobile-btn i{font-size:1.1rem}
     .mobile-btn.active{background:#eaf8f8;color:var(--teal)}
@@ -257,11 +282,12 @@
     .toast.show{opacity:1;transform:translate(-50%,0)}
 
     @media(min-width:720px){
-      body{padding-bottom:0}.desktop-nav{display:flex}.mobile-nav{display:none}
       .hero{padding-top:40px}.hero-shell{padding:38px 40px}.hero-grid{grid-template-columns:minmax(0,1.65fr) minmax(270px,.65fr);align-items:center}
       .hero-kpis{gap:10px}.hero-kpi{padding:18px 10px}.hero-kpi strong{font-size:1.65rem}
       .toolbar{grid-template-columns:minmax(0,1fr) 220px}
       .studies-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+      .guides-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+      .library-summary{grid-template-columns:repeat(2,minmax(0,220px))}
       .study-body{padding:21px}.study-actions{grid-template-columns:repeat(4,1fr)}
       .ranking-controls{grid-template-columns:minmax(0,1fr) 220px 180px;align-items:center}
       .ranking-capture{padding:28px}.podium-avatar-wrap{width:78px;height:78px}.podium-item.first .podium-avatar-wrap{width:92px;height:92px}
@@ -269,10 +295,11 @@
       .mine-grid{grid-template-columns:minmax(290px,.62fr) minmax(0,1.38fr);align-items:start}
       .profile-kpis{grid-template-columns:repeat(4,1fr)}
       .info-grid{grid-template-columns:repeat(2,1fr)}
-      .toast{bottom:24px}
     }
+    @media(min-width:960px){body{padding-bottom:0}.desktop-nav{display:flex}.mobile-nav{display:none}.toast{bottom:24px}}
     @media(min-width:1040px){
       .studies-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .guides-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
       .info-grid{grid-template-columns:repeat(3,1fr)}
     }
   
@@ -335,6 +362,7 @@
 
       <nav class="desktop-nav" aria-label="Navegación principal">
         <button class="nav-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i> Estudios</button>
+        <button class="nav-btn" data-nav="guides"><i class="fa-solid fa-book-open"></i> Guías</button>
         <button class="nav-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i> Histórico</button>
         <button class="nav-btn" data-nav="ranking"><i class="fa-solid fa-trophy"></i> Ranking</button>
         <button class="nav-btn" data-nav="mine"><i class="fa-solid fa-chart-line"></i> Mis puntos</button>
@@ -356,8 +384,9 @@
             <div>
               <div class="eyebrow"><i class="fa-solid fa-users-viewfinder"></i> Profesionales protagonistas</div>
               <h1>¡Estudia con <span>La Movida</span>!</h1>
-              <p>Actualización profesional continua en SST mediante aprendizaje móvil, participación técnica y construcción colectiva de conocimiento. Consulta los estudios, el ranking público y tu progreso personal.</p>
+              <p>Actualización profesional continua en SST mediante aprendizaje móvil, guías interactivas, participación técnica y construcción colectiva de conocimiento. Consulta los estudios, aprende a tu ritmo y revisa tu progreso.</p>
               <div class="hero-actions">
+                <button class="hero-btn primary" data-nav="guides"><i class="fa-solid fa-book-open-reader"></i> Explorar guías</button>
                 <button class="hero-btn primary" data-nav="mine"><i class="fa-solid fa-key"></i> Ver mis puntos</button>
                 <button class="hero-btn secondary" data-nav="ranking"><i class="fa-solid fa-ranking-star"></i> Ver ranking</button>
               </div>
@@ -392,6 +421,36 @@
             </select>
           </div>
           <div id="agendaGrid" class="studies-grid"></div>
+        </div>
+
+        <div id="view-guides" class="view">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Biblioteca de guías</h2>
+              <p class="section-desc">Recursos interactivos y gratuitos para estudiar normas, métodos y fundamentos de Seguridad y Salud en el Trabajo.</p>
+            </div>
+            <span class="badge live"><i class="fa-solid fa-book-open"></i> 10 recursos</span>
+          </div>
+
+          <div class="library-summary" aria-label="Resumen de la biblioteca">
+            <div class="library-stat"><i class="fa-solid fa-graduation-cap"></i><div><strong>6</strong><span>Guías de estudio</span></div></div>
+            <div class="library-stat"><i class="fa-solid fa-toolbox"></i><div><strong>4</strong><span>Recursos complementarios</span></div></div>
+          </div>
+
+          <div class="toolbar">
+            <div class="searchbox"><i class="fa-solid fa-magnifying-glass"></i><input id="guideSearch" type="search" placeholder="Buscar por tema, norma o método…" autocomplete="off"></div>
+            <select id="guideFilter" class="select" aria-label="Filtrar biblioteca">
+              <option value="all">Todos los recursos</option>
+              <option value="principal">Guías de estudio</option>
+              <option value="complementary">Complementarios</option>
+              <option value="ergonomia">Ergonomía</option>
+              <option value="emergencias">Emergencias</option>
+              <option value="higiene">Higiene ocupacional</option>
+              <option value="ia">IA en SST</option>
+              <option value="gestion">Gestión del riesgo</option>
+            </select>
+          </div>
+          <div id="guidesGrid" class="guides-grid"></div>
         </div>
 
         <div id="view-history" class="view">
@@ -599,6 +658,7 @@
 
   <nav class="mobile-nav" aria-label="Navegación móvil">
     <button class="mobile-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i><span>Estudios</span></button>
+    <button class="mobile-btn" data-nav="guides"><i class="fa-solid fa-book-open"></i><span>Guías</span></button>
     <button class="mobile-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i><span>Histórico</span></button>
     <button class="mobile-btn" data-nav="ranking"><i class="fa-solid fa-trophy"></i><span>Ranking</span></button>
     <button class="mobile-btn" data-nav="mine"><i class="fa-solid fa-chart-line"></i><span>Mis puntos</span></button>
@@ -643,6 +703,89 @@
         ajuste: 'Ajuste',
         historico: 'Puntaje histórico'
       };
+
+      const GUIDE_LIBRARY = [
+        {
+          title:'Ergonomía y Psicosociología 2026',
+          description:'Biomecánica, carga física y mental, métodos RULA, NIOSH y OCRA, estándares ISO y neuroergonomía.',
+          area:'Ergonomía', category:'ergonomia', type:'principal', kind:'Guía de estudio',
+          icon:'fa-solid fa-person-walking-luggage',
+          tags:['Biomecánica','RULA · NIOSH · OCRA','Normas ISO'],
+          url:'https://movidasst.github.io/ergonomia/'
+        },
+        {
+          title:'Norma Técnica de Manipulación de Cargas',
+          description:'Estudio interactivo de la norma venezolana sobre manipulación, levantamiento y traslado manual de carga.',
+          area:'Ergonomía', category:'ergonomia', type:'principal', kind:'Guía de estudio',
+          icon:'fa-solid fa-boxes-stacked',
+          tags:['Norma Técnica','Calculadora legal','Venezuela'],
+          url:'https://movidasst.github.io/cargas/'
+        },
+        {
+          title:'COVENIN 2226-90',
+          description:'Ruta de aprendizaje para comprender la elaboración de planes para el control de emergencias.',
+          area:'Emergencias', category:'emergencias', type:'principal', kind:'Guía de estudio',
+          icon:'fa-solid fa-triangle-exclamation',
+          tags:['Planes de emergencia','Caso práctico','Checklist'],
+          url:'https://movidasst.github.io/NVC2226_1990/'
+        },
+        {
+          title:'FONDONORMA 3661:2004',
+          description:'Guía para relacionar los 42 términos de gestión de riesgos, emergencias y desastres.',
+          area:'Emergencias', category:'emergencias', type:'principal', kind:'Guía de estudio',
+          icon:'fa-solid fa-house-flood-water',
+          tags:['42 términos','Amenaza y riesgo','Práctica SST'],
+          url:'https://movidasst.github.io/NVC_3661/'
+        },
+        {
+          title:'AuditorIA: IA y pensamiento crítico en SST',
+          description:'Método para auditar, validar y utilizar respuestas de inteligencia artificial sin delegar el criterio profesional.',
+          area:'IA en SST', category:'ia', type:'principal', kind:'Guía de estudio',
+          icon:'fa-solid fa-brain',
+          tags:['AuditorIA','Fuentes','Uso responsable'],
+          url:'https://piensa.movidasst.com/'
+        },
+        {
+          title:'Higiene Ocupacional',
+          description:'Fundamentos, seis etapas de actuación y una ruta para estudiar normas COVENIN sobre agentes ocupacionales.',
+          area:'Higiene ocupacional', category:'higiene', type:'principal', kind:'Guía de estudio',
+          icon:'fa-solid fa-microscope',
+          tags:['6 Movidas','Normas COVENIN','Microlearning'],
+          url:'https://higieneocupacional.movidasst.com/'
+        },
+        {
+          title:'Evaluación del desempeño SST · ISO 45004',
+          description:'Guía interactiva sobre procesos de evaluación, fuentes de información, indicadores y madurez organizacional.',
+          area:'Gestión SST', category:'gestion', type:'complementary', kind:'Guía interactiva',
+          icon:'fa-solid fa-chart-line',
+          tags:['ISO 45004','Indicadores','Autoevaluación'],
+          url:'https://movidasst.github.io/45004/'
+        },
+        {
+          title:'Ingeniería de Riesgos',
+          description:'Cindínica, BowTie, ALARP, LOPA, confiabilidad de controles e investigación orientada al aprendizaje.',
+          area:'Gestión del riesgo', category:'gestion', type:'complementary', kind:'Guía avanzada',
+          icon:'fa-solid fa-shield-halved',
+          tags:['BowTie','ALARP · LOPA','Controles'],
+          url:'https://movidasst.github.io/ingenieriariesgos-/'
+        },
+        {
+          title:'Seguridad del evaluador post-sismo',
+          description:'Manual técnico para la evaluación segura de estructuras afectadas o colapsadas después de un sismo.',
+          area:'Emergencias', category:'emergencias', type:'complementary', kind:'Manual técnico',
+          icon:'fa-solid fa-helmet-safety',
+          tags:['ATC-20','Estructuras','Seguridad en campo'],
+          url:'https://guia.movidasst.com/'
+        },
+        {
+          title:'Evaluación preliminar de riesgos',
+          description:'Recurso interactivo para reconocer peligros, construir escenarios y organizar una evaluación inicial.',
+          area:'Gestión del riesgo', category:'gestion', type:'complementary', kind:'Recurso práctico',
+          icon:'fa-solid fa-list-check',
+          tags:['Peligros','Escenarios','Evaluación'],
+          url:'https://movidasst.github.io/peligroso/'
+        }
+      ];
 
       function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]));
@@ -718,6 +861,40 @@
           setView(nav.dataset.nav);
         }
       });
+
+      function guideCard(guide) {
+        const url = safeUrl(guide.url);
+        const complementary = guide.type === 'complementary';
+        return `<article class="guide-card ${complementary ? 'complementary' : ''}">
+          <div class="guide-body">
+            <div class="guide-head">
+              <div class="guide-icon"><i class="${escapeHtml(guide.icon)}"></i></div>
+              <span class="guide-kind"><i class="fa-solid ${complementary ? 'fa-puzzle-piece' : 'fa-graduation-cap'}"></i>${escapeHtml(guide.kind)}</span>
+            </div>
+            <h3 class="guide-title">${escapeHtml(guide.title)}</h3>
+            <p class="guide-copy">${escapeHtml(guide.description)}</p>
+            <div class="guide-tags">${guide.tags.map(tag=>`<span class="guide-tag">${escapeHtml(tag)}</span>`).join('')}</div>
+            <div class="guide-footer">
+              <span class="guide-area"><i class="fa-solid fa-layer-group"></i>${escapeHtml(guide.area)}</span>
+              ${url ? `<a class="guide-open" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir ${escapeHtml(guide.title)}">Abrir guía <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+            </div>
+          </div>
+        </article>`;
+      }
+
+      function renderGuides() {
+        const search = $('guideSearch').value.trim().toLowerCase();
+        const filter = $('guideFilter').value;
+        const guides = GUIDE_LIBRARY.filter(guide => {
+          const haystack = `${guide.title} ${guide.description} ${guide.area} ${guide.kind} ${guide.tags.join(' ')}`.toLowerCase();
+          const matchesSearch = !search || haystack.includes(search);
+          const matchesFilter = filter === 'all' || guide.type === filter || guide.category === filter;
+          return matchesSearch && matchesFilter;
+        });
+        $('guidesGrid').innerHTML = guides.length
+          ? guides.map(guideCard).join('')
+          : `<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-book-open"></i><div><strong>No encontramos recursos con ese criterio.</strong><br>Prueba otra palabra o selecciona “Todos los recursos”.</div></div>`;
+      }
 
       function moderatorHtml(m) {
         return `<span class="moderator"><img src="${escapeHtml(imageUrl(m.foto_url))}" alt="" onerror="this.src='${escapeHtml(DEFAULT_AVATAR)}'"><span>${escapeHtml(m.nombre || 'Moderador')}</span></span>`;
@@ -1017,6 +1194,7 @@
       }
 
       async function init() {
+        renderGuides();
         try {
           if (!client) throw new Error('Supabase JS no cargó.');
           const [sessions, levels, ranking] = await Promise.all([
@@ -1051,6 +1229,8 @@
       $('agendaStatus').addEventListener('change',renderStudies);
       $('historySearch').addEventListener('input',renderStudies);
       $('historyType').addEventListener('change',renderStudies);
+      $('guideSearch').addEventListener('input',renderGuides);
+      $('guideFilter').addEventListener('change',renderGuides);
       $('rankingScope').addEventListener('change',loadRanking);
       $('rankingSearch').addEventListener('input',renderRanking);
       $('downloadRanking').addEventListener('click',downloadRanking);
