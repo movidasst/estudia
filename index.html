@@ -846,12 +846,39 @@
         return data;
       }
 
-      function setView(view) {
-        state.currentView = view;
-        document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${view}`));
-        document.querySelectorAll('[data-nav]').forEach(el => el.classList.toggle('active', el.dataset.nav === view));
-        window.scrollTo({top:0,behavior:'smooth'});
-        if (view === 'ranking' && state.ranking.length === 0) loadRanking();
+      const VIEW_ROUTES = {
+        agenda: 'estudios',
+        guides: 'guias',
+        history: 'historico',
+        ranking: 'ranking',
+        mine: 'mispuntos',
+        info: 'info'
+      };
+      const ROUTE_VIEWS = Object.fromEntries(
+        Object.entries(VIEW_ROUTES).map(([view, route]) => [route, view])
+      );
+
+      function viewFromHash() {
+        const route = window.location.hash.replace(/^#\/?/, '').replace(/\/$/, '').toLowerCase();
+        if (!route) return 'agenda';
+        if (route === 'mine' || route === 'mis-puntos') return 'mine';
+        return ROUTE_VIEWS[route] || 'agenda';
+      }
+
+      function setView(view, options = {}) {
+        const { updateHash = true, smooth = true } = options;
+        const nextView = VIEW_ROUTES[view] ? view : 'agenda';
+        state.currentView = nextView;
+        document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${nextView}`));
+        document.querySelectorAll('[data-nav]').forEach(el => el.classList.toggle('active', el.dataset.nav === nextView));
+
+        const targetHash = `#/${VIEW_ROUTES[nextView]}`;
+        if (updateHash && window.location.hash !== targetHash) {
+          window.history.pushState(null, '', targetHash);
+        }
+
+        window.scrollTo({top:0,behavior:smooth ? 'smooth' : 'auto'});
+        if (nextView === 'ranking' && state.ranking.length === 0) loadRanking();
       }
 
       document.addEventListener('click', e => {
@@ -860,6 +887,10 @@
           e.preventDefault();
           setView(nav.dataset.nav);
         }
+      });
+
+      window.addEventListener('hashchange', () => {
+        setView(viewFromHash(), { updateHash:false, smooth:false });
       });
 
       function guideCard(guide) {
@@ -1245,6 +1276,7 @@
       $('cedulaInput').addEventListener('input',e => { e.target.value = e.target.value.replace(/\D/g,'').slice(0,12); });
       $('codigoInput').addEventListener('input',e => { e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase().slice(0,5); });
 
+      setView(viewFromHash(), { updateHash:false, smooth:false });
       init();
     })();
   </script>
