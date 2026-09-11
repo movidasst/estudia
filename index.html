@@ -872,6 +872,11 @@
         document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${nextView}`));
         document.querySelectorAll('[data-nav]').forEach(el => el.classList.toggle('active', el.dataset.nav === nextView));
 
+        // La portada pertenece únicamente al inicio. En las demás rutas, el
+        // contenido seleccionado debe comenzar justo debajo del encabezado.
+        const hero = document.querySelector('.hero');
+        if (hero) hero.classList.toggle('hidden', nextView !== 'agenda');
+
         const targetHash = `#/${VIEW_ROUTES[nextView]}`;
         if (updateHash && window.location.hash !== targetHash) {
           window.history.pushState(null, '', targetHash);
