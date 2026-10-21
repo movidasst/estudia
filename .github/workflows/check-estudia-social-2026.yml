@@ -37,9 +37,5 @@ jobs:
           echo "ESTUDIA_SOCIAL_IMAGE_BYTES=${BYTES}"
           test "${BYTES}" -gt 10000
           test "${BYTES}" -lt 350000
-          python - <<'PY'
-          from PIL import Image
-          image=Image.open('/tmp/estudia.jpg')
-          assert image.size == (1200,630), image.size
-          print('ESTUDIA_SOCIAL_IMAGE_DIMENSIONS=1200x630')
-          PY
+          file /tmp/estudia.jpg | grep -q '1200x630'
+          echo 'ESTUDIA_SOCIAL_IMAGE_DIMENSIONS=1200x630'
