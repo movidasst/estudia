@@ -4,7 +4,7 @@
   <!-- LA MOVIDA SST · ESTUDIA v4 · estudios + biblioteca + ranking + progreso · 2026-08-24 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#00205b">
+  <meta name="theme-color" content="#007b85">
   <meta name="description" content="Estudia con La Movida de SST+: estudios colaborativos, guías interactivas, biblioteca de recursos y seguimiento del progreso profesional en Seguridad y Salud en el Trabajo.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://estudia.movidasst.com/">
@@ -374,6 +374,40 @@
     .mentoring-feature .mf-mentor small{display:block;font-weight:600;font-size:.76rem;color:#c8edf5;margin-top:2px}
     @media(min-width:730px){.mentoring-feature-card{grid-template-columns:minmax(0,1fr) 200px;align-items:center;padding:24px 28px;gap:20px}.mentoring-feature .mf-side{flex-direction:column;justify-content:center;text-align:center}.mentoring-feature .mf-logo{width:125px;height:125px}}
     @media(prefers-reduced-motion:reduce){.mentoring-feature .mf-link{transition:none}}
+
+    /* Identidad de La Movida SST+ */
+    :root{--navy:#00205b;--teal:#007b85;--green:#70ad47;--yellow:#ffb600;--bg:#f8fafc;}
+    .topbar{border-bottom:1px solid #dcebe9;}
+    .topbar::after{content:"";display:block;height:4px;background:linear-gradient(90deg,#007b85,#70ad47 62%,#ffb600);}
+    .topbar .brand{flex:none;display:grid;gap:2px;justify-items:start;padding:5px 0;}
+    .topbar .brand .movida-logo{display:block;width:clamp(103px,29vw,178px);height:auto;object-fit:contain;border-radius:0;background:transparent;box-shadow:none;}
+    .movida-site-name{color:#006871;font-size:.74rem;font-weight:800;line-height:1.15;}
+    .movida-social-links{display:flex;align-items:center;gap:4px;flex:none;}
+    .movida-social-link{display:grid;place-items:center;flex:none;width:clamp(32px,8.5vw,44px);height:clamp(36px,9vw,44px);border:1px solid #d5e8e4;border-radius:11px;background:#fff;}
+    .movida-social-link svg{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    .movida-social-whatsapp{color:#12824a;background:#e8f8ec;}
+    .movida-social-instagram{color:#a92b73;background:#fcebf5;}
+    .movida-social-linkedin{color:#0a66c2;background:#eaf3fd;}
+    .movida-social-link:hover{border-color:#91c8c2;}
+    :focus-visible{outline:3px solid #007b85;outline-offset:3px;}
+    .movida-dock svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    @media(max-width:440px){.topbar-inner{gap:6px;}}
+
+    .topbar .brand{margin-right:auto;}
+    .header-actions .icon-link{width:36px;height:36px;flex:none;color:#007b85;}
+    .hero-shell{background:linear-gradient(135deg,#00205b,#007b85);box-shadow:0 16px 40px #00205b25;}
+    .hero-btn.primary{background:#ffcb55;border-color:#ffcb55;}
+    .mobile-nav{border-color:#d5e8e4;}
+    .mobile-btn{min-height:48px;justify-content:center;color:#31616d;font-size:clamp(.58rem,2.4vw,.72rem);}
+    .mobile-btn.active{color:#006871;background:#dff3ef;}
+    .movida-footer-logo{width:145px;height:auto;}
+    @media(min-width:960px) and (max-width:1139px){
+      .desktop-nav{display:none;}
+      .mobile-nav{display:grid;}
+      body{padding-bottom:calc(70px + env(safe-area-inset-bottom));}
+    }
+    @media(max-width:959px){body{padding-bottom:calc(70px + env(safe-area-inset-bottom));}}
+    @media(max-width:360px){.header-actions .icon-link{width:32px;}}
   </style>
   <script defer src="https://www.movidasst.com/analytics.js?v=20261025-ga4com2"></script>
 </head>
@@ -388,13 +422,7 @@
 
   <header class="topbar">
     <div class="container topbar-inner">
-      <a class="brand" href="https://www.movidasst.com/" aria-label="Ir al inicio de La Movida SST">
-        <img class="brand-logo" src="https://www.movidasst.com/logo-oficial-movida-sst-plus.png" alt="La Movida SST Plus">
-        <div>
-          <div class="brand-title">La Movida SST Plus</div>
-          <div class="brand-sub">De la Reacción a la Prevención</div>
-        </div>
-      </a>
+      <a class="brand" href="https://www.movidasst.com/" aria-label="Ir al inicio de La Movida SST"><img class="movida-logo" src="https://www.movidasst.com/logo-horizontal-movida-sst-plus.webp" width="672" height="224" alt="La Movida de SST+"><span class="movida-site-name">Estudia</span></a>
 
       <nav class="desktop-nav" aria-label="Navegación principal">
         <button class="nav-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i> Estudios</button>
@@ -405,9 +433,20 @@
         <button class="nav-btn" data-nav="info"><i class="fa-regular fa-circle-question"></i> Info</button>
       </nav>
 
+      <nav class="movida-social-links" aria-label="Redes sociales de La Movida">
+      <a class="movida-social-link movida-social-youtube" href="https://www.youtube.com/@movidasst" target="_blank" rel="noopener noreferrer" title="YouTube de La Movida" aria-label="Abrir canal de YouTube de La Movida" style="color:#c5221f"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="width:22px;height:22px;fill:currentColor;stroke:none"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg></a>
+      <a class="movida-social-link movida-social-whatsapp" href="https://whatsapp.com/channel/0029Va0mlH5Jf05mrcCz8r3e" target="_blank" rel="noopener noreferrer" title="Canal de WhatsApp de La Movida" aria-label="Abrir canal oficial de WhatsApp de La Movida">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.3 11.4a8.2 8.2 0 0 1-11.7 7.3L3 20l1.5-5.3a8.2 8.2 0 1 1 15.8-3.3Z"/><path d="M8.8 7.7c-.4-.2-.7.1-1 .6-.8 1.1-.4 2.2.3 3.4 1.2 2.2 3 3.8 5.3 4.5 1.2.4 2.1.3 2.7-.6.3-.4.3-1.1-.2-1.3l-1.9-.9-.9 1.1c-1.7-.6-2.7-1.7-3.3-3.1l1-.8-.9-2Z"/></svg>
+      </a>
+      <a class="movida-social-link movida-social-instagram" href="https://www.instagram.com/movidasst/" target="_blank" rel="noopener noreferrer" title="Instagram @movidasst" aria-label="Abrir Instagram de La Movida, arroba movidasst">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".9" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="movida-social-link movida-social-linkedin" href="https://www.linkedin.com/in/davidlinaresbrea?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer" title="LinkedIn de David Linares Brea" aria-label="Abrir perfil de LinkedIn de David Linares Brea">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.8" y="2.8" width="18.4" height="18.4" rx="3"/><path d="M7.4 10v7.5M7.4 6.9v.2M11.6 17.5V10M11.6 13.2c0-1.9 1.1-3.1 2.8-3.1 1.8 0 2.5 1.2 2.5 3.1v4.3"/></svg>
+      </a>
+    </nav>
       <div class="header-actions">
         <a class="icon-link" href="https://calificaciones.movidasst.com/" title="Calificaciones" aria-label="Calificaciones"><i class="fa-solid fa-graduation-cap"></i></a>
-        <a class="icon-link" href="https://whatsapp.com/channel/0029Va0mlH5Jf05mrcCz8r3e" target="_blank" rel="noopener noreferrer" title="Canal de WhatsApp" aria-label="Canal de WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
       </div>
     </div>
   </header>
@@ -706,12 +745,13 @@
 
   <footer class="footer">
     <div class="container">
+      <img class="movida-footer-logo" src="https://www.movidasst.com/logo-horizontal-movida-sst-plus.webp" width="672" height="224" alt="" loading="lazy"><br>
       <strong>La Movida SST Plus</strong> · De la Reacción a la Prevención<br>
       Comunidad de estudio y actualización profesional en Seguridad y Salud en el Trabajo.
     </div>
   </footer>
 
-  <nav class="mobile-nav" aria-label="Navegación móvil">
+  <nav class="mobile-nav movida-dock" aria-label="Navegación móvil">
     <button class="mobile-btn active" data-nav="agenda"><i class="fa-regular fa-calendar-check"></i><span>Estudios</span></button>
     <button class="mobile-btn" data-nav="guides"><i class="fa-solid fa-book-open"></i><span>Guías</span></button>
     <button class="mobile-btn" data-nav="history"><i class="fa-solid fa-box-archive"></i><span>Histórico</span></button>
